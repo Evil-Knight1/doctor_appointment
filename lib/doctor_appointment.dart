@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/features/on_boarding/ui/screens/onboarding.dart';
+import 'package:doctor_appointment/core/routes/app_router.dart';
+import 'package:doctor_appointment/core/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 class DoctorAppointment extends StatelessWidget {
@@ -7,12 +8,13 @@ class DoctorAppointment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      onGenerateRoute: AppRouter.generateRoute,
+      initialRoute: Routes.onBoarding,
       debugShowCheckedModeBanner: false,
       title: 'Doctor Appointment',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      home: OnboardingScreen(),
     );
   }
 }
