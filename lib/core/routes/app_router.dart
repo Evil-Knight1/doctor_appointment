@@ -1,9 +1,11 @@
 import 'package:doctor_appointment/core/routes/routes.dart';
+import 'package:doctor_appointment/features/auth/ui/screens/login.dart';
+import 'package:doctor_appointment/features/auth/ui/screens/register.dart';
 import 'package:doctor_appointment/features/on_boarding/ui/screens/onboarding.dart';
 import 'package:flutter/material.dart';
 
 class AppRouter {
-  static Route<dynamic> generateRoute(RouteSettings settings) {
+  Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.splash:
         return MaterialPageRoute(
@@ -13,15 +15,9 @@ class AppRouter {
       case Routes.onBoarding:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
       case Routes.login:
-        return MaterialPageRoute(
-          builder: (_) =>
-              const Scaffold(body: Center(child: Text('Login Screen'))),
-        );
+        return MaterialPageRoute(builder: (_) => const LoginScreen());
       case Routes.register:
-        return MaterialPageRoute(
-          builder: (_) =>
-              const Scaffold(body: Center(child: Text('Register Screen'))),
-        );
+        return MaterialPageRoute(builder: (_) => const RegisterScreen());
       case Routes.forgotPassword:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

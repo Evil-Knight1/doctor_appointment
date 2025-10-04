@@ -1,5 +1,5 @@
 import 'package:doctor_appointment/core/helpers/assets_helper.dart';
-import 'package:doctor_appointment/core/helpers/colors_helper.dart';
+import 'package:doctor_appointment/core/themes/colors_manger.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatelessWidget {
@@ -41,7 +41,7 @@ class Body extends StatelessWidget {
                   'Best Doctor\nAppointment App',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: ColorsHelper.primary_100,
+                    color: ColorsManager.primary_100,
                     fontWeight: FontWeight.w700,
                     fontSize: 32,
                   ),
@@ -50,7 +50,7 @@ class Body extends StatelessWidget {
                   'Manage and schedule all of your medical appointments easily with Docdoc to get a new experience.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: ColorsHelper.textSecondary,
+                    color: ColorsManager.textSecondary,
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
                   ),

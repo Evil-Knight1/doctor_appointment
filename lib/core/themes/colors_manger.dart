@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ColorsHelper {
+class ColorsManager {
   static const Color primary_100 = Color(0xFF247CFF);
   static const Color primary_200 = Color(0xFF1E66E0);
   static const Color primary_300 = Color(0xFF1851B3);
@@ -10,6 +10,6 @@ class ColorsHelper {
   static const Color accent = Color(0xFFF9F9F9);
   static const Color background = Color(0xFFFFFFFF);
   static const Color textPrimary = Color(0xFF333333);
-  static const Color textSecondary = Color(0xFF777777);
+  static const Color textSecondary = Color(0xFF757575);
   static const Color border = Color(0xFFE0E0E0);
 }

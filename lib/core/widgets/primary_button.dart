@@ -1,4 +1,4 @@
-import 'package:doctor_appointment/core/helpers/colors_helper.dart';
+import 'package:doctor_appointment/core/themes/colors_manger.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -18,7 +18,7 @@ class PrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: ColorsHelper.primary_100,
+          backgroundColor: ColorsManager.primary_100,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
