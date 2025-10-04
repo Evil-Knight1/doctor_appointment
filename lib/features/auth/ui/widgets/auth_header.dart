@@ -27,7 +27,7 @@ class AuthHeader extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               height: 1.8,
-              color: ColorsManager.textSecondary,
+              color: ColorsManager.textBody,
               letterSpacing: .2,
             ),
           ),
