@@ -1,33 +1,35 @@
 import 'package:doctor_appointment/core/themes/colors_manger.dart';
+import 'package:doctor_appointment/core/themes/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AuthHeader extends StatelessWidget {
-  const AuthHeader({super.key, required this.title, required this.subtitle});
+class AuthHeaderText extends StatelessWidget {
+  const AuthHeaderText({
+    super.key,
+    required this.title,
+    required this.subtitle,
+  });
   final String title;
   final String subtitle;
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 90, left: 30, right: 30),
+      padding: EdgeInsets.only(top: 50.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 26,
+            style: TextStyles.font24BlueBold.copyWith(
               height: 1.5,
-              fontWeight: FontWeight.bold,
-              color: ColorsManager.primary_100,
+              letterSpacing: -.2,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Text(
             subtitle,
-            style: const TextStyle(
-              fontSize: 16,
+            style: TextStyles.font14BodyRegular.copyWith(
               height: 1.8,
-              color: ColorsManager.textBody,
               letterSpacing: .2,
             ),
           ),
