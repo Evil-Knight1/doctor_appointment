@@ -30,7 +30,7 @@ class PrimaryButton extends StatelessWidget {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 14.0),
-            child: Text(text, style: TextStyles.font16White700W),
+            child: Text(text, style: TextStyles.font16WhiteBold),
           ),
         ),
       ),
