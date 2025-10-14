@@ -3,26 +3,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TextStyles {
-  static TextStyle font24Black700W = TextStyle(
+  static TextStyle font24BlackBold = TextStyle(
     fontSize: 24.sp,
     fontWeight: FontWeight.w700,
     color: Colors.black,
   );
 
-  static TextStyle font32Blue700W = TextStyle(
+  static TextStyle font24BlueBold = TextStyle(
+    fontSize: 24.sp,
+    color: ColorsManager.primary_100,
+    fontWeight: FontWeight.bold,
+  );
+
+  static TextStyle font32BlueBold = TextStyle(
     fontSize: 32.sp,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.bold,
     color: ColorsManager.primary_100,
   );
 
-  static TextStyle font12Body400W = TextStyle(
+  static TextStyle font12BodyRegular = TextStyle(
     fontSize: 12.sp,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.normal,
     color: ColorsManager.textBody,
   );
-  static TextStyle font16White700W = TextStyle(
+  static TextStyle font14BodyRegular = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.normal,
+    color: ColorsManager.textBody,
+  );
+  static TextStyle font16WhiteBold = TextStyle(
     fontSize: 16.sp,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.bold,
     color: ColorsManager.white,
     height: 1.4,
   );
