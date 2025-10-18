@@ -24,17 +24,53 @@ class TextStyles {
   static TextStyle font12BodyRegular = TextStyle(
     fontSize: 12.sp,
     fontWeight: FontWeight.normal,
-    color: ColorsManager.textBody,
+    color: ColorsManager.darkBlue,
   );
   static TextStyle font14BodyRegular = TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.normal,
-    color: ColorsManager.textBody,
+    color: ColorsManager.darkBlue,
+  );
+
+  static TextStyle font14LightBlackRegular = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.normal,
+    color: ColorsManager.lightBlack,
+  );
+  static TextStyle font12LightBlackRegular = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.normal,
+    color: ColorsManager.lightBlack,
+  );
+  static TextStyle font12LightBlackBold = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.bold,
+    color: ColorsManager.lightBlack,
+  );
+  static TextStyle font12LightGrayRegular = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.normal,
+    color: ColorsManager.lightGray,
+  );
+
+  static TextStyle font14DarkBlueRegular = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.normal,
+    color: ColorsManager.darkBlue,
   );
   static TextStyle font16WhiteBold = TextStyle(
     fontSize: 16.sp,
     fontWeight: FontWeight.bold,
     color: ColorsManager.white,
     height: 1.4,
+  );
+  static TextStyle font12BlueRegular = TextStyle(
+    fontSize: 12.sp,
+    color: ColorsManager.primary_100,
+  );
+  static TextStyle font12BlueBold = TextStyle(
+    fontSize: 12.sp,
+    color: ColorsManager.primary_100,
+    fontWeight: FontWeight.bold,
   );
 }

@@ -1,7 +1,7 @@
 import 'package:doctor_appointment/core/helpers/extensions.dart';
 import 'package:doctor_appointment/core/routes/routes.dart';
 import 'package:doctor_appointment/core/themes/styles.dart';
-import 'package:doctor_appointment/core/widgets/primary_button.dart';
+import 'package:doctor_appointment/core/widgets/custom_button.dart';
 import 'package:doctor_appointment/features/on_boarding/ui/widgets/doc_body.dart';
 import 'package:doctor_appointment/features/on_boarding/ui/widgets/doc_logo_and_name.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +37,7 @@ class OnboardingScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 30.h),
-                      PrimaryButton(
+                      CustomButton(
                         text: 'Get Started',
                         onPressed: () => {
                           context.pushNamedReplacement(Routes.login),
