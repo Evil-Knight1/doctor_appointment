@@ -1,4 +1,5 @@
 import 'package:doctor_appointment/core/themes/colors_manger.dart';
+import 'package:doctor_appointment/core/themes/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -22,18 +23,18 @@ class CustomInputFormField extends StatelessWidget {
       validator: validator,
       onSaved: onSaved,
       obscureText: obscure,
+      style: TextStyles.font14LightBlackRegular.copyWith(height: 1.5),
       decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: ColorsManager.border),
-          borderRadius: BorderRadius.circular(16.r),
-        ),
+        isDense: true,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.r)),
         suffixIcon: icon,
         filled: true,
         hintText: name,
+        hintStyle: TextStyles.font14BodyRegular,
         focusedBorder: customBorder(ColorsManager.primary_100),
         errorBorder: customBorder(ColorsManager.secondaryRed),
-        fillColor: ColorsManager.secondaryForm,
-        contentPadding: EdgeInsets.symmetric(vertical: 17.h, horizontal: 16.w),
+        fillColor: ColorsManager.lightWhite,
+        contentPadding: EdgeInsets.symmetric(vertical: 17.h, horizontal: 20.w),
       ),
     );
   }

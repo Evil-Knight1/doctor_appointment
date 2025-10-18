@@ -1,4 +1,3 @@
-import 'package:doctor_appointment/core/themes/colors_manger.dart';
 import 'package:doctor_appointment/core/themes/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
