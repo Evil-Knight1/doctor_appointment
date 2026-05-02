@@ -1,4 +1,4 @@
-import 'package:doctor_appointment/core/utils/app_colors.dart';
+
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -73,7 +73,7 @@ class _RegistrationPhoneFieldState extends State<RegistrationPhoneField> {
                 TextSpan(
                   text: ' *',
                   style: AppStyles.styleMedium14.copyWith(
-                    color: AppColors.accent,
+                    color: theme.colorScheme.error,
                   ),
                 ),
             ],

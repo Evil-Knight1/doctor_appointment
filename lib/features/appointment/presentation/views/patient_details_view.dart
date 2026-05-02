@@ -47,7 +47,7 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
           child: Container(
             margin: EdgeInsets.all(8.w),
             decoration: BoxDecoration(
-              color: AppColors.bg,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(10.r),
             ),
             child: Icon(
@@ -123,7 +123,7 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
           height: 46.h,
           padding: EdgeInsets.symmetric(horizontal: 14.w),
           decoration: BoxDecoration(
-            color: AppColors.bg,
+            color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: DropdownButtonHideUnderline(

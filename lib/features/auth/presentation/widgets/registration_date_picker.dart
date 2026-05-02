@@ -1,4 +1,4 @@
-import 'package:doctor_appointment/core/utils/app_colors.dart';
+
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -85,7 +85,7 @@ class _RegistrationDatePickerState extends State<RegistrationDatePicker> {
                 TextSpan(
                   text: ' *',
                   style: AppStyles.styleMedium14.copyWith(
-                    color: AppColors.accent,
+                    color: theme.colorScheme.error,
                   ),
                 ),
             ],
@@ -112,7 +112,7 @@ class _RegistrationDatePickerState extends State<RegistrationDatePicker> {
               border: Border.all(
                 color: _isFocused 
                     ? theme.colorScheme.primary 
-                    : (theme.inputDecorationTheme.enabledBorder?.borderSide.color ?? AppColors.gray200),
+                    : (theme.inputDecorationTheme.enabledBorder?.borderSide.color ?? theme.dividerColor),
                 width: _isFocused ? 1.5 : 1,
               ),
               boxShadow: _isFocused

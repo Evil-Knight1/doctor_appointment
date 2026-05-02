@@ -1,4 +1,4 @@
-import 'package:doctor_appointment/core/utils/app_colors.dart';
+
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/features/auth/presentation/widgets/doctor_signup/doctor_signup_footer.dart';
@@ -154,10 +154,11 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
 
   void _showErrorSnackBar(String message) {
     if (!mounted) return;
+    final theme = Theme.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppColors.accent,
+        backgroundColor: theme.colorScheme.error,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
@@ -191,7 +192,7 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.bg,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Column(
             children: [
@@ -209,13 +210,16 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
                         Column(
                           children: [
                             ShaderMask(
-                              shaderCallback: (bounds) => const LinearGradient(
-                                colors: [Color(0xff236DEC), Color(0xff0D47A1)],
+                              shaderCallback: (bounds) => LinearGradient(
+                                colors: [
+                                  Theme.of(context).colorScheme.primary,
+                                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
+                                ],
                               ).createShader(bounds),
                               child: Text(
                                 'Doctor Registration',
                                 style: AppStyles.styleBold16.copyWith(
-                                  color: AppColors.bg,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -223,14 +227,14 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
                             Text(
                               'Step ${_currentStep + 1} of 3',
                               style: AppStyles.styleMedium12.copyWith(
-                                color: AppColors.textSecondary,
+                                color: Theme.of(context).textTheme.bodyMedium?.color,
                               ),
                             ),
                           ],
                         ),
                         _HeaderButton(
                           icon: Icons.help_outline_rounded,
-                          onTap: () {}, // Future: Show help dialog
+                          onTap: _showHelpDialog,
                         ),
                       ],
                     ),
@@ -301,12 +305,14 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Account Credentials', style: AppStyles.styleSemiBold20),
+          Text('Account Credentials', style: AppStyles.styleSemiBold20.copyWith(
+            color: Theme.of(context).textTheme.headlineMedium?.color,
+          )),
           SizedBox(height: 8.h),
           Text(
             'Enter your email, password and phone to get started.',
             style: AppStyles.styleRegular14.copyWith(
-              color: AppColors.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
           SizedBox(height: 24.h),
@@ -349,12 +355,14 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Personal Information', style: AppStyles.styleSemiBold20),
+          Text('Personal Information', style: AppStyles.styleSemiBold20.copyWith(
+            color: Theme.of(context).textTheme.headlineMedium?.color,
+          )),
           SizedBox(height: 8.h),
           Text(
             'Tell us more about your professional background.',
             style: AppStyles.styleRegular14.copyWith(
-              color: AppColors.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
           SizedBox(height: 24.h),
@@ -400,12 +408,14 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Clinic Information', style: AppStyles.styleSemiBold20),
+          Text('Clinic Information', style: AppStyles.styleSemiBold20.copyWith(
+            color: Theme.of(context).textTheme.headlineMedium?.color,
+          )),
           SizedBox(height: 8.h),
           Text(
             'Provide details about your practice location.',
             style: AppStyles.styleRegular14.copyWith(
-              color: AppColors.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
           SizedBox(height: 24.h),
@@ -459,13 +469,14 @@ class _HeaderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.bg,
+        color: theme.cardColor,
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withValues(alpha: theme.brightness == Brightness.dark ? 0.3 : 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -478,7 +489,7 @@ class _HeaderButton extends StatelessWidget {
           customBorder: const CircleBorder(),
           child: Padding(
             padding: EdgeInsets.all(8.w),
-            child: Icon(icon, size: 20.sp, color: AppColors.textPrimary),
+            child: Icon(icon, size: 20.sp, color: theme.iconTheme.color),
           ),
         ),
       ),

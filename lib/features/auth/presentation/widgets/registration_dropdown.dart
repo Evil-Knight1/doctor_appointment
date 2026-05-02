@@ -95,7 +95,7 @@ class _RegistrationDropdownState<T> extends State<RegistrationDropdown<T>> {
                 : [],
           ),
           child: DropdownButtonFormField<T>(
-            value: widget.value,
+            initialValue: widget.value,
             items: widget.items,
             onChanged: widget.onChanged,
             isExpanded: true,

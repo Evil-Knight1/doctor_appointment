@@ -160,7 +160,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView> {
         child: Container(
           margin: EdgeInsets.all(8.w),
           decoration: BoxDecoration(
-            color: AppColors.bg,
+            color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: Icon(
@@ -186,7 +186,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView> {
             child: Container(
               height: 46.h,
               decoration: BoxDecoration(
-                color: AppColors.bg,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: TextField(

@@ -1,4 +1,3 @@
-import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:flutter/material.dart';
@@ -10,16 +9,18 @@ class UserSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              AppColors.primary.withValues(alpha: 0.05),
-              Colors.white,
-              Colors.white,
+              theme.colorScheme.primary.withValues(alpha: 0.05),
+              theme.scaffoldBackgroundColor,
+              theme.scaffoldBackgroundColor,
             ],
             stops: const [0.0, 0.3, 1.0],
           ),
@@ -38,11 +39,11 @@ class UserSelectionView extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.all(16.w),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: theme.cardColor,
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.1),
+                          color: theme.colorScheme.primary.withValues(alpha: 0.1),
                           blurRadius: 20,
                           offset: const Offset(0, 10),
                         ),
@@ -50,7 +51,7 @@ class UserSelectionView extends StatelessWidget {
                     ),
                     child: Icon(
                       Icons.health_and_safety_rounded,
-                      color: AppColors.primary,
+                      color: theme.colorScheme.primary,
                       size: 48.sp,
                     ),
                   ),
@@ -59,7 +60,7 @@ class UserSelectionView extends StatelessWidget {
                 Text(
                   'MedLink+',
                   style: AppStyles.styleBold24.copyWith(
-                    color: AppColors.primary,
+                    color: theme.colorScheme.primary,
                     letterSpacing: -0.5,
                   ),
                 ),
@@ -71,14 +72,14 @@ class UserSelectionView extends StatelessWidget {
                   'Choose Your Role',
                   style: AppStyles.styleBold32.copyWith(
                     fontSize: 28.sp,
-                    color: AppColors.textPrimary,
+                    color: theme.textTheme.headlineLarge?.color,
                   ),
                 ),
                 SizedBox(height: 12.h),
                 Text(
                   'Are you looking for medical care or\noffering professional services?',
                   style: AppStyles.styleRegular14.copyWith(
-                    color: AppColors.textSecondary,
+                    color: theme.textTheme.bodyMedium?.color,
                     height: 1.5,
                   ),
                   textAlign: TextAlign.center,
@@ -121,7 +122,7 @@ class UserSelectionView extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.05),
+                      color: theme.colorScheme.primary.withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(20.r),
                     ),
                     child: Row(
@@ -131,7 +132,7 @@ class UserSelectionView extends StatelessWidget {
                         Text(
                           'Already a member? ',
                           style: AppStyles.styleRegular14.copyWith(
-                            color: AppColors.textSecondary,
+                            color: theme.textTheme.bodyMedium?.color,
                           ),
                         ),
                         GestureDetector(
@@ -139,7 +140,7 @@ class UserSelectionView extends StatelessWidget {
                           child: Text(
                             'Sign In',
                             style: AppStyles.styleSemiBold16.copyWith(
-                              color: AppColors.primary,
+                              color: theme.colorScheme.primary,
                               fontSize: 14.sp,
                             ),
                           ),
@@ -183,6 +184,7 @@ class _RoleCardState extends State<_RoleCard> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final bool active = widget.isSelected || _isHovered;
     
     return GestureDetector(
@@ -197,25 +199,25 @@ class _RoleCardState extends State<_RoleCard> {
           duration: const Duration(milliseconds: 300),
           padding: EdgeInsets.symmetric(vertical: 32.h, horizontal: 16.w),
           decoration: BoxDecoration(
-            color: active ? Colors.white : Colors.white.withValues(alpha: 0.8),
+            color: active ? theme.colorScheme.primary : theme.cardColor,
             borderRadius: BorderRadius.circular(28.r),
             gradient: active ? LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                AppColors.primary,
-                AppColors.primary.withValues(alpha: 0.8),
+                theme.colorScheme.primary,
+                theme.colorScheme.primary.withValues(alpha: 0.8),
               ],
             ) : null,
             border: Border.all(
-              color: active ? AppColors.primary : AppColors.border,
+              color: active ? theme.colorScheme.primary : theme.dividerColor,
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
                 color: active 
-                    ? AppColors.primary.withValues(alpha: 0.25) 
-                    : Colors.black.withValues(alpha: 0.05),
+                    ? theme.colorScheme.primary.withValues(alpha: 0.25) 
+                    : theme.shadowColor.withValues(alpha: 0.05),
                 blurRadius: active ? 24 : 12,
                 offset: Offset(0, active ? 12 : 6),
               ),
@@ -229,14 +231,14 @@ class _RoleCardState extends State<_RoleCard> {
                 padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(
                   color: active 
-                      ? Colors.white.withValues(alpha: 0.2) 
-                      : AppColors.primary.withValues(alpha: 0.08),
+                      ? theme.colorScheme.onPrimary.withValues(alpha: 0.2) 
+                      : theme.colorScheme.primary.withValues(alpha: 0.08),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   active ? widget.activeIcon : widget.icon,
                   size: 36.sp,
-                  color: active ? Colors.white : AppColors.primary,
+                  color: active ? theme.colorScheme.onPrimary : theme.colorScheme.primary,
                 ),
               ),
               SizedBox(height: 24.h),
@@ -244,7 +246,7 @@ class _RoleCardState extends State<_RoleCard> {
                 widget.title,
                 style: AppStyles.styleBold32.copyWith(
                   fontSize: 20.sp,
-                  color: active ? Colors.white : AppColors.textPrimary,
+                  color: active ? theme.colorScheme.onPrimary : theme.textTheme.headlineLarge?.color,
                 ),
               ),
               SizedBox(height: 12.h),
@@ -254,8 +256,8 @@ class _RoleCardState extends State<_RoleCard> {
                 style: AppStyles.styleRegular12.copyWith(
                   fontSize: 12.sp,
                   color: active 
-                      ? Colors.white.withValues(alpha: 0.9) 
-                      : AppColors.textSecondary,
+                      ? theme.colorScheme.onPrimary.withValues(alpha: 0.9) 
+                      : theme.textTheme.bodyMedium?.color,
                   height: 1.4,
                 ),
               ),

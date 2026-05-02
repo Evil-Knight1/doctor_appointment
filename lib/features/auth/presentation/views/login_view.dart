@@ -1,4 +1,3 @@
-import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/features/auth/logic/auth_cubit.dart';
@@ -47,8 +46,9 @@ class _LoginViewState extends State<LoginView> {
       },
       builder: (context, state) {
         final isLoading = state is AuthLoading;
+        final theme = Theme.of(context);
         return Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          backgroundColor: theme.scaffoldBackgroundColor,
           body: SafeArea(
             child: SingleChildScrollView(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -71,7 +71,9 @@ class _LoginViewState extends State<LoginView> {
                         SizedBox(height: 8.h),
                         Text(
                           'We\'re excited to have you back, can\'t wait to see what you\'ve been up to since you last logged in.',
-                          style: AppStyles.styleRegular14,
+                          style: AppStyles.styleRegular14.copyWith(
+                            color: theme.textTheme.bodyMedium?.color,
+                          ),
                         ),
                         SizedBox(height: 36.h),
                         CustomTextFormField(
@@ -96,7 +98,7 @@ class _LoginViewState extends State<LoginView> {
                             child: Text(
                               'Forgot Password?',
                               style: AppStyles.styleRegular12.copyWith(
-                                color: AppColors.primary,
+                                color: theme.colorScheme.primary,
                               ),
                             ),
                           ),
@@ -120,7 +122,7 @@ class _LoginViewState extends State<LoginView> {
                                       password: _passwordController.text.trim(),
                                     );
                                   },
-                            buttonColor: AppColors.primary,
+                            buttonColor: theme.colorScheme.primary,
                             textStyle: AppStyles.styleSemiBold16.copyWith(
                               color: Colors.white,
                             ),
@@ -153,7 +155,9 @@ class _LoginViewState extends State<LoginView> {
                               children: [
                                 Text(
                                   "Don't have an account? ",
-                                  style: AppStyles.styleRegular14,
+                                  style: AppStyles.styleRegular14.copyWith(
+                                    color: theme.textTheme.bodyMedium?.color,
+                                  ),
                                 ),
                                 GestureDetector(
                                   onTap: () {
@@ -162,7 +166,7 @@ class _LoginViewState extends State<LoginView> {
                                   child: Text(
                                     'Sign Up',
                                     style: AppStyles.styleRegular14.copyWith(
-                                      color: AppColors.primary,
+                                      color: theme.colorScheme.primary,
                                     ),
                                   ),
                                 ),

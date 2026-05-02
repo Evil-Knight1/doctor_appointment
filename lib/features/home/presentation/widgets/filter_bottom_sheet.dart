@@ -261,7 +261,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             margin: EdgeInsets.only(right: 8.w),
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
             decoration: BoxDecoration(
-              color: selected ? AppColors.primary : AppColors.bg,
+              color: selected ? AppColors.primary : Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(20.r),
               border: Border.all(
                 color: selected ? AppColors.primary : AppColors.border,
@@ -318,7 +318,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       margin: EdgeInsets.only(bottom: 8.h),
       padding: EdgeInsets.symmetric(horizontal: 14.w),
       decoration: BoxDecoration(
-        color: AppColors.bg,
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(10.r),
       ),
       child: DropdownButtonHideUnderline(
@@ -386,7 +386,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: selected ? AppColors.primary : AppColors.bg,
+        color: selected ? AppColors.primary : Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: selected ? AppColors.primary : AppColors.border,

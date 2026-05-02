@@ -189,7 +189,7 @@ class _SearchViewState extends State<SearchView> {
               duration: const Duration(milliseconds: 200),
               padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : AppColors.bg,
+                color: isSelected ? AppColors.primary : Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(20.r),
                 border: Border.all(
                   color: isSelected ? AppColors.primary : AppColors.border,

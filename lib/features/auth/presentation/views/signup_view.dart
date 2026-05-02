@@ -1,4 +1,3 @@
-import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/features/auth/logic/auth_cubit.dart';
 import 'package:doctor_appointment/features/auth/logic/auth_state.dart';
@@ -121,6 +120,7 @@ class _SignUpViewState extends State<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthFailure) {
@@ -128,7 +128,7 @@ class _SignUpViewState extends State<SignUpView> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),
-              backgroundColor: AppColors.accent,
+              backgroundColor: theme.colorScheme.error,
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.r),
@@ -142,8 +142,9 @@ class _SignUpViewState extends State<SignUpView> {
       },
       builder: (context, state) {
         final isLoading = state is AuthLoading;
+        final theme = Theme.of(context);
         return Scaffold(
-          backgroundColor: AppColors.bg,
+          backgroundColor: theme.scaffoldBackgroundColor,
           body: SafeArea(
             child: Column(
               children: [
@@ -220,7 +221,7 @@ class _SignUpViewState extends State<SignUpView> {
                   Text(
                     'Step ${_currentPage + 1} of 2',
                     style: AppStyles.styleMedium12.copyWith(
-                      color: AppColors.textSecondary,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                     ),
                   ),
                 ],
@@ -248,12 +249,17 @@ class _SignUpViewState extends State<SignUpView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 12.h),
-          Text('Account Info', style: AppStyles.styleSemiBold24),
+          Text(
+            'Account Info', 
+            style: AppStyles.styleSemiBold24.copyWith(
+              color: Theme.of(context).textTheme.headlineMedium?.color,
+            )
+          ),
           SizedBox(height: 8.h),
           Text(
             'Set up your login credentials to get started.',
             style: AppStyles.styleRegular14.copyWith(
-              color: AppColors.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
           SizedBox(height: 32.h),
@@ -339,12 +345,17 @@ class _SignUpViewState extends State<SignUpView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 12.h),
-          Text('Personal Details', style: AppStyles.styleSemiBold24),
+          Text(
+            'Personal Details', 
+            style: AppStyles.styleSemiBold24.copyWith(
+              color: Theme.of(context).textTheme.headlineMedium?.color,
+            )
+          ),
           SizedBox(height: 8.h),
           Text(
             'Complete your profile for a better experience.',
             style: AppStyles.styleRegular14.copyWith(
-              color: AppColors.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
           SizedBox(height: 32.h),
@@ -434,13 +445,14 @@ class _HeaderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.bg,
+        color: theme.cardColor,
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withValues(alpha: theme.brightness == Brightness.dark ? 0.3 : 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -453,7 +465,7 @@ class _HeaderButton extends StatelessWidget {
           customBorder: const CircleBorder(),
           child: Padding(
             padding: EdgeInsets.all(8.w),
-            child: Icon(icon, size: 20.sp, color: AppColors.textPrimary),
+            child: Icon(icon, size: 20.sp, color: theme.iconTheme.color),
           ),
         ),
       ),

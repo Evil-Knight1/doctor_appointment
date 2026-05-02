@@ -1,4 +1,3 @@
-import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -28,11 +27,7 @@ class StepProgressIndicator extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 4.w),
             height: isCurrent ? 8.h : 6.h,
             decoration: BoxDecoration(
-              color: isActive 
-                  ? theme.colorScheme.primary 
-                  : (theme.brightness == Brightness.dark 
-                      ? AppColors.darkBorder 
-                      : AppColors.gray200),
+              color: isActive ? theme.colorScheme.primary : theme.dividerColor,
               borderRadius: BorderRadius.circular(10.r),
               boxShadow: isCurrent ? [
                 BoxShadow(

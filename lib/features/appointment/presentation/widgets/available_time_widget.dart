@@ -37,7 +37,7 @@ class AvailableTimeWidget extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary : AppColors.bg,
+              color: isSelected ? AppColors.primary : Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(20.r),
               border: Border.all(
                 color: isSelected ? AppColors.primary : AppColors.border,

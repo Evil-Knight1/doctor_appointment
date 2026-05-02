@@ -1,6 +1,4 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField({
@@ -70,34 +68,10 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 ),
               )
             : widget.suffixIcon,
-        hintStyle: AppStyles.styleRegular14.copyWith(
-          color: const Color(0xFF949D9E),
-        ),
         hintText: widget.hintText,
-        filled: true,
-        fillColor: Colors.white,
-        border: buildBorder(),
-        enabledBorder: buildBorder(),
-        focusedBorder: buildBorder(focused: true),
-        errorBorder: buildBorder(hasError: true),
-        focusedErrorBorder: buildBorder(hasError: true, focused: true),
         errorText: null, // handled via validator
       ),
     );
   }
 
-  OutlineInputBorder buildBorder({
-    bool hasError = false,
-    bool focused = false,
-  }) {
-    final Color color = hasError
-        ? const Color(0xFFEF4444)
-        : focused
-        ? const Color(0xFF236DEC)
-        : const Color(0xFFDADADA);
-    return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.r),
-      borderSide: BorderSide(width: 1, color: color),
-    );
-  }
 }

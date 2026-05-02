@@ -98,7 +98,7 @@ class DoctorScheduleView extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 20.r,
-                backgroundColor: AppColors.bg,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 child: Icon(Icons.person, color: AppColors.textSecondary),
               ),
               SizedBox(width: 12.w),

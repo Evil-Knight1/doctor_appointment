@@ -1,4 +1,3 @@
-import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/features/auth/logic/forgot_password_cubit.dart';
@@ -107,7 +106,7 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
                                       _otpController.text.trim(),
                                     );
                               },
-                        buttonColor: AppColors.primary,
+                        buttonColor: Theme.of(context).colorScheme.primary,
                         textStyle: AppStyles.styleSemiBold16.copyWith(
                           color: Colors.white,
                         ),
