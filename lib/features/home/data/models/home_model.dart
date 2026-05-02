@@ -1,8 +1,31 @@
 import 'package:flutter/material.dart';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Speciality model
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── Doctor Model ───────────────────────────────────────────────────────────
+
+class DoctorModel {
+  const DoctorModel({
+    required this.id,
+    required this.name,
+    required this.speciality,
+    required this.hospital,
+    required this.rating,
+    required this.reviewCount,
+    required this.avatarAsset,
+    this.isAvailable = true,
+  });
+
+  final String id;
+  final String name;
+  final String speciality;
+  final String hospital;
+  final double rating;
+  final int reviewCount;
+  final String avatarAsset;
+  final bool isAvailable;
+}
+
+// ─── Speciality Model ────────────────────────────────────────────────────────
+
 class SpecialityModel {
   const SpecialityModel({
     required this.name,
@@ -17,30 +40,8 @@ class SpecialityModel {
   final Color bgColor;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Doctor model used by the Home feature (static/demo data)
-// ─────────────────────────────────────────────────────────────────────────────
-class DoctorModel {
-  const DoctorModel({
-    required this.name,
-    required this.speciality,
-    required this.hospital,
-    required this.rating,
-    required this.reviewCount,
-    this.isAvailable = true,
-  });
+// ─── Notification Model ──────────────────────────────────────────────────────
 
-  final String name;
-  final String speciality;
-  final String hospital;
-  final double rating;
-  final int reviewCount;
-  final bool isAvailable;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Notification item model
-// ─────────────────────────────────────────────────────────────────────────────
 class NotificationItemModel {
   const NotificationItemModel({
     required this.title,
@@ -63,16 +64,13 @@ class NotificationItemModel {
   final bool isToday;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Static sample data for the Home screens
-// ─────────────────────────────────────────────────────────────────────────────
-class HomeStaticData {
-  HomeStaticData._();
+// ─── Static Data ─────────────────────────────────────────────────────────────
 
+abstract final class HomeStaticData {
   static const List<SpecialityModel> specialities = [
     SpecialityModel(
       name: 'General',
-      icon: Icons.local_hospital_outlined,
+      icon: Icons.medical_services_outlined,
       color: Color(0xFF2563EB),
       bgColor: Color(0xFFEFF6FF),
     ),
@@ -90,43 +88,63 @@ class HomeStaticData {
     ),
     SpecialityModel(
       name: 'Radiology',
-      icon: Icons.radio_button_checked_outlined,
+      icon: Icons.monitor_heart_outlined,
+      color: Color(0xFF0891B2),
+      bgColor: Color(0xFFECFEFF),
+    ),
+    SpecialityModel(
+      name: 'Dental',
+      icon: Icons.front_hand_outlined,
       color: Color(0xFF059669),
       bgColor: Color(0xFFECFDF5),
+    ),
+    SpecialityModel(
+      name: 'Cardio',
+      icon: Icons.favorite_outline,
+      color: Color(0xFFDC2626),
+      bgColor: Color(0xFFFEF2F2),
     ),
   ];
 
   static const List<DoctorModel> recommendedDoctors = [
     DoctorModel(
-      name: 'Dr. Olivia Turner, M.D.',
+      id: '1',
+      name: 'Dr. Randy Wigham',
       speciality: 'General',
-      hospital: 'Cairo Hospital',
-      rating: 4.9,
-      reviewCount: 5380,
-      isAvailable: true,
-    ),
-    DoctorModel(
-      name: 'Dr. Alexander Bennett',
-      speciality: 'Neurologic',
-      hospital: 'Nile Medical Center',
+      hospital: 'RSUD Gatot Subroto',
       rating: 4.8,
-      reviewCount: 4220,
+      reviewCount: 4279,
+      avatarAsset: '',
       isAvailable: true,
     ),
     DoctorModel(
-      name: 'Dr. Sophia Martinez',
+      id: '2',
+      name: 'Dr. Jack Sulivan',
+      speciality: 'Neurologic',
+      hospital: 'RSUD Gatot Subroto',
+      rating: 4.9,
+      reviewCount: 3841,
+      avatarAsset: '',
+      isAvailable: true,
+    ),
+    DoctorModel(
+      id: '3',
+      name: 'Dr. Sarah Mitchell',
       speciality: 'Pediatric',
-      hospital: 'Al Salam Hospital',
+      hospital: 'St. Mary Hospital',
       rating: 4.7,
-      reviewCount: 3150,
+      reviewCount: 2956,
+      avatarAsset: '',
       isAvailable: false,
     ),
     DoctorModel(
-      name: 'Dr. Michael Chen, Ph.D.',
-      speciality: 'Radiology',
-      hospital: 'Ain Shams Clinic',
+      id: '4',
+      name: 'Dr. Ahmed Hassan',
+      speciality: 'Cardiologist',
+      hospital: 'Cairo Medical Center',
       rating: 4.9,
-      reviewCount: 6210,
+      reviewCount: 5120,
+      avatarAsset: '',
       isAvailable: true,
     ),
   ];

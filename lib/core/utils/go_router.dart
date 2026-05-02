@@ -114,14 +114,11 @@ abstract class AppRouter {
         ),
       ),
       GoRoute(
-<<<<<<< HEAD
-        name: Routes.onBoardingView,
-=======
         path: kUserSelectionView,
         builder: (context, state) => const UserSelectionView(),
       ),
       GoRoute(
->>>>>>> cb87b61b43edfb00699fa14b417cb11501eb9004
+        name: Routes.onBoardingView,
         path: kOnBoardingView,
         builder: (context, state) => const OnBoardingView(),
       ),
@@ -138,9 +135,8 @@ abstract class AppRouter {
           child: const SignUpView(),
         ),
       ),
-<<<<<<< HEAD
-=======
       GoRoute(
+        name: Routes.root,
         path: kRoot,
         builder: (context, state) => MultiBlocProvider(
           providers: [
@@ -157,12 +153,6 @@ abstract class AppRouter {
           ],
           child: const Root(),
         ),
-      ),
->>>>>>> cb87b61b43edfb00699fa14b417cb11501eb9004
-      GoRoute(
-        name: Routes.root,
-        path: kRoot,
-        builder: (context, state) => const Root(),
       ),
       GoRoute(
         name: Routes.favoriteView,
