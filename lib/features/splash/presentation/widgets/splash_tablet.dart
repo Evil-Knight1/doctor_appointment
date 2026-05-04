@@ -19,7 +19,7 @@ class SplashTablet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                width: 300.w,
+                width: 100.w,
                 child: SvgPicture.asset(
                   'assets/images/docdoc_logo.svg',
                   fit: BoxFit.contain,

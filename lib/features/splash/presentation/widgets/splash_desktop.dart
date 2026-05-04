@@ -1,6 +1,7 @@
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -25,7 +26,7 @@ class SplashDesktop extends StatelessWidget {
                     children: [
                       SvgPicture.asset(
                         'assets/images/docdoc_logo.svg',
-                        width: 350,
+                        width: 150.w,
                         fit: BoxFit.contain,
                       ),
                       Text(

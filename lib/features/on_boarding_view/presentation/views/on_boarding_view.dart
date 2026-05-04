@@ -25,7 +25,7 @@ class OnBoardingView extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     'assets/images/docdoc_logo.svg',
-                    width: 140.w,
+                    width: 40.w,
                   ),
                   Text(
                     'MedLink',

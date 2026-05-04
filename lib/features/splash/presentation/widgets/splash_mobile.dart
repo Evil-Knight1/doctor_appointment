@@ -21,12 +21,12 @@ class SplashMobile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
-                    width: 250.w,
+                    width: 72.w,
                     child: SvgPicture.asset('assets/images/docdoc_logo.svg'),
                   ),
                   Text(
                     'MedLink',
-                    style: AppStyles.styleBold32.copyWith(
+                    style: AppStyles.styleBold24.copyWith(
                       color: AppColors.black,
                     ),
                   ),
