@@ -4,7 +4,7 @@ import 'package:doctor_appointment/features/doctors/data/models/doctors_page_mod
 
 abstract class DoctorsRemoteDataSource {
   Future<DoctorsPageModel> searchDoctors({
-    String? specialization,
+    int? specializationId,
     double? minRating,
     String? searchTerm,
     int pageNumber,
@@ -19,7 +19,7 @@ class DoctorsRemoteDataSourceImpl implements DoctorsRemoteDataSource {
 
   @override
   Future<DoctorsPageModel> searchDoctors({
-    String? specialization,
+    int? specializationId,
     double? minRating,
     String? searchTerm,
     int pageNumber = 1,
@@ -28,7 +28,7 @@ class DoctorsRemoteDataSourceImpl implements DoctorsRemoteDataSource {
     final response = await apiService.get(
       '/api/Doctor/search',
       queryParameters: {
-        'Specialization': specialization,
+        'SpecializationId': specializationId,
         'MinRating': minRating,
         'SearchTerm': searchTerm,
         'PageNumber': pageNumber,

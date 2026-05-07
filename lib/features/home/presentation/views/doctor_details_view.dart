@@ -1,10 +1,12 @@
+import 'package:doctor_appointment/core/utils/app_dimensions.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:map_launcher/map_launcher.dart';
-import 'package:doctor_appointment/core/utils/app_dimensions.dart';
-import 'package:doctor_appointment/features/home/data/models/home_model.dart';
+import 'package:doctor_appointment/core/services/service_locator.dart';
+import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
@@ -13,15 +15,15 @@ import 'package:doctor_appointment/features/doctors/logic/doctor_details_state.d
 import '../widgets/doctor_details_widgets.dart';
 import '../widgets/shared_app_bar.dart';
 
-class DoctorDetailView extends StatefulWidget {
-  const DoctorDetailView({super.key, required this.doctor});
-  final DoctorModel doctor;
+class DoctorDetailsView extends StatefulWidget {
+  const DoctorDetailsView({super.key, required this.doctor});
+  final HomeDoctorModel doctor;
 
   @override
-  State<DoctorDetailView> createState() => _DoctorDetailViewState();
+  State<DoctorDetailsView> createState() => _DoctorDetailsViewState();
 }
 
-class _DoctorDetailViewState extends State<DoctorDetailView>
+class _DoctorDetailsViewState extends State<DoctorDetailsView>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
 
@@ -39,64 +41,69 @@ class _DoctorDetailViewState extends State<DoctorDetailView>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
-      appBar: SharedAppBar(
-        title: widget.doctor.name,
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.w),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    context.pushNamed(
-                      Routes.chatView,
-                      pathParameters: {'userId': widget.doctor.id.toString()},
-                      extra: widget.doctor.name,
-                    );
-                  },
-                  child: Container(
-                    width: 36.w,
-                    height: 36.h,
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: Icon(
-                      Icons.chat_bubble_outline_rounded,
-                      size: 16.sp,
-                      color: AppColors.textPrimary,
+    return BlocProvider(
+      create: (context) =>
+          getIt<DoctorDetailsCubit>()
+            ..loadDoctorDetails(int.parse(widget.doctor.id)),
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundLight,
+        appBar: SharedAppBar(
+          title: widget.doctor.name,
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 16.w),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.pushNamed(
+                        Routes.chatView,
+                        pathParameters: {'userId': widget.doctor.id.toString()},
+                        extra: widget.doctor.name,
+                      );
+                    },
+                    child: Container(
+                      width: 36.w,
+                      height: 36.h,
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Icon(
+                        Icons.chat_bubble_outline_rounded,
+                        size: 16.sp,
+                        color: AppColors.textPrimary,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(width: 8.w),
-                Icon(
-                  Icons.more_horiz_rounded,
-                  color: AppColors.textPrimary,
-                  size: 24.sp,
-                ),
-              ],
+                  SizedBox(width: 8.w),
+                  Icon(
+                    Icons.more_horiz_rounded,
+                    color: AppColors.textPrimary,
+                    size: 24.sp,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          DoctorHeaderCard(doctor: widget.doctor),
-          DoctorTabBar(controller: _tabController),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _AboutTab(doctor: widget.doctor),
-                _AddressTab(doctor: widget.doctor),
-                const _ReviewsTab(),
-              ],
+          ],
+        ),
+        body: Column(
+          children: [
+            DoctorHeaderCard(doctor: widget.doctor),
+            DoctorTabBar(controller: _tabController),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _AboutTab(doctor: widget.doctor),
+                  _AddressTab(doctor: widget.doctor),
+                  const _ReviewsTab(),
+                ],
+              ),
             ),
-          ),
-          _AppointmentButton(doctor: widget.doctor),
-        ],
+            _AppointmentButton(doctor: widget.doctor),
+          ],
+        ),
       ),
     );
   }
@@ -104,7 +111,7 @@ class _DoctorDetailViewState extends State<DoctorDetailView>
 
 class _AboutTab extends StatelessWidget {
   const _AboutTab({required this.doctor});
-  final DoctorModel doctor;
+  final HomeDoctorModel doctor;
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +142,7 @@ class _AboutTab extends StatelessWidget {
 
 class _AddressTab extends StatelessWidget {
   const _AddressTab({required this.doctor});
-  final DoctorModel doctor;
+  final HomeDoctorModel doctor;
 
   @override
   Widget build(BuildContext context) {
@@ -231,11 +238,18 @@ class _ReviewsTab extends StatelessWidget {
         if (state is DoctorDetailsLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is DoctorDetailsError) {
-          return Center(child: Text(state.message, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error)));
+          return Center(
+            child: Text(
+              state.message,
+              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.error),
+            ),
+          );
         } else if (state is DoctorDetailsLoaded) {
           final reviews = state.reviews;
           if (reviews.isEmpty) {
-            return Center(child: Text('No reviews yet', style: AppTextStyles.bodyMedium));
+            return Center(
+              child: Text('No reviews yet', style: AppTextStyles.bodyMedium),
+            );
           }
           return ListView.separated(
             padding: EdgeInsets.all(AppSpacing.lg),
@@ -243,9 +257,10 @@ class _ReviewsTab extends StatelessWidget {
             separatorBuilder: (_, _) =>
                 Divider(height: AppSpacing.xxl, color: AppColors.divider),
             itemBuilder: (_, index) => _ReviewTile(
-              name: reviews[index]['name'],
-              text: reviews[index]['text'],
-              stars: reviews[index]['stars'],
+              name: reviews[index].patientName,
+              text: reviews[index].comment,
+              stars: reviews[index].stars,
+              date: reviews[index].createdAt,
             ),
           );
         }
@@ -260,10 +275,12 @@ class _ReviewTile extends StatelessWidget {
     required this.name,
     required this.text,
     required this.stars,
+    required this.date,
   });
   final String name;
   final String text;
   final int stars;
+  final DateTime date;
 
   @override
   Widget build(BuildContext context) {
@@ -303,7 +320,10 @@ class _ReviewTile extends StatelessWidget {
                 ],
               ),
             ),
-            Text('Today', style: AppTextStyles.bodySmall),
+            Text(
+              DateFormat('MMM dd, yyyy').format(date),
+              style: AppTextStyles.bodySmall,
+            ),
           ],
         ),
         SizedBox(height: AppSpacing.md),
@@ -315,7 +335,7 @@ class _ReviewTile extends StatelessWidget {
 
 class _AppointmentButton extends StatelessWidget {
   const _AppointmentButton({required this.doctor});
-  final DoctorModel doctor;
+  final HomeDoctorModel doctor;
 
   @override
   Widget build(BuildContext context) {
@@ -340,10 +360,8 @@ class _AppointmentButton extends StatelessWidget {
         height: 50.h,
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: () => context.pushNamed(
-            Routes.bookingDateView,
-            extra: doctor,
-          ),
+          onPressed: () =>
+              context.pushNamed(Routes.bookingDateView, extra: doctor),
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
             shape: RoundedRectangleBorder(

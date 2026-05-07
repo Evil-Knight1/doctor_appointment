@@ -7,6 +7,7 @@ abstract class ChatRemoteDataSource {
   Future<List<ConversationModel>> getConversations();
   Future<bool> markAsRead(int otherUserId);
   Future<int> getUnreadCount();
+  Future<ChatMessageModel> sendMessage(int receiverId, String message);
 }
 
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
@@ -38,5 +39,17 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   Future<int> getUnreadCount() async {
     final response = await _apiService.get('api/Chat/unread-count');
     return response['data'] as int;
+  }
+
+  @override
+  Future<ChatMessageModel> sendMessage(int receiverId, String message) async {
+    final response = await _apiService.post(
+      'api/Chat/send',
+      data: {
+        'receiverId': receiverId,
+        'message': message,
+      },
+    );
+    return ChatMessageModel.fromJson(response['data']);
   }
 }

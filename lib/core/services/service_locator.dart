@@ -60,6 +60,13 @@ import 'package:doctor_appointment/features/doctor_flow/domain/usecases/get_doct
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_stats_cubit.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_profile_cubit.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_appointments_cubit.dart';
+import 'package:doctor_appointment/features/doctors/data/datasources/review_remote_data_source.dart';
+import 'package:doctor_appointment/features/doctors/data/repositories/review_repository_impl.dart';
+import 'package:doctor_appointment/features/doctors/domain/repositories/review_repository.dart';
+import 'package:doctor_appointment/features/home/data/datasource/notification_remote_data_source.dart';
+import 'package:doctor_appointment/features/home/data/repositories/notification_repository_impl.dart';
+import 'package:doctor_appointment/features/home/domain/repositories/notification_repository.dart';
+import 'package:doctor_appointment/features/home/logic/notification_cubit.dart';
 
 // Chatbot Imports
 import 'package:doctor_appointment/features/chatbot/data/datasources/ai_chat_remote_data_source.dart';
@@ -175,10 +182,18 @@ void setupServiceLocator() {
   getIt.registerLazySingleton(
     () => SearchDoctorsUseCase(getIt<DoctorsRepository>()),
   );
+  getIt.registerLazySingleton<ReviewRemoteDataSource>(
+    () => ReviewRemoteDataSourceImpl(getIt<ApiService>()),
+  );
+  getIt.registerLazySingleton<ReviewRepository>(
+    () => ReviewRepositoryImpl(getIt<ReviewRemoteDataSource>()),
+  );
   getIt.registerFactory(
     () => DoctorsCubit(searchDoctorsUseCase: getIt<SearchDoctorsUseCase>()),
   );
-  getIt.registerFactory(() => DoctorDetailsCubit());
+  getIt.registerFactory(
+    () => DoctorDetailsCubit(reviewRepository: getIt<ReviewRepository>()),
+  );
 
   getIt.registerLazySingleton<ProfileRemoteDataSource>(
     () => ProfileRemoteDataSourceImpl(getIt<ApiService>()),
@@ -334,4 +349,13 @@ void setupServiceLocator() {
   );
   getIt.registerFactory(() => UserChatCubit(getIt(), getIt()));
   getIt.registerFactory(() => ConversationsCubit(getIt(), getIt()));
+
+  // Notifications
+  getIt.registerLazySingleton<NotificationRemoteDataSource>(
+    () => NotificationRemoteDataSourceImpl(getIt<ApiService>()),
+  );
+  getIt.registerLazySingleton<NotificationRepository>(
+    () => NotificationRepositoryImpl(getIt<NotificationRemoteDataSource>()),
+  );
+  getIt.registerFactory(() => NotificationCubit(getIt<NotificationRepository>()));
 }

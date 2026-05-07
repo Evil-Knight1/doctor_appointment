@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
-import 'package:doctor_appointment/features/home/data/models/home_model.dart';
+import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
@@ -20,7 +20,7 @@ class BookingSummaryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DoctorModel doctor = args['doctor'];
+    final Doctor doctor = args['doctor'];
     final String time = args['time'] ?? '';
     final int paymentMethodId = args['paymentMethod'] as int? ?? 3;
     final String paymentLabel = args['paymentLabel'] as String? ?? 'Cash at Clinic';
@@ -86,9 +86,9 @@ class BookingSummaryView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(AppRadius.lg),
                             ),
                             clipBehavior: Clip.antiAlias,
-                            child: doctor.avatarAsset.isNotEmpty
+                            child: doctor.profilePictureUrl != null && doctor.profilePictureUrl!.isNotEmpty
                                 ? CachedNetworkImage(
-                                    imageUrl: doctor.avatarAsset,
+                                    imageUrl: doctor.profilePictureUrl!,
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) => const Center(
                                       child: CircularProgressIndicator(),
@@ -109,9 +109,9 @@ class BookingSummaryView extends StatelessWidget {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(doctor.name, style: AppTextStyles.headingSmall),
+                              Text(doctor.fullName, style: AppTextStyles.headingSmall),
                               Text(
-                                '${doctor.speciality} | ${doctor.hospital}',
+                                '${doctor.specialization ?? 'General'} | ${doctor.hospital ?? 'Clinic'}',
                                 style: AppTextStyles.bodySmall,
                               ),
                             ],
@@ -192,7 +192,7 @@ class BookingSummaryView extends StatelessWidget {
                 isLoading: isLoading,
                 isCash: paymentMethodId == 3,
                 onConfirm: () {
-                  final int doctorId = int.tryParse(doctor.id) ?? 0;
+                  final int doctorId = doctor.id;
                   context.read<PaymentCubit>().checkout(
                         doctorId: doctorId,
                         slotId: slotId,

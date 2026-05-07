@@ -1,12 +1,13 @@
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/utils/go_router.dart';
-import 'package:doctor_appointment/features/home/data/models/doctor_model.dart';
+import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class FavoriteDoctorCard extends StatelessWidget {
-  final DoctorModel doctor;
+  final HomeDoctorModel doctor;
   final VoidCallback onRemove;
 
   const FavoriteDoctorCard({
@@ -38,25 +39,32 @@ class FavoriteDoctorCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
-              child: Image.asset(
-                doctor.imageAsset,
-                width: 65.w,
-                height: 65.h,
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => Container(
-                  width: 65.w,
-                  height: 65.h,
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryLight,
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  child: Icon(
-                    Icons.person,
-                    color: AppColors.primary,
-                    size: 30.sp,
-                  ),
-                ),
-              ),
+              child: doctor.imageAsset.startsWith('http')
+                  ? CachedNetworkImage(
+                      imageUrl: doctor.imageAsset,
+                      width: 65.w,
+                      height: 65.h,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (_, _, _) => Container(
+                        width: 65.w,
+                        height: 65.h,
+                        color: AppColors.primaryLight,
+                        child: Icon(
+                          Icons.person,
+                          color: AppColors.primary,
+                          size: 30.sp,
+                        ),
+                      ),
+                    )
+                  : Image.asset(
+                      doctor.imageAsset,
+                      width: 65.w,
+                      height: 65.h,
+                      fit: BoxFit.cover,
+                    ),
             ),
             SizedBox(width: 12.w),
             Expanded(

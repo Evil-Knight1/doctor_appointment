@@ -1,112 +1,129 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:doctor_appointment/core/utils/app_dimensions.dart';
-import 'package:doctor_appointment/features/home/data/models/home_model.dart';
-import 'package:doctor_appointment/core/utils/app_colors.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctor_appointment/core/services/service_locator.dart';
+import 'package:doctor_appointment/features/home/logic/notification_cubit.dart';
+import 'package:doctor_appointment/features/home/logic/notification_state.dart';
 import '../widgets/notification_tile.dart';
 import '../widgets/shared_app_bar.dart';
-
-const _todayNotifs = [
-  NotificationItemModel(
-    title: 'Appointment Success',
-    message:
-        "Congratulations – your appointment is confirmed! We're looking forward to meeting with you.",
-    timeAgo: '1h',
-    icon: Icons.check_circle_outline_rounded,
-    iconColor: Color(0xFF059669),
-    iconBg: Color(0xFFECFDF5),
-  ),
-  NotificationItemModel(
-    title: 'Schedule Changed',
-    message:
-        'You have successfully changed your appointment with Dr. Randy Wigham.',
-    timeAgo: '3h',
-    icon: Icons.calendar_today_outlined,
-    iconColor: Color(0xFF2563EB),
-    iconBg: Color(0xFFEFF6FF),
-  ),
-  NotificationItemModel(
-    title: 'Video Call Appointment',
-    message: "We'll send you a link to join the call at the booking details.",
-    timeAgo: '7h',
-    icon: Icons.videocam_outlined,
-    iconColor: Color(0xFF7C3AED),
-    iconBg: Color(0xFFF5F3FF),
-  ),
-];
-
-const _yesterdayNotifs = [
-  NotificationItemModel(
-    title: 'Appointment Cancelled',
-    message:
-        'You have successfully canceled your appointment with Dr. Randy Wigham. 50% of the funds will be returned.',
-    timeAgo: '1d',
-    icon: Icons.cancel_outlined,
-    iconColor: Color(0xFFDC2626),
-    iconBg: Color(0xFFFEF2F2),
-    isRead: true,
-    isToday: false,
-  ),
-  NotificationItemModel(
-    title: 'New Payment Added!',
-    message: 'Your payment has been successfully linked with Docdoc.',
-    timeAgo: '1d',
-    icon: Icons.payment_outlined,
-    iconColor: Color(0xFFD97706),
-    iconBg: Color(0xFFFFFBEB),
-    isRead: true,
-    isToday: false,
-  ),
-];
+import 'package:doctor_appointment/core/utils/app_dimensions.dart';
+import 'package:doctor_appointment/core/utils/app_colors.dart';
+import 'package:doctor_appointment/core/utils/app_styles.dart';
 
 class NotificationsView extends StatelessWidget {
   const NotificationsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
-      appBar: SharedAppBar(
-        title: 'Notification',
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.w),
-            child: Center(
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 10.w,
-                  vertical: 4.h,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(AppRadius.full),
-                ),
-                child: Text(
-                  '3 NEW',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.w700,
+    return BlocProvider(
+      create: (context) => getIt<NotificationCubit>()..fetchNotifications(),
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundLight,
+        appBar: _buildAppBar(context),
+        body: _buildBody(),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    return SharedAppBar(
+      title: 'Notification',
+      actions: [
+        BlocBuilder<NotificationCubit, NotificationState>(
+          builder: (context, state) {
+            if (state is NotificationSuccess && state.unreadCount > 0) {
+              return Padding(
+                padding: EdgeInsets.only(right: 16.w),
+                child: Center(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(AppRadius.full),
+                    ),
+                    child: Text(
+                      '${state.unreadCount} NEW',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ),
+              );
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBody() {
+    return BlocBuilder<NotificationCubit, NotificationState>(
+      builder: (context, state) {
+        if (state is NotificationLoading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is NotificationError) {
+          return Center(child: Text(state.message));
+        } else if (state is NotificationSuccess) {
+          final notifications = state.notifications;
+          if (notifications.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.notifications_none_rounded,
+                    size: 80.sp,
+                    color: AppColors.textSecondary.withValues(alpha: 0.2),
+                  ),
+                  SizedBox(height: AppSpacing.md),
+                  Text(
+                    'No notifications yet',
+                    style: AppTextStyles.headingSmall.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  SizedBox(height: AppSpacing.sm),
+                  Text(
+                    'We\'ll notify you when something important happens',
+                    style: AppTextStyles.bodySmall,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
+            );
+          }
+
+          // Simple grouping for UI (can be enhanced to group by Today/Yesterday)
+          return RefreshIndicator(
+            onRefresh: () => context.read<NotificationCubit>().fetchNotifications(),
+            child: ListView.builder(
+              padding: EdgeInsets.all(AppSpacing.lg),
+              itemCount: notifications.length + 1, // +1 for the Mark All label
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: AppSpacing.md),
+                    child: _SectionLabel(
+                      label: 'All Notifications',
+                      onMarkAll: () => context.read<NotificationCubit>().markAllAsRead(),
+                    ),
+                  );
+                }
+                final notification = notifications[index - 1];
+                return NotificationTile(
+                  notification: notification,
+                  onTap: () => context.read<NotificationCubit>().markAsRead(notification.id),
+                );
+              },
             ),
-          ),
-        ],
-      ),
-      body: ListView(
-        padding: EdgeInsets.all(AppSpacing.lg),
-        children: [
-          _SectionLabel(label: 'Today', onMarkAll: () {}),
-          SizedBox(height: AppSpacing.md),
-          ..._todayNotifs.map((n) => NotificationTile(item: n)),
-          SizedBox(height: AppSpacing.xl),
-          const _SectionLabel(label: 'Yesterday'),
-          SizedBox(height: AppSpacing.md),
-          ..._yesterdayNotifs.map((n) => NotificationTile(item: n)),
-        ],
-      ),
+          );
+        }
+        return const SizedBox.shrink();
+      },
     );
   }
 }

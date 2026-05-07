@@ -1,11 +1,11 @@
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
-import 'package:doctor_appointment/features/home/data/models/doctor_model.dart';
+import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorInfoWidget extends StatelessWidget {
-  final DoctorModel doctor;
+  final HomeDoctorModel doctor;
   const DoctorInfoWidget({super.key, required this.doctor});
 
   @override

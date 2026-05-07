@@ -14,7 +14,7 @@ class DoctorsCubit extends Cubit<DoctorsState> {
   bool _isFetching = false;
 
   Future<void> fetchDoctors({
-    String? specialization,
+    int? specializationId,
     double? minRating,
     String? searchTerm,
     int pageNumber = 1,
@@ -34,7 +34,7 @@ class DoctorsCubit extends Cubit<DoctorsState> {
 
     final result = await searchDoctorsUseCase(
       SearchDoctorsParams(
-        specialization: specialization,
+        specializationId: specializationId,
         minRating: minRating,
         searchTerm: searchTerm,
         pageNumber: pageNumber,
@@ -67,14 +67,14 @@ class DoctorsCubit extends Cubit<DoctorsState> {
   }
 
   void fetchNextPage({
-    String? specialization,
+    int? specializationId,
     double? minRating,
     String? searchTerm,
   }) {
     if (_currentPage == null || !_currentPage!.hasNextPage || _isFetching) return;
 
     fetchDoctors(
-      specialization: specialization,
+      specializationId: specializationId,
       minRating: minRating,
       searchTerm: searchTerm,
       pageNumber: _currentPage!.pageNumber + 1,

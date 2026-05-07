@@ -13,22 +13,20 @@ import 'package:doctor_appointment/features/auth/presentation/views/user_selecti
 import 'package:doctor_appointment/features/auth/logic/auth_cubit.dart';
 import 'package:doctor_appointment/features/auth/logic/forgot_password_cubit.dart';
 import 'package:doctor_appointment/features/calendar/presentation/views/calendar_view.dart';
+import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 import 'package:doctor_appointment/features/favorite/presentation/views/favorite_view.dart';
 import 'package:doctor_appointment/features/home/presentation/views/home_view.dart';
 import 'package:doctor_appointment/features/home/presentation/views/notification_view.dart';
 import 'package:doctor_appointment/features/home/presentation/views/find_nearby_view.dart';
 import 'package:doctor_appointment/features/home/presentation/views/doctor_speciality_view.dart';
 import 'package:doctor_appointment/features/home/presentation/views/recommendation_view.dart';
-import 'package:doctor_appointment/features/home/presentation/views/doctor_details_view.dart'
-    as home_doctor_details;
+import 'package:doctor_appointment/features/doctor_details/presentation/views/doctor_details_view.dart';
 import 'package:doctor_appointment/features/home/presentation/views/booking_date_view.dart';
 import 'package:doctor_appointment/features/home/presentation/views/booking_payment_view.dart';
 import 'package:doctor_appointment/features/home/presentation/views/booking_summary_view.dart';
 import 'package:doctor_appointment/features/home/presentation/views/booking_confirmed_view.dart';
 import 'package:doctor_appointment/features/home/presentation/views/booking_review_view.dart';
-import 'package:doctor_appointment/features/home/data/models/home_model.dart'
-    as home_models;
-import 'package:doctor_appointment/features/home/data/models/doctor_model.dart';
+import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:doctor_appointment/features/chatbot/presentation/views/chatbot_view.dart';
 import 'package:doctor_appointment/features/profile/presentation/views/profile_view.dart';
 import 'package:doctor_appointment/features/profile/presentation/views/edit_profile_view.dart';
@@ -148,10 +146,12 @@ abstract class AppRouter {
           providers: [
             BlocProvider(
               create: (context) =>
-                  getIt<DoctorsCubit>()..fetchDoctors(pageNumber: 1, pageSize: 10, minRating: 3.5),
+                  getIt<DoctorsCubit>()
+                    ..fetchDoctors(pageNumber: 1, pageSize: 10, minRating: 3.5),
             ),
             BlocProvider(
-              create: (context) => getIt<AppointmentsCubit>()..loadAppointments(),
+              create: (context) =>
+                  getIt<AppointmentsCubit>()..loadAppointments(),
             ),
             BlocProvider(
               create: (context) => getIt<ProfileCubit>()..loadProfile(),
@@ -189,7 +189,8 @@ abstract class AppRouter {
         builder: (context, state) {
           final sessionId = state.extra as String?;
           return BlocProvider(
-            create: (context) => getIt<ChatCubit>()..initChat(sessionId: sessionId),
+            create: (context) =>
+                getIt<ChatCubit>()..initChat(sessionId: sessionId),
             child: const ChatbotView(),
           );
         },
@@ -271,7 +272,8 @@ abstract class AppRouter {
           providers: [
             BlocProvider(create: (context) => getIt<AuthCubit>()),
             BlocProvider(
-              create: (context) => getIt<SpecializationsCubit>()..fetchSpecializations(),
+              create: (context) =>
+                  getIt<SpecializationsCubit>()..fetchSpecializations(),
             ),
           ],
           child: const DoctorSignUpView(),
@@ -313,7 +315,7 @@ abstract class AppRouter {
         name: Routes.newAppointment,
         path: kNewAppointment,
         builder: (context, state) {
-          final doctor = state.extra as DoctorModel;
+          final doctor = state.extra as HomeDoctorModel;
           return NewAppointmentView(doctor: doctor);
         },
       ),
@@ -352,17 +354,22 @@ abstract class AppRouter {
         path: kRecommendationView,
         builder: (context, state) {
           final speciality = state.extra as String?;
-          return RecommendationView(filterSpeciality: speciality);
+          return BlocProvider(
+            create: (context) => getIt<DoctorsCubit>(),
+            child: RecommendationView(filterSpeciality: speciality),
+          );
         },
       ),
       GoRoute(
         name: Routes.doctorDetailsView,
         path: kHomeDoctorDetailsView,
         builder: (context, state) {
-          final doctor = state.extra as home_models.DoctorModel;
+          final doctor = state.extra as HomeDoctorModel;
           return BlocProvider(
-            create: (context) => getIt<DoctorDetailsCubit>()..loadDoctorDetails(doctor.id),
-            child: home_doctor_details.DoctorDetailView(doctor: doctor),
+            create: (context) =>
+                getIt<DoctorDetailsCubit>()
+                  ..loadDoctorDetails(doctor.doctor.id),
+            child: DoctorDetailsView(doctor: doctor),
           );
         },
       ),
@@ -370,8 +377,8 @@ abstract class AppRouter {
         name: Routes.bookingDateView,
         path: kBookingDateView,
         builder: (context, state) {
-          final doctor = state.extra as home_models.DoctorModel;
-          return BookingDateView(doctor: doctor);
+          final doctor = state.extra as HomeDoctorModel;
+          return BookingDateView(doctor: doctor.doctor);
         },
       ),
       GoRoute(
@@ -405,8 +412,12 @@ abstract class AppRouter {
         name: Routes.bookingReviewView,
         path: kBookingReviewView,
         builder: (context, state) {
-          final doctor = state.extra as home_models.DoctorModel;
-          return BookingReviewView(doctor: doctor);
+          final doctor = state.extra as Doctor;
+          return BlocProvider(
+            create: (context) =>
+                getIt<DoctorDetailsCubit>()..loadDoctorDetails(doctor.id),
+            child: BookingReviewView(doctor: doctor),
+          );
         },
       ),
       GoRoute(

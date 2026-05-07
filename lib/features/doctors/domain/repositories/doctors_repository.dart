@@ -3,10 +3,10 @@ import 'package:doctor_appointment/features/doctors/domain/entities/doctors_page
 
 abstract class DoctorsRepository {
   Future<Result<DoctorsPage>> searchDoctors({
-    String? specialization,
+    int? specializationId,
     double? minRating,
     String? searchTerm,
-    int pageNumber,
-    int pageSize,
+    int? pageNumber,
+    int? pageSize,
   });
 }

@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
-import 'package:doctor_appointment/features/home/data/models/home_model.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import '../widgets/doctor_bottom_card.dart';
 import '../widgets/shared_app_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctor_appointment/features/doctors/logic/doctors_cubit.dart';
+import 'package:doctor_appointment/features/doctors/logic/doctors_state.dart';
+import 'package:doctor_appointment/features/home/presentation/widgets/recommended_doctors_list.dart';
 
 class FindNearbyView extends StatelessWidget {
   const FindNearbyView({super.key});
@@ -30,17 +33,25 @@ class FindNearbyView extends StatelessWidget {
         children: [
           const _MapBackground(),
           const _SearchOverlay(),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: DoctorBottomCard(
-              doctor: HomeStaticData.recommendedDoctors.first,
-              onTap: () => context.pushNamed(
-                Routes.doctorDetailsView,
-                extra: HomeStaticData.recommendedDoctors.first,
-              ),
-            ),
+          BlocBuilder<DoctorsCubit, DoctorsState>(
+            builder: (context, state) {
+              if (state is DoctorsSuccess && state.page.items.isNotEmpty) {
+                final doctor = state.page.items.first.toHomeModel();
+                return Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: DoctorBottomCard(
+                    doctor: doctor,
+                    onTap: () => context.pushNamed(
+                      Routes.doctorDetailsView,
+                      extra: doctor,
+                    ),
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
           ),
         ],
       ),

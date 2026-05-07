@@ -4,6 +4,7 @@ class Doctor {
   final String email;
   final String phone;
   final String? specialization;
+  final int specializationId;
   final String? bio;
   final int? yearsOfExperience;
   final String? clinicAddress;
@@ -12,20 +13,27 @@ class Doctor {
   final double? averageRating;
   final int totalReviews;
   final DateTime createdAt;
+  final String? profilePictureUrl;
+  final List<String>? clinicImagesUrls;
+  final bool isAvailable;
 
   const Doctor({
     required this.id,
     required this.fullName,
     required this.email,
     required this.phone,
-    required this.specialization,
-    required this.bio,
-    required this.yearsOfExperience,
-    required this.clinicAddress,
-    required this.hospital,
+    required this.specializationId,
+    this.specialization,
+    this.bio,
+    this.yearsOfExperience,
+    this.clinicAddress,
+    this.hospital,
     required this.isApproved,
-    required this.averageRating,
+    this.averageRating,
     required this.totalReviews,
     required this.createdAt,
+    this.profilePictureUrl,
+    this.clinicImagesUrls,
+    required this.isAvailable,
   });
 }

@@ -146,7 +146,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                         ? () {}
                         : () {
                             _paymentCubit.checkout(
-                              doctorId: widget.payload.draft.doctor.id,
+                              doctorId: widget.payload.draft.doctor.doctor.id,
                               slotId: widget.payload.draft.slot.id,
                               reason: widget.payload.reason,
                               paymentMethod: _selectedMethod,

@@ -3,15 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
-import 'package:doctor_appointment/features/home/data/models/home_model.dart';
+import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'star_rating.dart';
 
 class DoctorCard extends StatelessWidget {
   const DoctorCard({super.key, required this.doctor});
 
-  final DoctorModel doctor;
+  final HomeDoctorModel doctor;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,7 @@ class DoctorCard extends StatelessWidget {
 class _DoctorAvatar extends StatelessWidget {
   const _DoctorAvatar({required this.doctor});
 
-  final DoctorModel doctor;
+  final HomeDoctorModel doctor;
 
   @override
   Widget build(BuildContext context) {
@@ -73,11 +74,24 @@ class _DoctorAvatar extends StatelessWidget {
             color: AppColors.primaryLight,
             borderRadius: BorderRadius.circular(AppRadius.lg),
           ),
-          child: Icon(
-            Icons.person_rounded,
-            size: 36.sp,
-            color: AppColors.primary,
-          ),
+          clipBehavior: Clip.antiAlias,
+          child: doctor.imageAsset.startsWith('http')
+              ? CachedNetworkImage(
+                  imageUrl: doctor.imageAsset,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  errorWidget: (context, url, error) => Icon(
+                    Icons.person_rounded,
+                    size: 36.sp,
+                    color: AppColors.primary,
+                  ),
+                )
+              : Image.asset(
+                  doctor.imageAsset,
+                  fit: BoxFit.cover,
+                ),
         ),
         if (doctor.isAvailable)
           Positioned(
@@ -101,7 +115,7 @@ class _DoctorAvatar extends StatelessWidget {
 class _DoctorInfo extends StatelessWidget {
   const _DoctorInfo({required this.doctor});
 
-  final DoctorModel doctor;
+  final HomeDoctorModel doctor;
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorStatsWidget extends StatelessWidget {
-  const DoctorStatsWidget({super.key});
+  final double rating;
+  final int reviewCount;
+  final int yearsOfExperience;
+
+  const DoctorStatsWidget({
+    super.key,
+    required this.rating,
+    required this.reviewCount,
+    required this.yearsOfExperience,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +22,11 @@ class DoctorStatsWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _statItem('1000+', 'Patients', Icons.people_outline_rounded),
+          _statItem(reviewCount.toString(), 'Reviews', Icons.reviews_outlined),
           _divider(),
-          _statItem('10 Yrs', 'Experience', Icons.workspace_premium_outlined),
+          _statItem('$yearsOfExperience Yrs', 'Experience', Icons.workspace_premium_outlined),
           _divider(),
-          _statItem('4.5', 'Ratings', Icons.star_outline_rounded),
+          _statItem(rating.toStringAsFixed(1), 'Ratings', Icons.star_outline_rounded),
         ],
       ),
     );

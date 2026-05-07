@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
-import 'package:doctor_appointment/features/home/data/models/home_model.dart';
+import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import '../widgets/booking_confirmed_widgets.dart';
@@ -14,7 +14,7 @@ class BookingConfirmedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DoctorModel? doctor = args?['doctor'] as DoctorModel?;
+    final Doctor? doctor = args?['doctor'] as Doctor?;
     final String time = args?['time'] as String? ?? '';
     final String paymentLabel = args?['paymentLabel'] as String? ?? 'Cash at Clinic';
 

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctor_appointment/core/services/service_locator.dart';
+import 'package:doctor_appointment/features/doctors/logic/specializations_cubit.dart';
+import 'package:doctor_appointment/features/doctors/logic/doctors_cubit.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import '../widgets/home_app_bar.dart';
@@ -8,15 +12,31 @@ import '../widgets/quick_access_grid.dart';
 import '../widgets/recommended_doctors_list.dart';
 import '../widgets/specialities_list.dart';
 
+import 'package:doctor_appointment/features/profile/logic/profile_cubit.dart';
+
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundLight,
-      appBar: const HomeAppBar(),
-      body: const _HomeBody(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => getIt<SpecializationsCubit>()..fetchSpecializations(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<DoctorsCubit>()
+            ..fetchDoctors(pageNumber: 1, pageSize: 10, minRating: 3.5),
+        ),
+        BlocProvider(
+          create: (context) => getIt<ProfileCubit>()..loadProfile(),
+        ),
+      ],
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundLight,
+        appBar: const HomeAppBar(),
+        body: const _HomeBody(),
+      ),
     );
   }
 }

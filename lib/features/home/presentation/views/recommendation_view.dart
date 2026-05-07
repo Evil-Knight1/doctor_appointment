@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
-import 'package:doctor_appointment/features/home/data/models/home_model.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import '../widgets/doctor_list_tile.dart';
 import '../widgets/recommendation_widgets.dart';
 import '../widgets/shared_app_bar.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctor_appointment/features/doctors/logic/doctors_cubit.dart';
+import 'package:doctor_appointment/features/doctors/logic/doctors_state.dart';
+
+import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 
 class RecommendationView extends StatefulWidget {
   const RecommendationView({super.key, this.filterSpeciality});
@@ -18,11 +23,18 @@ class RecommendationView extends StatefulWidget {
 }
 
 class _RecommendationViewState extends State<RecommendationView> {
-  String _searchQuery = '';
+  @override
+  void initState() {
+    super.initState();
+    // Initial fetch
+    context.read<DoctorsCubit>().fetchDoctors(
+          searchTerm: widget.filterSpeciality ?? '',
+        );
+  }
 
-  List<DoctorModel> get _filtered => HomeStaticData.recommendedDoctors
-      .where((d) => d.name.toLowerCase().contains(_searchQuery.toLowerCase()))
-      .toList();
+  void _onSearchChanged(String query) {
+    context.read<DoctorsCubit>().fetchDoctors(searchTerm: query);
+  }
 
   void _showSortSheet() => showModalBottomSheet(
         context: context,
@@ -54,25 +66,45 @@ class _RecommendationViewState extends State<RecommendationView> {
       body: Column(
         children: [
           RecommendationSearchRow(
-            onChanged: (v) => setState(() => _searchQuery = v),
+            onChanged: _onSearchChanged,
             onFilterTap: _showSortSheet,
           ),
           SizedBox(height: AppSpacing.md),
           Expanded(
-            child: ListView.separated(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.lg,
-                vertical: AppSpacing.sm,
-              ),
-              itemCount: _filtered.length,
-              separatorBuilder: (_, _) => SizedBox(height: AppSpacing.md),
-              itemBuilder: (context, index) => DoctorListTile(
-                doctor: _filtered[index],
-                onTap: () => context.pushNamed(
-                  Routes.doctorDetailsView,
-                  extra: _filtered[index],
-                ),
-              ),
+            child: BlocBuilder<DoctorsCubit, DoctorsState>(
+              builder: (context, state) {
+                if (state is DoctorsLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is DoctorsFailure) {
+                  return Center(child: Text('Error: ${state.message}'));
+                } else if (state is DoctorsSuccess) {
+                  final doctors = state.page.items;
+                  if (doctors.isEmpty) {
+                    return const Center(child: Text('No doctors found.'));
+                  }
+                  return ListView.separated(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppSpacing.lg,
+                      vertical: AppSpacing.sm,
+                    ),
+                    itemCount: doctors.length,
+                    separatorBuilder: (_, _) => SizedBox(height: AppSpacing.md),
+                    itemBuilder: (context, index) {
+                      final doctor = doctors[index];
+                      final homeModel = HomeDoctorModel(doctor: doctor);
+                      
+                      return DoctorListTile(
+                        doctor: homeModel,
+                        onTap: () => context.pushNamed(
+                          Routes.doctorDetailsView,
+                          extra: homeModel,
+                        ),
+                      );
+                    },
+                  );
+                }
+                return const SizedBox.shrink();
+              },
             ),
           ),
         ],

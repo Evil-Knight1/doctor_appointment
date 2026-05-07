@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:doctor_appointment/core/errors/exceptions.dart';
 import 'package:doctor_appointment/core/errors/failures.dart';
 import 'package:doctor_appointment/core/utils/result.dart';
+import 'package:doctor_appointment/core/services/shared_preferences_helper.dart';
 import 'package:doctor_appointment/features/profile/data/datasources/profile_remote_data_source.dart';
 import 'package:doctor_appointment/features/profile/domain/entities/patient_profile.dart';
 import 'package:doctor_appointment/features/profile/domain/repositories/profile_repository.dart';
@@ -15,6 +16,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<Result<PatientProfile>> getPatientProfile() async {
     try {
       final response = await remoteDataSource.getPatientProfile();
+      await SharedPreferencesHelper.saveProfileInfo(
+        response.fullName,
+        response.profilePicture,
+      );
       return Result.success(response);
     } on ApiException catch (exception) {
       return Result.failure(
@@ -44,6 +49,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
         gender: gender,
         address: address,
         profilePicturePath: profilePicturePath,
+      );
+      await SharedPreferencesHelper.saveProfileInfo(
+        response.fullName,
+        response.profilePicture,
       );
       return Result.success(response);
     } on ApiException catch (exception) {

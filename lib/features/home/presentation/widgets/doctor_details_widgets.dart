@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
-import 'package:doctor_appointment/features/home/data/models/home_model.dart';
+import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 
 class DoctorHeaderCard extends StatelessWidget {
   const DoctorHeaderCard({super.key, required this.doctor});
-  final DoctorModel doctor;
+  final HomeDoctorModel doctor;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +39,9 @@ class DoctorHeaderCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppRadius.lg),
             ),
             clipBehavior: Clip.antiAlias,
-            child: doctor.avatarAsset.isNotEmpty
+            child: doctor.imageAsset.startsWith('http')
                 ? CachedNetworkImage(
-                    imageUrl: doctor.avatarAsset,
+                    imageUrl: doctor.imageAsset,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => const Center(
                       child: CircularProgressIndicator(),
@@ -52,10 +52,9 @@ class DoctorHeaderCard extends StatelessWidget {
                       size: 40.sp,
                     ),
                   )
-                : Icon(
-                    Icons.person_rounded,
-                    color: AppColors.primary,
-                    size: 40.sp,
+                : Image.asset(
+                    doctor.imageAsset,
+                    fit: BoxFit.cover,
                   ),
           ),
           SizedBox(width: AppSpacing.md),

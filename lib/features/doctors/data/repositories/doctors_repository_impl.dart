@@ -13,19 +13,19 @@ class DoctorsRepositoryImpl implements DoctorsRepository {
 
   @override
   Future<Result<DoctorsPage>> searchDoctors({
-    String? specialization,
+    int? specializationId,
     double? minRating,
     String? searchTerm,
-    int pageNumber = 1,
-    int pageSize = 10,
+    int? pageNumber = 1,
+    int? pageSize = 10,
   }) async {
     try {
       final response = await remoteDataSource.searchDoctors(
-        specialization: specialization,
+        specializationId: specializationId,
         minRating: minRating,
         searchTerm: searchTerm,
-        pageNumber: pageNumber,
-        pageSize: pageSize,
+        pageNumber: pageNumber ?? 1,
+        pageSize: pageSize ?? 10,
       );
       return Result.success(response);
     } on ApiException catch (exception) {

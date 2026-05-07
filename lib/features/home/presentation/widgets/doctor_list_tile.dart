@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
-import 'package:doctor_appointment/features/home/data/models/home_model.dart';
+import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class DoctorListTile extends StatelessWidget {
   const DoctorListTile({super.key, required this.doctor, required this.onTap});
-  final DoctorModel doctor;
+  final HomeDoctorModel doctor;
   final VoidCallback onTap;
 
   @override
@@ -36,11 +37,24 @@ class DoctorListTile extends StatelessWidget {
                 color: AppColors.primaryLight,
                 borderRadius: BorderRadius.circular(AppRadius.lg),
               ),
-              child: Icon(
-                Icons.person_rounded,
-                color: AppColors.primary,
-                size: 34.sp,
-              ),
+              clipBehavior: Clip.antiAlias,
+              child: doctor.imageAsset.startsWith('http')
+                  ? CachedNetworkImage(
+                      imageUrl: doctor.imageAsset,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.person_rounded,
+                        color: AppColors.primary,
+                        size: 34.sp,
+                      ),
+                    )
+                  : Image.asset(
+                      doctor.imageAsset,
+                      fit: BoxFit.cover,
+                    ),
             ),
             SizedBox(width: AppSpacing.md),
             Expanded(

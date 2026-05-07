@@ -48,8 +48,15 @@ class UserChatCubit extends Cubit<ChatState> {
 
   Future<void> sendMessage(String text) async {
     if (state.activeChatUserId == null) return;
+    await sendMessageViaApi(state.activeChatUserId!, text);
+  }
+
+  Future<void> sendMessageViaApi(int receiverId, String text) async {
+    emit(state.copyWith(status: ChatStatus.loading));
     try {
-      await _signalRService.sendMessage(state.activeChatUserId!, text);
+      final message = await _remoteDataSource.sendMessage(receiverId, text);
+      final updatedMessages = List<ChatMessageModel>.from(state.messages)..add(message);
+      emit(state.copyWith(status: ChatStatus.success, messages: updatedMessages));
     } catch (e) {
       emit(state.copyWith(status: ChatStatus.error, errorMessage: e.toString()));
     }

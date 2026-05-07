@@ -1,6 +1,6 @@
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
-import 'package:doctor_appointment/features/home/data/models/doctor_model.dart';
+import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:doctor_appointment/features/appointment/presentation/models/appointment_draft.dart';
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/features/appointment/presentation/widgets/date_picker_widget.dart';
@@ -17,7 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class NewAppointmentView extends StatefulWidget {
-  final DoctorModel doctor;
+  final HomeDoctorModel doctor;
   const NewAppointmentView({super.key, required this.doctor});
 
   @override
@@ -43,7 +43,7 @@ class _NewAppointmentViewState extends State<NewAppointmentView> {
   }
 
   void _fetchSlots() {
-    _slotsCubit.fetchSlots(widget.doctor.id, _selectedDate);
+    _slotsCubit.fetchSlots(widget.doctor.doctor.id, _selectedDate);
     setState(() {
       _selectedSlot = null; // Reset selection on date change
     });

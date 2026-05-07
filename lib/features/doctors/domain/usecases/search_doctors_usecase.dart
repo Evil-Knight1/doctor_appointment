@@ -9,7 +9,7 @@ class SearchDoctorsUseCase {
 
   Future<Result<DoctorsPage>> call(SearchDoctorsParams params) {
     return repository.searchDoctors(
-      specialization: params.specialization,
+      specializationId: params.specializationId,
       minRating: params.minRating,
       searchTerm: params.searchTerm,
       pageNumber: params.pageNumber,
@@ -19,14 +19,14 @@ class SearchDoctorsUseCase {
 }
 
 class SearchDoctorsParams {
-  final String? specialization;
+  final int? specializationId;
   final double? minRating;
   final String? searchTerm;
   final int pageNumber;
   final int pageSize;
 
   const SearchDoctorsParams({
-    this.specialization,
+    this.specializationId,
     this.minRating,
     this.searchTerm,
     this.pageNumber = 1,

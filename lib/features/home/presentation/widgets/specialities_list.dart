@@ -6,7 +6,12 @@ import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/features/home/data/models/home_model.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
+import 'package:doctor_appointment/core/utils/specialty_mapper.dart';
 import 'section_header.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doctor_appointment/features/doctors/logic/specializations_cubit.dart';
+import 'package:doctor_appointment/features/doctors/logic/specializations_state.dart';
 
 class SpecialitiesList extends StatelessWidget {
   const SpecialitiesList({super.key});
@@ -21,20 +26,41 @@ class SpecialitiesList extends StatelessWidget {
           onSeeAllTap: () => context.pushNamed(Routes.doctorSpecialityView),
         ),
         SizedBox(height: AppSpacing.md),
-        SizedBox(
-          height: 92.h,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-            itemCount: HomeStaticData.specialities.length,
-            separatorBuilder: (_, _) => SizedBox(width: AppSpacing.md),
-            itemBuilder: (_, index) =>
-                SpecialityCard(speciality: HomeStaticData.specialities[index]),
-          ),
+        BlocBuilder<SpecializationsCubit, SpecializationsState>(
+          builder: (context, state) {
+            if (state is SpecializationsLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is SpecializationsSuccess) {
+              final uniqueNames = state.uniqueNames.toList();
+              return SizedBox(
+                height: 92.h,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                  itemCount: uniqueNames.length,
+                  separatorBuilder: (_, _) => SizedBox(width: AppSpacing.md),
+                  itemBuilder: (_, index) {
+                    final name = uniqueNames[index];
+                    final spec = state.specializations.firstWhere((s) => s.name == name);
+                    final theme = SpecialtyMapper.getThemeForSpecialty(spec.name);
+                    final model = SpecialityModel(
+                      name: spec.name,
+                      icon: theme.icon,
+                      color: theme.color,
+                      bgColor: theme.bgColor,
+                    );
+                    return SpecialityCard(speciality: model);
+                  },
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          },
         ),
       ],
     );
   }
+
 }
 
 class SpecialityCard extends StatelessWidget {

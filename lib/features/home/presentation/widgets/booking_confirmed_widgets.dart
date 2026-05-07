@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
-import 'package:doctor_appointment/features/home/data/models/home_model.dart';
+import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 
@@ -108,7 +108,7 @@ class BookingInfoRow extends StatelessWidget {
 
 class DoctorInfoRow extends StatelessWidget {
   const DoctorInfoRow({super.key, required this.doctor});
-  final DoctorModel doctor;
+  final Doctor doctor;
 
   @override
   Widget build(BuildContext context) {
@@ -131,9 +131,9 @@ class DoctorInfoRow extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(doctor.name, style: AppTextStyles.headingSmall),
+            Text(doctor.fullName, style: AppTextStyles.headingSmall),
             Text(
-              '${doctor.speciality} | ${doctor.hospital}',
+              '${doctor.specialization ?? 'General'} | ${doctor.hospital ?? 'Clinic'}',
               style: AppTextStyles.bodySmall,
             ),
             Row(
@@ -141,7 +141,7 @@ class DoctorInfoRow extends StatelessWidget {
                 Icon(Icons.star_rounded, size: 12.sp, color: AppColors.star),
                 SizedBox(width: 2.w),
                 Text(
-                  '${doctor.rating} (${doctor.reviewCount} reviews)',
+                  '${doctor.averageRating?.toStringAsFixed(1) ?? '0.0'} (${doctor.totalReviews} reviews)',
                   style: AppTextStyles.bodySmall,
                 ),
               ],

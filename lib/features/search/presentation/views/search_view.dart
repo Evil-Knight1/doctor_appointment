@@ -1,15 +1,18 @@
 import 'package:doctor_appointment/core/utils/app_colors.dart';
-import 'package:doctor_appointment/core/utils/app_images.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/services/service_locator.dart';
 import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 import 'package:doctor_appointment/features/doctors/logic/doctors_cubit.dart';
 import 'package:doctor_appointment/features/doctors/logic/doctors_state.dart';
-import 'package:doctor_appointment/features/home/data/models/home_model.dart';
+import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:doctor_appointment/features/home/presentation/widgets/doctor_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:doctor_appointment/features/doctors/logic/specializations_cubit.dart';
+import 'package:doctor_appointment/features/doctors/logic/specializations_state.dart';
+import 'package:doctor_appointment/core/utils/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
@@ -20,30 +23,24 @@ class SearchView extends StatefulWidget {
 
 class _SearchViewState extends State<SearchView> {
   late final DoctorsCubit _doctorsCubit;
+  late final SpecializationsCubit _specializationsCubit;
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   String _searchTerm = '';
-
-  // Specialty chips
-  static const List<String> _specialties = [
-    'All',
-    'Dentist',
-    'Ophthalmologist',
-    'ENT Specialist',
-    'Cardiologist',
-    'Dermatologist',
-    'Neurologist',
-    'Pediatrics',
-    'Orthopedics',
-  ];
-  String _selectedSpecialty = 'All';
+  int? _selectedSpecializationId;
 
   @override
   void initState() {
     super.initState();
     _doctorsCubit = getIt<DoctorsCubit>();
-    // Load all doctors initially
+    _specializationsCubit = getIt<SpecializationsCubit>();
+    
+    // Load data
     _doctorsCubit.fetchDoctors(pageNumber: 1, pageSize: 10);
+    if (_specializationsCubit.state is! SpecializationsSuccess) {
+      _specializationsCubit.fetchSpecializations();
+    }
+    
     _scrollController.addListener(_onScroll);
   }
 
@@ -59,8 +56,7 @@ class _SearchViewState extends State<SearchView> {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       _doctorsCubit.fetchNextPage(
-        specialization:
-            _selectedSpecialty == 'All' ? null : _selectedSpecialty,
+        specializationId: _selectedSpecializationId,
         searchTerm: _searchTerm.isEmpty ? null : _searchTerm,
       );
     }
@@ -69,19 +65,19 @@ class _SearchViewState extends State<SearchView> {
   void _search() {
     _searchTerm = _searchController.text.trim();
     _doctorsCubit.fetchDoctors(
-      specialization: _selectedSpecialty == 'All' ? null : _selectedSpecialty,
+      specializationId: _selectedSpecializationId,
       searchTerm: _searchTerm.isEmpty ? null : _searchTerm,
       pageNumber: 1,
       pageSize: 10,
     );
   }
 
-  void _selectSpecialty(String specialty) {
+  void _selectSpecialty(int? specializationId) {
     setState(() {
-      _selectedSpecialty = specialty;
+      _selectedSpecializationId = specializationId;
     });
     _doctorsCubit.fetchDoctors(
-      specialization: specialty == 'All' ? null : specialty,
+      specializationId: _selectedSpecializationId,
       searchTerm: _searchTerm.isEmpty ? null : _searchTerm,
       pageNumber: 1,
       pageSize: 10,
@@ -90,8 +86,11 @@ class _SearchViewState extends State<SearchView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _doctorsCubit,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _doctorsCubit),
+        BlocProvider.value(value: _specializationsCubit),
+      ],
       child: Scaffold(
         body: SafeArea(
           child: Column(
@@ -173,41 +172,54 @@ class _SearchViewState extends State<SearchView> {
   }
 
   Widget _buildSpecialtyChips() {
-    return SizedBox(
-      height: 36.h,
-      child: ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        scrollDirection: Axis.horizontal,
-        itemCount: _specialties.length,
-        separatorBuilder: (_, _) => SizedBox(width: 8.w),
-        itemBuilder: (_, index) {
-          final specialty = _specialties[index];
-          final isSelected = specialty == _selectedSpecialty;
-          return GestureDetector(
-            onTap: () => _selectSpecialty(specialty),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
-              decoration: BoxDecoration(
-                color: isSelected ? AppColors.primary : Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(20.r),
-                border: Border.all(
-                  color: isSelected ? AppColors.primary : AppColors.border,
+    return BlocBuilder<SpecializationsCubit, SpecializationsState>(
+      builder: (context, state) {
+        if (state is! SpecializationsSuccess) {
+          return const SizedBox.shrink();
+        }
+
+        final specs = state.specializations;
+        return SizedBox(
+          height: 36.h,
+          child: ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            scrollDirection: Axis.horizontal,
+            itemCount: specs.length + 1,
+            separatorBuilder: (_, _) => SizedBox(width: 8.w),
+            itemBuilder: (_, index) {
+              final bool isAll = index == 0;
+              final String name = isAll ? 'All' : specs[index - 1].name;
+              final int? id = isAll ? null : specs[index - 1].id;
+              final isSelected = id == _selectedSpecializationId;
+
+              return GestureDetector(
+                onTap: () => _selectSpecialty(id),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? AppColors.primary
+                        : Theme.of(context).scaffoldBackgroundColor,
+                    borderRadius: BorderRadius.circular(20.r),
+                    border: Border.all(
+                      color: isSelected ? AppColors.primary : AppColors.border,
+                    ),
+                  ),
+                  child: Text(
+                    name,
+                    style: AppStyles.styleRegular12.copyWith(
+                      color: isSelected ? Colors.white : AppColors.textSecondary,
+                      fontSize: 12.sp,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                    ),
+                  ),
                 ),
-              ),
-              child: Text(
-                specialty,
-                style: AppStyles.styleRegular12.copyWith(
-                  color: isSelected ? Colors.white : AppColors.textSecondary,
-                  fontSize: 12.sp,
-                  fontWeight:
-                      isSelected ? FontWeight.w600 : FontWeight.normal,
-                ),
-              ),
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -307,9 +319,13 @@ class _SearchViewState extends State<SearchView> {
             separatorBuilder: (_, _) => SizedBox(height: 12.h),
             itemBuilder: (_, index) {
               if (index < doctors.length) {
+                final doctorModel = doctors[index];
                 return DoctorListTile(
-                  doctor: doctors[index],
-                  onTap: () {},
+                  doctor: doctorModel,
+                  onTap: () => context.pushNamed(
+                    Routes.doctorDetailsView,
+                    extra: doctorModel.doctor,
+                  ),
                 );
               }
               return Padding(
@@ -325,25 +341,6 @@ class _SearchViewState extends State<SearchView> {
   }
 }
 
-List<DoctorModel> _mapDoctors(List<Doctor> doctors) {
-  final images = [
-    Assets.imagesDrAyeshaRahman,
-    Assets.imagesDrNobleThorme,
-    Assets.imagesDrSarah,
-  ];
-
-  return doctors.asMap().entries.map((entry) {
-    final index = entry.key;
-    final doctor = entry.value;
-    return DoctorModel(
-      id: doctor.id.toString(),
-      name: doctor.fullName,
-      speciality: doctor.specialization ?? 'General',
-      hospital: 'N/A',
-      rating: doctor.averageRating ?? 0.0,
-      reviewCount: doctor.totalReviews,
-      avatarAsset: images[index % images.length],
-      isAvailable: true,
-    );
-  }).toList();
+List<HomeDoctorModel> _mapDoctors(List<Doctor> doctors) {
+  return doctors.map((doctor) => HomeDoctorModel(doctor: doctor)).toList();
 }
