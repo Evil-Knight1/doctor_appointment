@@ -16,6 +16,8 @@ import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:doctor_appointment/core/logic/theme_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_offline/flutter_offline.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -69,7 +71,42 @@ class DoctorAppointment extends StatelessWidget {
                   themeMode: themeMode,
                   // ignore: deprecated_member_use
                   useInheritedMediaQuery: true,
-                  builder: DevicePreview.appBuilder,
+                  builder: (context, child) {
+                    final appChild = DevicePreview.appBuilder(context, child);
+                    return OfflineBuilder(
+                      connectivityBuilder: (
+                        BuildContext context,
+                        List<ConnectivityResult> connectivity,
+                        Widget child,
+                      ) {
+                        final bool connected = !connectivity.contains(ConnectivityResult.none);
+                        return Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            child,
+                            if (!connected)
+                              Positioned(
+                                top: MediaQuery.of(context).padding.top,
+                                left: 0,
+                                right: 0,
+                                child: Material(
+                                  color: Colors.red,
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                                    child: Text(
+                                      'No Internet Connection',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(color: Colors.white, fontSize: 14),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                      child: appChild,
+                    );
+                  },
                   locale: DevicePreview.locale(context),
                   routerConfig: AppRouter.router,
                   debugShowCheckedModeBanner: false,
