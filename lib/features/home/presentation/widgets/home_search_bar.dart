@@ -4,6 +4,8 @@ import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class HomeSearchBar extends StatelessWidget {
   const HomeSearchBar({super.key});
 
@@ -27,6 +29,7 @@ class _SearchInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       height: 50.h,
       decoration: BoxDecoration(
@@ -42,7 +45,7 @@ class _SearchInput extends StatelessWidget {
       ),
       child: TextField(
         decoration: InputDecoration(
-          hintText: 'Search doctor, hospital...',
+          hintText: l10n.searchHint,
           hintStyle: AppTextStyles.bodyMedium,
           prefixIcon: Icon(
             Icons.search_rounded,

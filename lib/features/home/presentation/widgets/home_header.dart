@@ -4,6 +4,8 @@ import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key, required this.userName});
 
@@ -32,15 +34,16 @@ class _GreetingText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hi, $userName! 👋', style: AppTextStyles.displayMedium),
+            Text('${l10n.hi}, $userName! 👋', style: AppTextStyles.displayMedium),
             SizedBox(height: 2.h),
-            Text('How are you today?', style: AppTextStyles.bodyMedium),
+            Text(l10n.howAreYou, style: AppTextStyles.bodyMedium),
           ],
         ),
         const _AvatarButton(),
@@ -168,13 +171,14 @@ class _BannerText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Book and\nschedule with\nnearest doctor',
+          l10n.bookNearestDoctor,
           style: AppTextStyles.greetingTitle,
         ),
         SizedBox(height: AppSpacing.md),
@@ -189,6 +193,7 @@ class _FindNearbyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
@@ -206,7 +211,7 @@ class _FindNearbyButton extends StatelessWidget {
         ],
       ),
       child: Text(
-        'Find Nearby',
+        l10n.findNearby,
         style: TextStyle(
           fontSize: 12.sp,
           fontWeight: FontWeight.w600,

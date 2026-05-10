@@ -12,6 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
 
@@ -33,6 +35,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthFailure) {
@@ -67,23 +70,23 @@ class _LoginViewState extends State<LoginView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 30.h),
-                        Text('Welcome Back', style: AppStyles.styleBold32),
+                        Text(l10n.welcomeBack, style: AppStyles.styleBold32),
                         SizedBox(height: 8.h),
                         Text(
-                          'We\'re excited to have you back, can\'t wait to see what you\'ve been up to since you last logged in.',
+                          l10n.welcomeBackSubtitle,
                           style: AppStyles.styleRegular14.copyWith(
                             color: theme.textTheme.bodyMedium?.color,
                           ),
                         ),
                         SizedBox(height: 36.h),
                         CustomTextFormField(
-                          hintText: 'Email',
+                          hintText: l10n.email,
                           textInputType: TextInputType.emailAddress,
                           controller: _emailController,
                         ),
                         SizedBox(height: 16.h),
                         CustomTextFormField(
-                          hintText: 'Password',
+                          hintText: l10n.password,
                           textInputType: TextInputType.visiblePassword,
                           isPassword: true,
                           controller: _passwordController,
@@ -96,7 +99,7 @@ class _LoginViewState extends State<LoginView> {
                               context.go(AppRouter.kForgotPasswordView);
                             },
                             child: Text(
-                              'Forgot Password?',
+                              l10n.forgotPassword,
                               style: AppStyles.styleRegular12.copyWith(
                                 color: theme.colorScheme.primary,
                               ),
@@ -109,7 +112,7 @@ class _LoginViewState extends State<LoginView> {
                           child: CustomButton(
                             height: 52.h,
                             width: double.infinity,
-                            text: isLoading ? 'Logging in...' : 'Login',
+                            text: isLoading ? l10n.loggingIn : l10n.login,
                             onPressed: isLoading
                                 ? () {}
                                 : () {
@@ -154,7 +157,7 @@ class _LoginViewState extends State<LoginView> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Don't have an account? ",
+                                  l10n.dontHaveAccount,
                                   style: AppStyles.styleRegular14.copyWith(
                                     color: theme.textTheme.bodyMedium?.color,
                                   ),
@@ -164,7 +167,7 @@ class _LoginViewState extends State<LoginView> {
                                     context.go(AppRouter.kUserSelectionView);
                                   },
                                   child: Text(
-                                    'Sign Up',
+                                    l10n.signUp,
                                     style: AppStyles.styleRegular14.copyWith(
                                       color: theme.colorScheme.primary,
                                     ),

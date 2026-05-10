@@ -16,16 +16,19 @@ extension DoctorToHomeModel on Doctor {
   }
 }
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class RecommendedDoctorsList extends StatelessWidget {
   const RecommendedDoctorsList({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          title: 'Recommendation Doctor',
+          title: l10n.recommendedDoctors,
           onSeeAllTap: () => context.pushNamed(Routes.recommendationView),
         ),
         SizedBox(height: AppSpacing.md),
@@ -38,8 +41,8 @@ class RecommendedDoctorsList extends StatelessWidget {
             } else if (state is DoctorsSuccess) {
               final doctors = state.page.items;
               if (doctors.isEmpty) {
-                return const Center(
-                  child: Text('No recommended doctors found.'),
+                return Center(
+                  child: Text(l10n.seeAll), // Or add a specific "No doctors" key
                 );
               }
               return ListView.separated(

@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:doctor_appointment/core/utils/app_dimensions.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SectionHeader extends StatelessWidget {
   const SectionHeader({
@@ -16,6 +14,7 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: Row(
@@ -25,7 +24,7 @@ class SectionHeader extends StatelessWidget {
           if (showSeeAll)
             GestureDetector(
               onTap: onSeeAllTap,
-              child: Text('See All', style: AppTextStyles.labelLarge),
+              child: Text(l10n.seeAll, style: AppTextStyles.labelLarge),
             ),
         ],
       ),

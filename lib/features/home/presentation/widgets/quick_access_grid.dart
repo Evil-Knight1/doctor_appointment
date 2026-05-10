@@ -6,6 +6,8 @@ import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class _QuickAccessItem {
   const _QuickAccessItem({
     required this.label,
@@ -23,47 +25,51 @@ class _QuickAccessItem {
 class QuickAccessGrid extends StatelessWidget {
   const QuickAccessGrid({super.key});
 
-  static const List<_QuickAccessItem> _items = [
-    _QuickAccessItem(
-      label: 'Find\nNearby',
-      icon: Icons.location_on_outlined,
-      color: Color(0xFF2563EB),
-      bgColor: Color(0xFFEFF6FF),
-    ),
-    _QuickAccessItem(
-      label: 'Video\nCall',
-      icon: Icons.video_call_outlined,
-      color: Color(0xFF059669),
-      bgColor: Color(0xFFECFDF5),
-    ),
-    _QuickAccessItem(
-      label: 'Phone\nCall',
-      icon: Icons.phone_outlined,
-      color: Color(0xFFD97706),
-      bgColor: Color(0xFFFFFBEB),
-    ),
-    _QuickAccessItem(
-      label: 'My\nRecords',
-      icon: Icons.description_outlined,
-      color: Color(0xFF7C3AED),
-      bgColor: Color(0xFFF5F3FF),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final List<_QuickAccessItem> items = [
+      _QuickAccessItem(
+        label: l10n.findNearbyGrid,
+        icon: Icons.location_on_outlined,
+        color: const Color(0xFF2563EB),
+        bgColor: const Color(0xFFEFF6FF),
+      ),
+      _QuickAccessItem(
+        label: l10n.videoCall,
+        icon: Icons.video_call_outlined,
+        color: const Color(0xFF059669),
+        bgColor: const Color(0xFFECFDF5),
+      ),
+      _QuickAccessItem(
+        label: l10n.phoneCall,
+        icon: Icons.phone_outlined,
+        color: const Color(0xFFD97706),
+        bgColor: const Color(0xFFFFFBEB),
+      ),
+      _QuickAccessItem(
+        label: l10n.myRecords,
+        icon: Icons.description_outlined,
+        color: const Color(0xFF7C3AED),
+        bgColor: const Color(0xFFF5F3FF),
+      ),
+    ];
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: Row(
         children: List.generate(
-          _items.length,
+          items.length,
           (index) => Expanded(
             child: Padding(
               padding: EdgeInsets.only(
                 left: index == 0 ? 0 : (AppSpacing.sm / 2),
-                right: index == _items.length - 1 ? 0 : (AppSpacing.sm / 2),
+                right: index == items.length - 1 ? 0 : (AppSpacing.sm / 2),
               ),
-              child: _QuickAccessCard(item: _items[index]),
+              child: _QuickAccessCard(
+                item: items[index],
+                isNearby: index == 0,
+              ),
             ),
           ),
         ),
@@ -73,15 +79,16 @@ class QuickAccessGrid extends StatelessWidget {
 }
 
 class _QuickAccessCard extends StatelessWidget {
-  const _QuickAccessCard({required this.item});
+  const _QuickAccessCard({required this.item, this.isNearby = false});
 
   final _QuickAccessItem item;
+  final bool isNearby;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (item.label == 'Find\nNearby') {
+        if (isNearby) {
           context.pushNamed(Routes.findNearbyView);
         }
       },

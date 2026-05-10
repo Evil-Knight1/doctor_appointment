@@ -18,6 +18,8 @@ import 'package:go_router/go_router.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:doctor_appointment/core/widgets/image_picker_widget.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
 
@@ -72,13 +74,14 @@ class _SignUpViewState extends State<SignUpView> {
   }
 
   void _nextPage() {
+    final l10n = AppLocalizations.of(context)!;
     if (_currentPage == 0) {
       if (_formKey.currentState?.validate() != true) return;
       if (_passwordController.text.trim() !=
           _confirmPasswordController.text.trim()) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Passwords do not match'),
+          SnackBar(
+            content: Text(l10n.passwordsDoNotMatch),
             backgroundColor: Colors.red,
           ),
         );
@@ -120,6 +123,7 @@ class _SignUpViewState extends State<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
@@ -148,7 +152,7 @@ class _SignUpViewState extends State<SignUpView> {
           body: SafeArea(
             child: Column(
               children: [
-                _buildHeader(),
+                _buildHeader(l10n),
                 Expanded(
                   child: Form(
                     key: _formKey,
@@ -170,8 +174,8 @@ class _SignUpViewState extends State<SignUpView> {
                       child: KeyedSubtree(
                         key: ValueKey<int>(_currentPage),
                         child: _currentPage == 0
-                            ? _buildAccountInfoStep()
-                            : _buildPersonalInfoStep(isLoading),
+                            ? _buildAccountInfoStep(l10n)
+                            : _buildPersonalInfoStep(isLoading, l10n),
                       ),
                     ),
                   ),
@@ -180,7 +184,7 @@ class _SignUpViewState extends State<SignUpView> {
                   padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
                   child: PatientSignUpFooter(
                     isLoading: isLoading,
-                    label: _currentPage == 0 ? 'Continue' : 'Create Account',
+                    label: _currentPage == 0 ? l10n.continueButton : l10n.createAccount,
                     onPressed: isLoading ? null : (_currentPage == 0 ? _nextPage : _submitForm),
                   ),
                 ),
@@ -192,7 +196,7 @@ class _SignUpViewState extends State<SignUpView> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(AppLocalizations l10n) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
       child: Column(
@@ -211,7 +215,7 @@ class _SignUpViewState extends State<SignUpView> {
                       colors: [Color(0xff236DEC), Color(0xff0D47A1)],
                     ).createShader(bounds),
                     child: Text(
-                      'Patient Registration',
+                      l10n.patientRegistration,
                       style: AppStyles.styleBold16.copyWith(
                         color: Colors.white,
                       ),
@@ -219,7 +223,7 @@ class _SignUpViewState extends State<SignUpView> {
                   ),
                   SizedBox(height: 2.h),
                   Text(
-                    'Step ${_currentPage + 1} of 2',
+                    '${l10n.step} ${_currentPage + 1} ${l10n.of} 2',
                     style: AppStyles.styleMedium12.copyWith(
                       color: Theme.of(context).textTheme.bodyMedium?.color,
                     ),
@@ -242,7 +246,7 @@ class _SignUpViewState extends State<SignUpView> {
     );
   }
 
-  Widget _buildAccountInfoStep() {
+  Widget _buildAccountInfoStep(AppLocalizations l10n) {
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(
@@ -250,21 +254,21 @@ class _SignUpViewState extends State<SignUpView> {
         children: [
           SizedBox(height: 12.h),
           Text(
-            'Account Info', 
+            l10n.accountInfo, 
             style: AppStyles.styleSemiBold24.copyWith(
               color: Theme.of(context).textTheme.headlineMedium?.color,
             )
           ),
           SizedBox(height: 8.h),
           Text(
-            'Set up your login credentials to get started.',
+            l10n.accountInfoSubtitle,
             style: AppStyles.styleRegular14.copyWith(
               color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
           SizedBox(height: 32.h),
           RegistrationTextField(
-            label: 'Email',
+            label: l10n.email,
             hintText: 'example@email.com',
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
@@ -274,25 +278,25 @@ class _SignUpViewState extends State<SignUpView> {
             serverError: _getServerError('email'),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return 'Email is required';
+                return l10n.emailRequired;
               }
               if (!RegExp(
                 r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
               ).hasMatch(value.trim())) {
-                return 'Enter a valid email address';
+                return l10n.emailInvalid;
               }
               return null;
             },
           ),
           RegistrationPhoneField(
-            label: 'Phone Number',
+            label: l10n.phone,
             controller: _phoneController,
             focusNode: _phoneFocus,
             serverError: _getServerError('phone'),
           ),
           SizedBox(height: 16.h),
           RegistrationTextField(
-            label: 'Password',
+            label: l10n.password,
             hintText: 'Min. 6 characters',
             controller: _passwordController,
             isPassword: true,
@@ -302,17 +306,17 @@ class _SignUpViewState extends State<SignUpView> {
             serverError: _getServerError('password'),
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return 'Password is required';
+                return l10n.passwordRequired;
               }
               if (value.trim().length < 6) {
-                return 'Password must be at least 6 characters';
+                return l10n.passwordShort;
               }
               return null;
             },
           ),
           SizedBox(height: 16.h),
           RegistrationTextField(
-            label: 'Confirm Password',
+            label: l10n.confirmPassword,
             hintText: 'Re-enter your password',
             controller: _confirmPasswordController,
             isPassword: true,
@@ -338,7 +342,7 @@ class _SignUpViewState extends State<SignUpView> {
     );
   }
 
-  Widget _buildPersonalInfoStep(bool isLoading) {
+  Widget _buildPersonalInfoStep(bool isLoading, AppLocalizations l10n) {
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(
@@ -346,14 +350,14 @@ class _SignUpViewState extends State<SignUpView> {
         children: [
           SizedBox(height: 12.h),
           Text(
-            'Personal Details', 
+            l10n.personalDetails, 
             style: AppStyles.styleSemiBold24.copyWith(
               color: Theme.of(context).textTheme.headlineMedium?.color,
             )
           ),
           SizedBox(height: 8.h),
           Text(
-            'Complete your profile for a better experience.',
+            l10n.personalDetailsSubtitle,
             style: AppStyles.styleRegular14.copyWith(
               color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
@@ -368,7 +372,7 @@ class _SignUpViewState extends State<SignUpView> {
           ),
           SizedBox(height: 32.h),
           RegistrationTextField(
-            label: 'Full Name',
+            label: l10n.fullName,
             hintText: 'e.g. John Doe',
             controller: _nameController,
             keyboardType: TextInputType.name,
@@ -378,7 +382,7 @@ class _SignUpViewState extends State<SignUpView> {
           ),
           SizedBox(height: 16.h),
           RegistrationDatePicker(
-            label: 'Date of Birth',
+            label: l10n.dateOfBirth,
             hintText: 'Select your date of birth',
             selectedDate: _dateOfBirth,
             isRequired: false,
@@ -387,14 +391,14 @@ class _SignUpViewState extends State<SignUpView> {
           ),
           SizedBox(height: 16.h),
           RegistrationDropdown<String>(
-            label: 'Gender',
+            label: l10n.gender,
             hintText: 'Select gender',
             value: _selectedGender,
             isRequired: false,
             prefixIcon: Icons.wc_outlined,
-            items: const [
-              DropdownMenuItem(value: 'male', child: Text('Male')),
-              DropdownMenuItem(value: 'female', child: Text('Female')),
+            items: [
+              DropdownMenuItem(value: 'male', child: Text(l10n.male)),
+              DropdownMenuItem(value: 'female', child: Text(l10n.female)),
             ],
             onChanged: (value) => setState(() => _selectedGender = value),
             validator: (_) => null,
@@ -404,8 +408,8 @@ class _SignUpViewState extends State<SignUpView> {
             onTap: _showLocationPicker,
             child: AbsorbPointer(
               child: RegistrationTextField(
-                label: 'Address',
-                hintText: 'Tap to select location on map',
+                label: l10n.address,
+                hintText: l10n.locationOnMap,
                 controller: _addressController,
                 prefixIcon: Icons.location_on_outlined,
                 isRequired: false,
