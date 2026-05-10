@@ -1,16 +1,5 @@
-import 'package:doctor_appointment/core/logic/theme_cubit.dart';
-import 'package:doctor_appointment/core/utils/app_colors.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
-import 'package:doctor_appointment/core/utils/go_router.dart';
-import 'package:doctor_appointment/features/profile/logic/profile_cubit.dart';
-import 'package:doctor_appointment/features/profile/logic/profile_state.dart';
-import 'package:doctor_appointment/core/services/shared_preferences_helper.dart';
-import 'package:doctor_appointment/features/profile/presentation/widgets/profile_header_widget.dart';
-import 'package:doctor_appointment/features/profile/presentation/widgets/profile_menu_item.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
+import 'package:doctor_appointment/core/logic/locale_cubit.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -21,16 +10,19 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   bool _notificationsEnabled = true;
-  String _selectedLanguage = 'English';
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final currentLocale = Localizations.localeOf(context);
+    final String selectedLanguage = currentLocale.languageCode == 'ar' ? l10n.arabic : l10n.english;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
-          'Profile',
+          l10n.profile,
           style: AppStyles.styleSemiBold22.copyWith(fontSize: 18.sp),
         ),
       ),
@@ -73,18 +65,18 @@ class _ProfileViewState extends State<ProfileView> {
                     return const SizedBox.shrink();
                   },
                 ),
-                _buildSectionLabel('Account'),
+                _buildSectionLabel(l10n.account),
                 SizedBox(height: 10.h),
                 BlocBuilder<ProfileCubit, ProfileState>(
                   builder: (context, state) {
                     return ProfileMenuItem(
                       icon: Icons.person_outline_rounded,
-                      title: 'Personal Information',
-                      subtitle: 'Name, email, phone',
+                      title: l10n.personalInfo,
+                      subtitle: l10n.personalInfoSubtitle,
                       onTap: () async {
                         if (state is! ProfileSuccess) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Profile not loaded')),
+                             SnackBar(content: Text(l10n.seeAll)), // Placeholder for error
                           );
                           return;
                         }
@@ -103,40 +95,40 @@ class _ProfileViewState extends State<ProfileView> {
                 SizedBox(height: 10.h),
                 ProfileMenuItem(
                   icon: Icons.lock_outline_rounded,
-                  title: 'Change Password',
-                  subtitle: 'Update your password',
+                  title: l10n.changePassword,
+                  subtitle: l10n.changePasswordSubtitle,
                   onTap: () {},
                 ),
                 SizedBox(height: 20.h),
-                _buildSectionLabel('Health'),
+                _buildSectionLabel(l10n.health),
                 SizedBox(height: 10.h),
                 ProfileMenuItem(
                   icon: Icons.description_outlined,
-                  title: 'Medical Records',
-                  subtitle: 'View your health documents',
+                  title: l10n.medicalRecords,
+                  subtitle: l10n.medicalRecordsSubtitle,
                   onTap: () => context.push(AppRouter.kMedicalRecordsView),
                 ),
                 SizedBox(height: 10.h),
                 ProfileMenuItem(
                   icon: Icons.payment_rounded,
-                  title: 'Payment History',
-                  subtitle: 'Check past transactions',
+                  title: l10n.paymentHistory,
+                  subtitle: l10n.paymentHistorySubtitle,
                   onTap: () => context.push(AppRouter.kPaymentHistoryView),
                 ),
                 SizedBox(height: 20.h),
-                _buildSectionLabel('Preferences'),
+                _buildSectionLabel(l10n.preferences),
                 SizedBox(height: 10.h),
                 ProfileMenuItem(
                   icon: Icons.language_rounded,
-                  title: 'Language',
-                  subtitle: _selectedLanguage,
+                  title: l10n.language,
+                  subtitle: selectedLanguage,
                   onTap: () => _showLanguagePicker(context),
                 ),
                 SizedBox(height: 10.h),
                 ProfileMenuItem(
                   icon: Icons.notifications_outlined,
-                  title: 'Notifications',
-                  subtitle: _notificationsEnabled ? 'Enabled' : 'Disabled',
+                  title: l10n.notifications,
+                  subtitle: _notificationsEnabled ? l10n.enabled : l10n.disabled,
                   trailing: Switch(
                     value: _notificationsEnabled,
                     onChanged: (v) => setState(() => _notificationsEnabled = v),
@@ -148,10 +140,10 @@ class _ProfileViewState extends State<ProfileView> {
                   builder: (context, themeMode) {
                     return ProfileMenuItem(
                       icon: Icons.dark_mode_outlined,
-                      title: 'Dark Mode',
+                      title: l10n.darkMode,
                       subtitle: themeMode == ThemeMode.dark
-                          ? 'Enabled'
-                          : 'Disabled',
+                          ? l10n.enabled
+                          : l10n.disabled,
                       trailing: Switch(
                         value: themeMode == ThemeMode.dark,
                         onChanged: (v) {
@@ -163,17 +155,17 @@ class _ProfileViewState extends State<ProfileView> {
                   },
                 ),
                 SizedBox(height: 20.h),
-                _buildSectionLabel('Support'),
+                _buildSectionLabel(l10n.support),
                 SizedBox(height: 10.h),
                 ProfileMenuItem(
                   icon: Icons.help_outline_rounded,
-                  title: 'Help & Support',
+                  title: l10n.helpSupport,
                   onTap: () {},
                 ),
                 SizedBox(height: 10.h),
                 ProfileMenuItem(
                   icon: Icons.privacy_tip_outlined,
-                  title: 'Privacy Policy',
+                  title: l10n.privacyPolicy,
                   onTap: () {},
                 ),
                 SizedBox(height: 20.h),
@@ -199,7 +191,7 @@ class _ProfileViewState extends State<ProfileView> {
                         ),
                         SizedBox(width: 8.w),
                         Text(
-                          'Log Out',
+                          l10n.logout,
                           style: AppStyles.styleMedium14.copyWith(
                             color: AppColors.accent,
                             fontSize: 15.sp,
@@ -229,6 +221,9 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   void _showLanguagePicker(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final currentLocale = Localizations.localeOf(context);
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -254,32 +249,25 @@ class _ProfileViewState extends State<ProfileView> {
             ),
             SizedBox(height: 16.h),
             Text(
-              'Select Language',
+              l10n.selectLanguage,
               style: AppStyles.styleSemiBold22.copyWith(fontSize: 16.sp),
             ),
             SizedBox(height: 16.h),
-            ...['English', 'Arabic', 'French', 'Spanish'].map(
-              (lang) => GestureDetector(
-                onTap: () {
-                  setState(() => _selectedLanguage = lang);
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 12.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(lang, style: AppStyles.styleMedium14),
-                      if (_selectedLanguage == lang)
-                        Icon(
-                          Icons.check_rounded,
-                          color: AppColors.primary,
-                          size: 18.sp,
-                        ),
-                    ],
-                  ),
-                ),
-              ),
+            _LanguageOption(
+              label: l10n.english,
+              isSelected: currentLocale.languageCode == 'en',
+              onTap: () {
+                context.read<LocaleCubit>().changeLocale('en');
+                Navigator.pop(context);
+              },
+            ),
+            _LanguageOption(
+              label: l10n.arabic,
+              isSelected: currentLocale.languageCode == 'ar',
+              onTap: () {
+                context.read<LocaleCubit>().changeLocale('ar');
+                Navigator.pop(context);
+              },
             ),
             SizedBox(height: 8.h),
           ],
@@ -289,6 +277,7 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   void _showLogoutDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -296,11 +285,11 @@ class _ProfileViewState extends State<ProfileView> {
           borderRadius: BorderRadius.circular(16.r),
         ),
         title: Text(
-          'Log Out',
+          l10n.logout,
           style: AppStyles.styleSemiBold22.copyWith(fontSize: 16.sp),
         ),
         content: Text(
-          'Are you sure you want to log out?',
+          l10n.logoutConfirm,
           style: AppStyles.styleRegular14.copyWith(
             color: AppColors.textSecondary,
           ),
@@ -309,7 +298,7 @@ class _ProfileViewState extends State<ProfileView> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
+              l10n.cancel,
               style: AppStyles.styleMedium14.copyWith(
                 color: AppColors.textSecondary,
               ),
@@ -323,11 +312,45 @@ class _ProfileViewState extends State<ProfileView> {
               }
             },
             child: Text(
-              'Log Out',
+              l10n.logout,
               style: AppStyles.styleMedium14.copyWith(color: AppColors.accent),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _LanguageOption extends StatelessWidget {
+  const _LanguageOption({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 12.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(label, style: AppStyles.styleMedium14),
+            if (isSelected)
+              Icon(
+                Icons.check_rounded,
+                color: AppColors.primary,
+                size: 18.sp,
+              ),
+          ],
+        ),
       ),
     );
   }
