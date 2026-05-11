@@ -1,15 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
+import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 
 import 'package:doctor_appointment/l10n/app_localizations.dart';
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key, required this.userName});
+  const HomeHeader({super.key, required this.userName, this.userImageUrl});
 
   final String userName;
+  final String? userImageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,7 @@ class HomeHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _GreetingText(userName: userName),
+          _GreetingText(userName: userName, userImageUrl: userImageUrl),
           SizedBox(height: AppSpacing.lg),
           const _HeroBanner(),
         ],
@@ -28,9 +31,10 @@ class HomeHeader extends StatelessWidget {
 }
 
 class _GreetingText extends StatelessWidget {
-  const _GreetingText({required this.userName});
+  const _GreetingText({required this.userName, this.userImageUrl});
 
   final String userName;
+  final String? userImageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -41,39 +45,79 @@ class _GreetingText extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${l10n.hi}, $userName! 👋', style: AppTextStyles.displayMedium),
+            Text(
+              '${l10n.hi}, $userName! 👋',
+              style: AppTextStyles.displayMedium,
+            ),
             SizedBox(height: 2.h),
             Text(l10n.howAreYou, style: AppTextStyles.bodyMedium),
           ],
         ),
-        const _AvatarButton(),
+        _AvatarButton(userImageUrl: userImageUrl),
       ],
     );
   }
 }
 
 class _AvatarButton extends StatelessWidget {
-  const _AvatarButton();
+  const _AvatarButton({this.userImageUrl});
+
+  final String? userImageUrl;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 44.w,
-      height: 44.h,
+      width: 48.r,
+      height: 48.r,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3), width: 2.w),
-        gradient: const LinearGradient(
+        border: Border.all(
+          color: AppColors.primary.withValues(alpha: 0.2),
+          width: 2.w,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: ClipOval(
+        child: userImageUrl != null
+            ? CachedNetworkImage(
+                imageUrl: ImageUrlHelper.getFullUrl(userImageUrl),
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  color: AppColors.primaryLight,
+                  child: Center(
+                    child: SizedBox(
+                      width: 16.w,
+                      height: 16.h,
+                      child: const CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ),
+                ),
+                errorWidget: (context, url, error) => _buildPlaceholder(),
+              )
+            : _buildPlaceholder(),
+      ),
+    );
+  }
+
+  Widget _buildPlaceholder() {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
           colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
       ),
-      child: Icon(
-        Icons.person_outline_rounded,
-        color: Colors.white,
-        size: 22.sp,
-      ),
+      child: Icon(Icons.person_rounded, color: Colors.white, size: 24.sp),
     );
   }
 }
@@ -177,10 +221,7 @@ class _BannerText extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          l10n.bookNearestDoctor,
-          style: AppTextStyles.greetingTitle,
-        ),
+        Text(l10n.bookNearestDoctor, style: AppTextStyles.greetingTitle),
         SizedBox(height: AppSpacing.md),
         const _FindNearbyButton(),
       ],

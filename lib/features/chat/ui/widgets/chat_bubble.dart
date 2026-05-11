@@ -16,34 +16,94 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 14.w),
-        decoration: BoxDecoration(
-          color: isMe ? AppColors.primary : AppColors.gray100,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12.r),
-            topRight: Radius.circular(12.r),
-            bottomLeft: Radius.circular(isMe ? 12.r : 0),
-            bottomRight: Radius.circular(isMe ? 0 : 12.r),
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+    return Padding(
+      padding: EdgeInsets.only(
+        top: 2.h,
+        bottom: 2.h,
+        left: isMe ? 60.w : 0,
+        right: isMe ? 0 : 60.w,
+      ),
+      child: Align(
+        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
-              message.message,
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: isMe ? Colors.white : AppColors.textPrimary,
-              ),
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              _formatTime(message.timestamp),
-              style: AppStyles.styleRegular10.copyWith(
-                color: isMe ? Colors.white70 : AppColors.textSecondary,
+            if (!isMe) ...[
+              _senderDot(),
+              SizedBox(width: 6.w),
+            ],
+            Flexible(
+              child: Container(
+                padding:
+                    EdgeInsets.symmetric(vertical: 10.h, horizontal: 14.w),
+                decoration: BoxDecoration(
+                  gradient: isMe
+                      ? const LinearGradient(
+                          colors: [
+                            AppColors.headerGradientStart,
+                            AppColors.headerGradientEnd,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )
+                      : null,
+                  color: isMe ? null : Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(18.r),
+                    topRight: Radius.circular(18.r),
+                    bottomLeft: Radius.circular(isMe ? 18.r : 4.r),
+                    bottomRight: Radius.circular(isMe ? 4.r : 18.r),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: isMe
+                          ? AppColors.primary.withValues(alpha: 0.25)
+                          : Colors.black.withValues(alpha: 0.06),
+                      blurRadius: 8,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: isMe
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      message.message,
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color:
+                            isMe ? Colors.white : AppColors.textPrimary,
+                        height: 1.4,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          _formatTime(message.timestamp),
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: isMe
+                                ? Colors.white.withValues(alpha: 0.75)
+                                : AppColors.textLight,
+                          ),
+                        ),
+                        if (isMe) ...[
+                          SizedBox(width: 4.w),
+                          Icon(
+                            Icons.done_all_rounded,
+                            size: 14.r,
+                            color: Colors.white.withValues(alpha: 0.8),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -52,7 +112,22 @@ class ChatBubble extends StatelessWidget {
     );
   }
 
+  Widget _senderDot() {
+    return Container(
+      width: 28.r,
+      height: 28.r,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.primaryLight,
+        border: Border.all(
+            color: AppColors.primary.withValues(alpha: 0.2), width: 1.5),
+      ),
+      child: Icon(Icons.person_rounded,
+          color: AppColors.primary.withValues(alpha: 0.7), size: 16.r),
+    );
+  }
+
   String _formatTime(DateTime timestamp) {
-    return "${timestamp.hour}:${timestamp.minute.toString().padLeft(2, '0')}";
+    return '${timestamp.hour}:${timestamp.minute.toString().padLeft(2, '0')}';
   }
 }

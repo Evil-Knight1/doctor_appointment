@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
@@ -21,10 +22,11 @@ class _BookingDateViewState extends State<BookingDateView> {
   DateTime _selectedDate = DateTime.now().add(const Duration(days: 1));
   String? _selectedTime;
 
-  final List<String> _timeSlots = [
-    '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM',
-    '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'
-  ];
+  final Map<String, List<String>> _categorizedTimeSlots = {
+    'Morning': ['08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM'],
+    'Afternoon': ['12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'],
+    'Evening': ['05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM'],
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -40,43 +42,60 @@ class _BookingDateViewState extends State<BookingDateView> {
               children: [
                 Text('Select Date', style: AppTextStyles.headingMedium),
                 SizedBox(height: AppSpacing.md),
-                _CalendarPlaceholder(
+                _CalendarPicker(
                   selectedDate: _selectedDate,
                   onDateSelected: (d) => setState(() => _selectedDate = d),
                 ),
                 SizedBox(height: AppSpacing.xl),
                 Text('Select Time', style: AppTextStyles.headingMedium),
                 SizedBox(height: AppSpacing.md),
-                Wrap(
-                  spacing: AppSpacing.md,
-                  runSpacing: AppSpacing.md,
-                  children: _timeSlots.map((time) {
-                    final isSelected = _selectedTime == time;
-                    return GestureDetector(
-                      onTap: () => setState(() => _selectedTime = time),
-                      child: Container(
-                        width: (1.sw - AppSpacing.lg * 2 - AppSpacing.md * 2) / 3,
-                        padding: EdgeInsets.symmetric(vertical: 12.h),
-                        decoration: BoxDecoration(
-                          color: isSelected ? AppColors.primary : AppColors.surface,
-                          borderRadius: BorderRadius.circular(AppRadius.lg),
-                          border: Border.all(
-                            color: isSelected ? AppColors.primary : AppColors.divider,
-                          ),
+                ..._categorizedTimeSlots.entries.map((entry) {
+                  final category = entry.key;
+                  final slots = entry.value;
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: AppSpacing.lg),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          category,
+                          style: AppTextStyles.labelLarge.copyWith(color: AppColors.textSecondary),
                         ),
-                        child: Center(
-                          child: Text(
-                            time,
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: isSelected ? Colors.white : AppColors.textPrimary,
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                            ),
-                          ),
+                        SizedBox(height: AppSpacing.sm),
+                        Wrap(
+                          spacing: AppSpacing.md,
+                          runSpacing: AppSpacing.md,
+                          children: slots.map((time) {
+                            final isSelected = _selectedTime == time;
+                            return GestureDetector(
+                              onTap: () => setState(() => _selectedTime = time),
+                              child: Container(
+                                width: (1.sw - AppSpacing.lg * 2 - AppSpacing.md * 2) / 3,
+                                padding: EdgeInsets.symmetric(vertical: 12.h),
+                                decoration: BoxDecoration(
+                                  color: isSelected ? AppColors.primary : AppColors.surface,
+                                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                                  border: Border.all(
+                                    color: isSelected ? AppColors.primary : AppColors.divider,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    time,
+                                    style: AppTextStyles.bodySmall.copyWith(
+                                      color: isSelected ? Colors.white : AppColors.textPrimary,
+                                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
                         ),
-                      ),
-                    );
-                  }).toList(),
-                ),
+                      ],
+                    ),
+                  );
+                }),
               ],
             ),
           ),
@@ -98,15 +117,18 @@ class _BookingDateViewState extends State<BookingDateView> {
   }
 }
 
-class _CalendarPlaceholder extends StatelessWidget {
-  const _CalendarPlaceholder({required this.selectedDate, required this.onDateSelected});
+class _CalendarPicker extends StatelessWidget {
+  const _CalendarPicker({
+    required this.selectedDate,
+    required this.onDateSelected,
+  });
+
   final DateTime selectedDate;
   final ValueChanged<DateTime> onDateSelected;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppRadius.xl),
@@ -114,57 +136,46 @@ class _CalendarPlaceholder extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10.r,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('May 2023', style: AppTextStyles.headingSmall),
-              Row(
-                children: [
-                  Icon(Icons.chevron_left, color: AppColors.textSecondary),
-                  SizedBox(width: 10.w),
-                  Icon(Icons.chevron_right, color: AppColors.textSecondary),
-                ],
-              ),
-            ],
+      child: TableCalendar(
+        firstDay: DateTime.now(),
+        lastDay: DateTime.now().add(const Duration(days: 90)),
+        focusedDay: selectedDate,
+        currentDay: DateTime.now(),
+        selectedDayPredicate: (day) => isSameDay(selectedDate, day),
+        onDaySelected: (selectedDay, focusedDay) {
+          onDateSelected(selectedDay);
+        },
+        calendarFormat: CalendarFormat.month,
+        headerStyle: HeaderStyle(
+          formatButtonVisible: false,
+          titleCentered: true,
+          titleTextStyle: AppTextStyles.headingSmall,
+          leftChevronIcon: Icon(Icons.chevron_left, color: AppColors.primary),
+          rightChevronIcon: Icon(Icons.chevron_right, color: AppColors.primary),
+        ),
+        calendarStyle: CalendarStyle(
+          todayDecoration: BoxDecoration(
+            color: AppColors.primaryLight,
+            shape: BoxShape.circle,
           ),
-          SizedBox(height: AppSpacing.md),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(7, (index) {
-              final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-              final date = 8 + index;
-              final isSelected = date == 8;
-              return Column(
-                children: [
-                  Text(days[index], style: AppTextStyles.bodySmall.copyWith(fontSize: 10.sp)),
-                  SizedBox(height: 8.h),
-                  Container(
-                    width: 32.w,
-                    height: 32.h,
-                    decoration: BoxDecoration(
-                      color: isSelected ? AppColors.primary : Colors.transparent,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        '$date',
-                        style: TextStyle(
-                          color: isSelected ? Colors.white : AppColors.textPrimary,
-                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }),
+          todayTextStyle: TextStyle(color: AppColors.primary),
+          selectedDecoration: BoxDecoration(
+            color: AppColors.primary,
+            shape: BoxShape.circle,
           ),
-        ],
+          selectedTextStyle: const TextStyle(color: Colors.white),
+          outsideDaysVisible: false,
+          defaultTextStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary),
+          weekendTextStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.error),
+        ),
+        daysOfWeekStyle: DaysOfWeekStyle(
+          weekdayStyle: AppTextStyles.labelMedium,
+          weekendStyle: AppTextStyles.labelMedium.copyWith(color: AppColors.error),
+        ),
       ),
     );
   }

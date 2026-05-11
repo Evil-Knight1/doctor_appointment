@@ -25,6 +25,7 @@ class DoctorSignUpForm extends StatefulWidget {
   final TextEditingController bioController;
   final TextEditingController clinicAddressController;
   final TextEditingController hospitalController;
+  final TextEditingController consultationFeeController;
   final Specialization? selectedSpecialization;
   final ValueChanged<Specialization?> onSpecializationChanged;
   final DateTime? selectedDateOfBirth;
@@ -51,6 +52,7 @@ class DoctorSignUpForm extends StatefulWidget {
     required this.bioController,
     required this.clinicAddressController,
     required this.hospitalController,
+    required this.consultationFeeController,
     required this.selectedSpecialization,
     required this.onSpecializationChanged,
     required this.profilePicturePath,
@@ -86,6 +88,7 @@ class _DoctorSignUpFormState extends State<DoctorSignUpForm> {
 
   final FocusNode _hospitalFocus = FocusNode();
   final FocusNode _clinicFocus = FocusNode();
+  final FocusNode _feeFocus = FocusNode();
 
   @override
   void dispose() {
@@ -99,6 +102,7 @@ class _DoctorSignUpFormState extends State<DoctorSignUpForm> {
     _bioFocus.dispose();
     _hospitalFocus.dispose();
     _clinicFocus.dispose();
+    _feeFocus.dispose();
     super.dispose();
   }
 
@@ -241,6 +245,17 @@ class _DoctorSignUpFormState extends State<DoctorSignUpForm> {
               ),
             ),
           ],
+        ),
+        SizedBox(height: 16.h),
+        RegistrationTextField(
+          label: 'Consultation Fee',
+          hintText: 'e.g. 200',
+          controller: widget.consultationFeeController,
+          focusNode: _feeFocus,
+          keyboardType: TextInputType.number,
+          prefixIcon: Icons.attach_money_rounded,
+          validator: RegistrationValidators.validateConsultationFee,
+          serverError: _serverError('consultationfee') ?? _serverError('consultationFee'),
         ),
         SizedBox(height: 16.h),
         RegistrationTextField(

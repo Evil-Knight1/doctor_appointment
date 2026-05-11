@@ -1,6 +1,7 @@
 import 'package:doctor_appointment/features/doctors/data/models/doctor_api_model.dart';
 import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 import 'package:doctor_appointment/core/utils/specialty_mapper.dart';
+import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 import 'package:flutter/material.dart';
 
 class HomeDoctorModel {
@@ -38,9 +39,9 @@ class HomeDoctorModel {
   double get rating => doctor.averageRating ?? 0.0;
   int get reviewCount => doctor.totalReviews;
   String get reviews => reviewCount.toString(); // For favorite_doctor_card.dart
-  String get fee => '\$100'; // Default fee for now
+  String get fee => doctor.consultationFee != null ? '\$${doctor.consultationFee!.toInt()}' : '\$100';
   String get imageAsset => (doctor.profilePictureUrl != null && doctor.profilePictureUrl!.isNotEmpty)
-      ? doctor.profilePictureUrl!
+      ? ImageUrlHelper.getFullUrl(doctor.profilePictureUrl!)
       : 'assets/images/doctor1.png';
   bool get isAvailable => doctor.isAvailable;
 

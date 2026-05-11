@@ -132,7 +132,9 @@ class _NewAppointmentViewState extends State<NewAppointmentView> {
                   SizedBox(height: 24.h),
                   _sectionTitle('Consultation Fees'),
                   SizedBox(height: 12.h),
-                  const ConsultationFeesWidget(),
+                  ConsultationFeesWidget(
+                    fee: widget.doctor.doctor.consultationFee ?? 0.0,
+                  ),
                   SizedBox(height: 100.h),
                 ],
               ),

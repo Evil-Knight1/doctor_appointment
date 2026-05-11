@@ -16,6 +16,7 @@ class Doctor {
   final String? profilePictureUrl;
   final List<String>? clinicImagesUrls;
   final bool isAvailable;
+  final double? consultationFee;
 
   const Doctor({
     required this.id,
@@ -35,5 +36,6 @@ class Doctor {
     this.profilePictureUrl,
     this.clinicImagesUrls,
     required this.isAvailable,
+    this.consultationFee,
   });
 }

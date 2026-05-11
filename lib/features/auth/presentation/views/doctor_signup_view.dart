@@ -38,6 +38,7 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
   final _bioController = TextEditingController();
   final _clinicAddressController = TextEditingController();
   final _hospitalController = TextEditingController();
+  final _consultationFeeController = TextEditingController();
   DateTime? _dateOfBirth;
   String? _selectedGender;
 
@@ -61,6 +62,7 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
     _bioController.dispose();
     _clinicAddressController.dispose();
     _hospitalController.dispose();
+    _consultationFeeController.dispose();
     super.dispose();
   }
 
@@ -143,6 +145,7 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
       licenseId: _licenseController.text.trim(),
       clinicAddress: _clinicAddressController.text.trim(),
       hospitalName: _hospitalController.text.trim(),
+      consultationFee: double.tryParse(_consultationFeeController.text) ?? 0.0,
       bio: _bioController.text.trim(),
       profilePicturePath: _profilePicturePath,
       clinicImagesPaths: _clinicImagesPaths,
@@ -423,6 +426,7 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
             bioController: _bioController,
             clinicAddressController: _clinicAddressController,
             hospitalController: _hospitalController,
+            consultationFeeController: _consultationFeeController,
             selectedSpecialization: _selectedSpecialization,
             onSpecializationChanged: (spec) =>
                 setState(() => _selectedSpecialization = spec),
@@ -493,6 +497,7 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
             confirmPasswordController: _confirmPasswordController,
             clinicAddressController: _clinicAddressController,
             hospitalController: _hospitalController,
+            consultationFeeController: _consultationFeeController,
             clinicImagesPaths: _clinicImagesPaths,
             onClinicImagesChanged: (paths) =>
                 setState(() => _clinicImagesPaths = paths),
@@ -544,6 +549,7 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
             yearsController: _yearsController,
             licenseController: _licenseController,
             bioController: _bioController,
+            consultationFeeController: _consultationFeeController,
             selectedSpecialization: _selectedSpecialization,
             onSpecializationChanged: (spec) =>
                 setState(() => _selectedSpecialization = spec),

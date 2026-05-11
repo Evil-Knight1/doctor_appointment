@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:doctor_appointment/core/utils/image_url_helper.dart';
+
 class AppointmentDetailsView extends StatelessWidget {
   final Map<String, dynamic> appointmentData;
 
@@ -15,9 +18,10 @@ class AppointmentDetailsView extends StatelessWidget {
     final name = appointmentData['name'] ?? 'Doctor Name';
     final date = appointmentData['date'] ?? '12 Oct, 2023';
     final time = appointmentData['time'] ?? '10:00 AM';
-    final imageAsset = appointmentData['imageAsset'];
+    final image = appointmentData['imageAsset'] ?? appointmentData['image'];
     final isCancelled = appointmentData['isCancelled'] == true;
     final isCompleted = appointmentData['isCompleted'] == true;
+    final fee = appointmentData['fee'] ?? '\$15.00';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -26,12 +30,18 @@ class AppointmentDetailsView extends StatelessWidget {
         elevation: 0,
         titleSpacing: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary, size: 20.sp),
+          icon: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.textPrimary,
+            size: 20.sp,
+          ),
           onPressed: () => context.pop(),
         ),
         title: Text(
           'Appointment Details',
-          style: AppStyles.styleSemiBold22.copyWith(fontSize: 18.sp),
+          style: AppStyles.styleSemiBold18.copyWith(
+            color: AppColors.textPrimary,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -41,37 +51,80 @@ class AppointmentDetailsView extends StatelessWidget {
             Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16.r),
-                child: imageAsset != null
-                    ? Image.asset(
-                        imageAsset,
+                child:
+                    (image != null &&
+                        (image.startsWith('http') ||
+                            image.startsWith('https') ||
+                            image.startsWith('/')))
+                    ? CachedNetworkImage(
+                        imageUrl: ImageUrlHelper.getFullUrl(image),
                         width: 100.w,
                         height: 100.w,
                         fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          width: 100.w,
+                          height: 100.w,
+                          color: AppColors.primaryLight,
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          width: 100.w,
+                          height: 100.w,
+                          color: AppColors.primaryLight,
+                          child: Icon(
+                            Icons.person,
+                            color: AppColors.primary,
+                            size: 40.sp,
+                          ),
+                        ),
                       )
-                    : Container(
+                    : Image.asset(
+                        image ?? 'assets/images/doctor1.png',
                         width: 100.w,
                         height: 100.w,
-                        color: AppColors.primaryLight,
-                        child: Icon(Icons.person, color: AppColors.primary, size: 40.sp),
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: 100.w,
+                          height: 100.w,
+                          color: AppColors.primaryLight,
+                          child: Icon(
+                            Icons.person,
+                            color: AppColors.primary,
+                            size: 40.sp,
+                          ),
+                        ),
                       ),
               ),
             ),
             SizedBox(height: 16.h),
             Text(name, style: AppStyles.styleSemiBold22),
             SizedBox(height: 4.h),
-            Text('Dentist Specialist', style: AppStyles.styleMedium14.copyWith(color: AppColors.textSecondary)),
+            Text(
+              'Dentist Specialist',
+              style: AppStyles.styleMedium14.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
             SizedBox(height: 32.h),
-            _buildDetailRow('Status', isCancelled ? 'Cancelled' : (isCompleted ? 'Completed' : 'Upcoming'), 
-                isCancelled ? Colors.red : (isCompleted ? Colors.green : AppColors.primary)),
+            _buildDetailRow(
+              'Status',
+              isCancelled
+                  ? 'Cancelled'
+                  : (isCompleted ? 'Completed' : 'Upcoming'),
+              isCancelled
+                  ? Colors.red
+                  : (isCompleted ? Colors.green : AppColors.primary),
+            ),
             _buildDetailRow('Date', date),
             _buildDetailRow('Time', time),
-            _buildDetailRow('Consultation Fees', '\$15.00'),
+            _buildDetailRow('Consultation Fees', fee),
             SizedBox(height: 40.h),
             if (!isCancelled && !isCompleted) ...[
               CustomButton(
                 text: 'Reschedule',
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Rescheduling...')));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Rescheduling...')),
+                  );
                 },
                 width: double.infinity,
                 height: 50.h,
@@ -84,7 +137,9 @@ class AppointmentDetailsView extends StatelessWidget {
                 onPressed: () => _showCancelDialog(context),
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: Colors.red),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
                   padding: EdgeInsets.symmetric(vertical: 14.h),
                   minimumSize: Size(double.infinity, 50.h),
                 ),
@@ -96,17 +151,23 @@ class AppointmentDetailsView extends StatelessWidget {
             ] else ...[
               OutlinedButton(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Mock rebook...')));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Mock rebook...')),
+                  );
                 },
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(color: AppColors.primary),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
                   padding: EdgeInsets.symmetric(vertical: 14.h),
                   minimumSize: Size(double.infinity, 50.h),
                 ),
                 child: Text(
                   'Book Again',
-                  style: AppStyles.styleSemiBold16.copyWith(color: AppColors.primary),
+                  style: AppStyles.styleSemiBold16.copyWith(
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
             ],
@@ -120,21 +181,43 @@ class AppointmentDetailsView extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-        title: Text('Canel Appointment', style: AppStyles.styleSemiBold22.copyWith(fontSize: 16.sp)),
-        content: Text('Are you sure you want to cancel this appointment?', style: AppStyles.styleRegular14.copyWith(color: AppColors.textSecondary)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        title: Text(
+          'Canel Appointment',
+          style: AppStyles.styleSemiBold22.copyWith(fontSize: 16.sp),
+        ),
+        content: Text(
+          'Are you sure you want to cancel this appointment?',
+          style: AppStyles.styleRegular14.copyWith(
+            color: AppColors.textSecondary,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Back', style: AppStyles.styleMedium14.copyWith(color: AppColors.textSecondary)),
+            child: Text(
+              'Back',
+              style: AppStyles.styleMedium14.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context); // Close dialog
               context.pop(); // Go back to calendar
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Appointment Cancelled Successfully')));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Appointment Cancelled Successfully'),
+                ),
+              );
             },
-            child: Text('Cancel', style: AppStyles.styleMedium14.copyWith(color: Colors.red)),
+            child: Text(
+              'Cancel',
+              style: AppStyles.styleMedium14.copyWith(color: Colors.red),
+            ),
           ),
         ],
       ),
@@ -147,8 +230,18 @@ class AppointmentDetailsView extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: AppStyles.styleRegular14.copyWith(color: AppColors.textSecondary)),
-          Text(value, style: AppStyles.styleSemiBold16.copyWith(color: valueColor ?? AppColors.textPrimary)),
+          Text(
+            label,
+            style: AppStyles.styleRegular14.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+          Text(
+            value,
+            style: AppStyles.styleSemiBold16.copyWith(
+              color: valueColor ?? AppColors.textPrimary,
+            ),
+          ),
         ],
       ),
     );

@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 
 class EditProfileView extends StatefulWidget {
   final PatientProfile profile;
@@ -138,7 +139,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                   : (widget.profile.profilePicture != null
                                         ? CachedNetworkImage(
                                             imageUrl:
-                                                widget.profile.profilePicture!,
+                                                ImageUrlHelper.getFullUrl(widget.profile.profilePicture),
                                             fit: BoxFit.cover,
                                             placeholder: (context, url) =>
                                                 const Center(

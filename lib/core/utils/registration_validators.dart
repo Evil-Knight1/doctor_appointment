@@ -51,4 +51,18 @@ class RegistrationValidators {
     }
     return null;
   }
+
+  static String? validateConsultationFee(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Consultation fee is required';
+    }
+    final fee = double.tryParse(value);
+    if (fee == null) {
+      return 'Please enter a valid number';
+    }
+    if (fee < 0) {
+      return 'Fee cannot be negative';
+    }
+    return null;
+  }
 }

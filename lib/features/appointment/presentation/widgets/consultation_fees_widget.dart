@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ConsultationFeesWidget extends StatelessWidget {
-  const ConsultationFeesWidget({super.key});
+  final double fee;
+  const ConsultationFeesWidget({super.key, required this.fee});
 
-  static const List<Map<String, dynamic>> _fees = [
-    {'label': 'Online Call', 'amount': '\$10', 'icon': Icons.call_outlined},
-    {'label': 'Home Visit', 'amount': '\$20', 'icon': Icons.home_outlined},
-    {'label': 'Video Call', 'amount': '\$30', 'icon': Icons.videocam_outlined},
-  ];
+  List<Map<String, dynamic>> get _fees => [
+        {'label': 'Online Call', 'amount': '\$${fee.toStringAsFixed(0)}', 'icon': Icons.call_outlined},
+        {'label': 'Home Visit', 'amount': '\$${(fee * 1.5).toStringAsFixed(0)}', 'icon': Icons.home_outlined},
+        {'label': 'Video Call', 'amount': '\$${(fee * 1.2).toStringAsFixed(0)}', 'icon': Icons.videocam_outlined},
+      ];
 
   @override
   Widget build(BuildContext context) {

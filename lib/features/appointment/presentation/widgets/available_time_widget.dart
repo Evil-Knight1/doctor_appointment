@@ -3,6 +3,7 @@ import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/features/appointment/data/models/slot_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 class AvailableTimeWidget extends StatelessWidget {
   final List<SlotModel> slots;
@@ -19,39 +20,136 @@ class AvailableTimeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (slots.isEmpty) {
-      return Text(
-        'No available slots for this date.',
-        style: AppStyles.styleMedium14.copyWith(color: AppColors.textSecondary),
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 20.h),
+          child: Column(
+            children: [
+              Icon(
+                Icons.event_busy_rounded,
+                size: 48.sp,
+                color: AppColors.border,
+              ),
+              SizedBox(height: 12.h),
+              Text(
+                'No available slots for this date.',
+                style: AppStyles.styleMedium14.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     }
-    
-    return Wrap(
-      spacing: 10.w,
-      runSpacing: 10.h,
-      children: slots.map((slot) {
-        final isSelected = selectedSlot?.id == slot.id;
-        final timeString = '${slot.startTime.hour.toString().padLeft(2, '0')}:${slot.startTime.minute.toString().padLeft(2, '0')}';
-        
-        return GestureDetector(
-          onTap: () => onSlotSelected(slot),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-            decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary : Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: BorderRadius.circular(20.r),
-              border: Border.all(
-                color: isSelected ? AppColors.primary : AppColors.border,
-              ),
-            ),
-            child: Text(
-              timeString,
-              style: AppStyles.styleRegular12.copyWith(
-                color: isSelected ? Colors.white : AppColors.textPrimary,
-              ),
-            ),
+
+    final morningSlots = slots.where((s) => s.startTime.hour < 12).toList();
+    final afternoonSlots = slots
+        .where((s) => s.startTime.hour >= 12 && s.startTime.hour < 17)
+        .toList();
+    final eveningSlots = slots.where((s) => s.startTime.hour >= 17).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (morningSlots.isNotEmpty) ...[
+          _buildTimeSection(
+            context,
+            'Morning',
+            Icons.wb_sunny_outlined,
+            morningSlots,
           ),
-        );
-      }).toList(),
+          SizedBox(height: 20.h),
+        ],
+        if (afternoonSlots.isNotEmpty) ...[
+          _buildTimeSection(
+            context,
+            'Afternoon',
+            Icons.light_mode_outlined,
+            afternoonSlots,
+          ),
+          SizedBox(height: 20.h),
+        ],
+        if (eveningSlots.isNotEmpty) ...[
+          _buildTimeSection(
+            context,
+            'Evening',
+            Icons.dark_mode_outlined,
+            eveningSlots,
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildTimeSection(
+    BuildContext context,
+    String title,
+    IconData icon,
+    List<SlotModel> sectionSlots,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 16.sp, color: AppColors.textSecondary),
+            SizedBox(width: 6.w),
+            Text(
+              title,
+              style: AppStyles.styleMedium14.copyWith(
+                color: AppColors.textSecondary,
+                fontSize: 13.sp,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 12.h),
+        Wrap(
+          spacing: 12.w,
+          runSpacing: 12.h,
+          children: sectionSlots
+              .map((slot) => _buildTimeChip(context, slot))
+              .toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTimeChip(BuildContext context, SlotModel slot) {
+    final isSelected = selectedSlot?.id == slot.id;
+    final timeString = DateFormat('hh:mm a').format(slot.startTime);
+
+    return GestureDetector(
+      onTap: () => onSlotSelected(slot),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : Colors.white,
+          borderRadius: BorderRadius.circular(14.r),
+          border: Border.all(
+            color: isSelected ? AppColors.primary : AppColors.border,
+            width: 1.5,
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
+        ),
+        child: Text(
+          timeString,
+          style: AppStyles.styleMedium14.copyWith(
+            fontSize: 13.sp,
+            color: isSelected ? Colors.white : AppColors.textPrimary,
+          ),
+        ),
+      ),
     );
   }
 }

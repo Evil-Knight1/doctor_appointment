@@ -13,6 +13,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:map_launcher/map_launcher.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:doctor_appointment/core/widgets/full_screen_image_viewer.dart';
+import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 
 class DoctorDetailsView extends StatefulWidget {
   final HomeDoctorModel doctor;
@@ -116,11 +119,30 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView>
           height: 300.h,
           color: AppColors.primaryLight,
           child: widget.doctor.doctor.profilePictureUrl != null
-              ? Image.network(
-                  widget.doctor.doctor.profilePictureUrl!,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) =>
-                      Icon(Icons.person, size: 80.sp, color: AppColors.primary),
+              ? GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FullScreenImageViewer(
+                          images: [ImageUrlHelper.getFullUrl(widget.doctor.doctor.profilePictureUrl)],
+                          initialIndex: 0,
+                        ),
+                      ),
+                    );
+                  },
+                  child: CachedNetworkImage(
+                    imageUrl: ImageUrlHelper.getFullUrl(widget.doctor.doctor.profilePictureUrl),
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                        strokeWidth: 2,
+                      ),
+                    ),
+                    errorWidget: (_, _, _) => Icon(Icons.person,
+                        size: 80.sp, color: AppColors.primary),
+                  ),
                 )
               : Icon(Icons.person, size: 80.sp, color: AppColors.primary),
         ),
@@ -328,6 +350,62 @@ class _AddressTab extends StatelessWidget {
             color: AppColors.textSecondary,
           ),
         ),
+        if (doctor.doctor.clinicImagesUrls != null &&
+            doctor.doctor.clinicImagesUrls!.isNotEmpty) ...[
+          SizedBox(height: 20.h),
+          Text(
+            'Clinic Images',
+            style: AppStyles.styleSemiBold22.copyWith(fontSize: 16.sp),
+          ),
+          SizedBox(height: 12.h),
+          SizedBox(
+            height: 100.h,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: doctor.doctor.clinicImagesUrls!.length,
+              separatorBuilder: (context, index) => SizedBox(width: 12.w),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FullScreenImageViewer(
+                          images: doctor.doctor.clinicImagesUrls!.map((url) => ImageUrlHelper.getFullUrl(url)).toList(),
+                          initialIndex: index,
+                        ),
+                      ),
+                    );
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.r),
+                    child: CachedNetworkImage(
+                      imageUrl: ImageUrlHelper.getFullUrl(doctor.doctor.clinicImagesUrls![index]),
+                      width: 150.w,
+                      height: 100.h,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        width: 150.w,
+                        height: 100.h,
+                        color: AppColors.primaryLight,
+                        child: const Center(
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        width: 150.w,
+                        height: 100.h,
+                        color: AppColors.primaryLight,
+                        child: Icon(Icons.image_not_supported,
+                            color: AppColors.primary),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
         SizedBox(height: 20.h),
         Text(
           'Location Map',

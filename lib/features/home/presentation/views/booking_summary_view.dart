@@ -9,6 +9,7 @@ import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart'
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 import 'package:doctor_appointment/features/payments/logic/payment_cubit.dart';
 import 'package:doctor_appointment/features/payments/logic/payment_state.dart';
 import '../widgets/booking_stepper.dart';
@@ -88,7 +89,7 @@ class BookingSummaryView extends StatelessWidget {
                             clipBehavior: Clip.antiAlias,
                             child: doctor.profilePictureUrl != null && doctor.profilePictureUrl!.isNotEmpty
                                 ? CachedNetworkImage(
-                                    imageUrl: doctor.profilePictureUrl!,
+                                    imageUrl: ImageUrlHelper.getFullUrl(doctor.profilePictureUrl),
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) => const Center(
                                       child: CircularProgressIndicator(),

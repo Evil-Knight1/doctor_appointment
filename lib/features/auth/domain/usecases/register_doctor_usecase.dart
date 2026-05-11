@@ -18,6 +18,7 @@ class RegisterDoctorUseCase {
       licenseId: params.licenseId,
       clinicAddress: params.clinicAddress,
       hospitalName: params.hospitalName,
+      consultationFee: params.consultationFee,
       dateOfBirth: params.dateOfBirth,
       gender: params.gender,
       bio: params.bio,
@@ -37,6 +38,7 @@ class RegisterDoctorParams {
   final String licenseId;
   final String clinicAddress;
   final String hospitalName;
+  final double consultationFee;
   final DateTime? dateOfBirth;
   final String? gender;
   final String? bio;
@@ -53,6 +55,7 @@ class RegisterDoctorParams {
     required this.licenseId,
     required this.clinicAddress,
     required this.hospitalName,
+    required this.consultationFee,
     this.dateOfBirth,
     this.gender,
     this.bio,

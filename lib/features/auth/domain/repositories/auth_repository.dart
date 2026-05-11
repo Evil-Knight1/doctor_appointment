@@ -35,6 +35,7 @@ abstract class AuthRepository {
     required String licenseId,
     required String clinicAddress,
     required String hospitalName,
+    required double consultationFee,
     DateTime? dateOfBirth,
     String? gender,
     String? bio,

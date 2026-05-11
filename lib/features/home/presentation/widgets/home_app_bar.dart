@@ -14,6 +14,7 @@ import 'package:doctor_appointment/features/profile/logic/profile_cubit.dart';
 import 'package:doctor_appointment/features/profile/logic/profile_state.dart';
 import 'package:doctor_appointment/core/services/shared_preferences_helper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
@@ -75,7 +76,7 @@ class _UserInfoRow extends StatelessWidget {
                 child: ClipOval(
                   child: image != null
                       ? CachedNetworkImage(
-                          imageUrl: image,
+                          imageUrl: ImageUrlHelper.getFullUrl(image),
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Container(
                             color: AppColors.primaryLight,

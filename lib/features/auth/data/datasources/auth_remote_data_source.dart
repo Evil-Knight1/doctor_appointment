@@ -35,6 +35,7 @@ abstract class AuthRemoteDataSource {
     required String licenseId,
     required String clinicAddress,
     required String hospitalName,
+    required double consultationFee,
     DateTime? dateOfBirth,
     String? gender,
     String? bio,
@@ -130,6 +131,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String licenseId,
     required String clinicAddress,
     required String hospitalName,
+    required double consultationFee,
     DateTime? dateOfBirth,
     String? gender,
     String? bio,
@@ -168,6 +170,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         ),
       );
     }
+
+    data['consultationFee'] = consultationFee;
 
     final response = await apiService.post(
       '/api/Auth/register/doctor',
