@@ -50,4 +50,17 @@ class AppColors {
   static const headerGradientEnd = Color(0xFF1D4ED8);
 
   static const error = Color(0xFFEF4444);
+
+  // ── Custom Functional ──
+  static const success = Color(0xFF10B981);
+  static const warning = Color(0xFFF59E0B);
+  static const pending = Color(0xFF6366F1);
+  static const online = Color(0xFF22C55E);
+  static const offline = Color(0xFF94A3B8);
+
+  // ── Chat Bubbles ──
+  static const chatMineLight = primary;
+  static const chatOthersLight = Color(0xFFF3F4F6);
+  static const chatMineDark = primary;
+  static const chatOthersDark = Color(0xFF334155);
 }

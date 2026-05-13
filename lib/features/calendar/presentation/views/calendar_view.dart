@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class CalendarView extends StatefulWidget {
   const CalendarView({super.key});
@@ -81,7 +82,28 @@ class _CalendarViewState extends State<CalendarView>
     return BlocBuilder<AppointmentsCubit, AppointmentsState>(
       builder: (context, state) {
         if (state is AppointmentsLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return Skeletonizer(
+            enabled: true,
+            child: ListView.separated(
+              padding: EdgeInsets.only(
+                left: 20.w,
+                right: 20.w,
+                top: 16.h,
+                bottom: 100.h,
+              ),
+              itemCount: 5,
+              separatorBuilder: (_, _) => SizedBox(height: 14.h),
+              itemBuilder: (_, index) {
+                return const AppointmentCard(
+                  name: 'Doctor Name Loading',
+                  specialty: 'Specialty Loading',
+                  date: '00-00-0000',
+                  time: '00:00',
+                  imageAsset: Assets.imagesDrSarah,
+                );
+              },
+            ),
+          );
         }
         if (state is AppointmentsFailure) {
           return Center(

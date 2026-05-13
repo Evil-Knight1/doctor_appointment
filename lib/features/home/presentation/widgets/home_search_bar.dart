@@ -33,11 +33,11 @@ class _SearchInput extends StatelessWidget {
     return Container(
       height: 50.h,
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(AppRadius.lg),
         boxShadow: [
           BoxShadow(
-            color: AppColors.cardShadow.withValues(alpha: 0.07),
+            color: Theme.of(context).shadowColor,
             blurRadius: 10.r,
             offset: Offset(0, 2.h),
           ),
@@ -50,7 +50,7 @@ class _SearchInput extends StatelessWidget {
           prefixIcon: Icon(
             Icons.search_rounded,
             size: 20.sp,
-            color: AppColors.textHint,
+            color: Theme.of(context).hintColor,
           ),
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(
@@ -72,11 +72,11 @@ class _FilterButton extends StatelessWidget {
       width: 50.w,
       height: 50.h,
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(AppRadius.lg),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.3),
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
             blurRadius: 10.r,
             offset: Offset(0, 4.h),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/core/services/service_locator.dart';
@@ -18,14 +19,38 @@ class DoctorSpecialityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<SpecializationsCubit>()..fetchSpecializations(),
+      create: (context) =>
+          getIt<SpecializationsCubit>()..fetchSpecializations(),
       child: Scaffold(
         backgroundColor: AppColors.backgroundLight,
         appBar: const SharedAppBar(title: 'Doctor Speciality'),
         body: BlocBuilder<SpecializationsCubit, SpecializationsState>(
           builder: (context, state) {
             if (state is SpecializationsLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return Skeletonizer(
+                enabled: true,
+                child: GridView.builder(
+                  padding: EdgeInsets.all(AppSpacing.lg),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: AppSpacing.md,
+                    crossAxisSpacing: AppSpacing.md,
+                    childAspectRatio: 1,
+                  ),
+                  itemCount: 12,
+                  itemBuilder: (context, index) {
+                    return SpecialityGridCard(
+                      speciality: SpecialityModel(
+                        name: 'Loading...',
+                        icon: Icons.medical_services,
+                        color: Colors.grey,
+                        bgColor: Colors.grey,
+                      ),
+                      onTap: () {},
+                    );
+                  },
+                ),
+              );
             } else if (state is SpecializationsFailure) {
               return Center(child: Text('Error: ${state.message}'));
             } else if (state is SpecializationsSuccess) {
@@ -68,5 +93,4 @@ class DoctorSpecialityView extends StatelessWidget {
       ),
     );
   }
-
 }

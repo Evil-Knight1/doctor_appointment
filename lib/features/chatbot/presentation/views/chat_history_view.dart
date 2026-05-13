@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ChatHistoryView extends StatelessWidget {
   const ChatHistoryView({super.key});
@@ -40,36 +41,47 @@ class ChatHistoryView extends StatelessWidget {
       ),
       body: BlocBuilder<ChatHistoryCubit, ChatHistoryState>(
         builder: (context, state) {
-          if (state is ChatHistoryLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is ChatHistoryError) {
+          final isLoading = state is ChatHistoryLoading;
+          final sessionIds = state is ChatHistoryLoaded ? state.sessionIds : [];
+
+          if (state is ChatHistoryError) {
             return Center(
-                child: Text(state.message,
-                    style: AppStyles.styleMedium14.copyWith(color: Colors.red)));
-          } else if (state is ChatHistoryLoaded) {
-            if (state.sessionIds.isEmpty) {
-              return Padding(
-                padding: EdgeInsets.only(bottom: 100.h),
-                child: Center(
-                    child: Text('No previous chats found.',
-                        style: AppStyles.styleMedium14)),
-              );
-            }
-            return ListView.separated(
+              child: Text(
+                state.message,
+                style: AppStyles.styleMedium14.copyWith(color: Colors.red),
+              ),
+            );
+          }
+
+          if (state is ChatHistoryLoaded && sessionIds.isEmpty) {
+            return Padding(
+              padding: EdgeInsets.only(bottom: 100.h),
+              child: Center(
+                child: Text('No previous chats found.',
+                    style: AppStyles.styleMedium14),
+              ),
+            );
+          }
+
+          return Skeletonizer(
+            enabled: isLoading,
+            child: ListView.separated(
               padding: EdgeInsets.only(
                 left: 20.w,
                 right: 20.w,
                 top: 16.h,
                 bottom: 100.h,
               ),
-              itemCount: state.sessionIds.length,
+              itemCount: isLoading ? 6 : sessionIds.length,
               separatorBuilder: (context, index) => SizedBox(height: 12.h),
               itemBuilder: (context, index) {
-                return _buildChatRecord(context, state.sessionIds[index]);
+                return _buildChatRecord(
+                  context,
+                  isLoading ? 'dummy_session_id' : sessionIds[index],
+                );
               },
-            );
-          }
-          return const SizedBox.shrink();
+            ),
+          );
         },
       ),
     );

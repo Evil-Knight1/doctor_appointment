@@ -1,3 +1,4 @@
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -79,10 +80,18 @@ class _DoctorAvatar extends StatelessWidget {
           child: doctor.imageAsset.startsWith('http')
               ? CachedNetworkImage(
                   imageUrl: doctor.imageAsset,
-                                  httpHeaders: ImageUrlHelper.getImageHeaders(),
+                  httpHeaders: ImageUrlHelper.getImageHeaders(),
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                  placeholder: (context, url) => Skeletonizer(
+                    enabled: true,
+                    child: Container(
+                      width: 64.w,
+                      height: 64.h,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(AppRadius.lg),
+                      ),
+                    ),
                   ),
                   errorWidget: (context, url, error) => Icon(
                     Icons.person_rounded,

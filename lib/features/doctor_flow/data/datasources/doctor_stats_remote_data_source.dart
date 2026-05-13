@@ -8,6 +8,7 @@ abstract class DoctorStatsRemoteDataSource {
   Future<DoctorStatsModel> getDoctorStats();
   Future<DoctorApiModel> getDoctorProfile();
   Future<List<AppointmentModel>> getDoctorAppointments();
+  Future<DoctorApiModel> updateDoctorProfile(Map<String, dynamic> data);
 }
 
 class DoctorStatsRemoteDataSourceImpl implements DoctorStatsRemoteDataSource {
@@ -48,5 +49,14 @@ class DoctorStatsRemoteDataSourceImpl implements DoctorStatsRemoteDataSource {
     }
     final List data = response['data'] ?? [];
     return data.map((e) => AppointmentModel.fromJson(e)).toList();
+  }
+
+  @override
+  Future<DoctorApiModel> updateDoctorProfile(Map<String, dynamic> data) async {
+    final response = await apiService.put('/api/Doctor/profile', data: data);
+    if (response['success'] != true) {
+      throw ApiException(response['message'] ?? 'Failed to update profile');
+    }
+    return DoctorApiModel.fromJson(response['data']);
   }
 }

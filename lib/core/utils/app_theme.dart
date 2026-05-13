@@ -1,68 +1,68 @@
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
+import 'package:flex_seed_scheme/flex_seed_scheme.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static ThemeData get theme => ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.light,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      primary: AppColors.primary,
-      onPrimary: Colors.white,
-      secondary: AppColors.primaryLight,
-      surface: AppColors.bg,
-      onSurface: AppColors.textPrimary,
-      error: AppColors.accent,
-      brightness: Brightness.light,
-    ),
-    scaffoldBackgroundColor: AppColors.bg,
-    cardColor: AppColors.white,
-    dividerColor: AppColors.gray200,
-    hintColor: AppColors.textSecondary,
-    shadowColor: AppColors.black.withValues(alpha: 0.05),
-    canvasColor: AppColors.bg,
-    fontFamily: 'Inter',
-    textTheme: _textTheme(Brightness.light),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.bg,
-      elevation: 0,
-      centerTitle: false,
-      iconTheme: IconThemeData(color: AppColors.textPrimary),
-    ),
-    inputDecorationTheme: _inputDecorationTheme(Brightness.light),
-    iconTheme: const IconThemeData(color: AppColors.textSecondary),
-  );
+  static ThemeData get theme => _buildTheme(Brightness.light);
+  static ThemeData get darkTheme => _buildTheme(Brightness.dark);
 
-  static ThemeData get darkTheme => ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.dark,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      primary: AppColors.primary,
-      onPrimary: Colors.white,
-      secondary: AppColors.darkSurface,
-      surface: AppColors.darkBg,
-      onSurface: AppColors.darkTextPrimary,
-      error: AppColors.accent,
-      brightness: Brightness.dark,
-    ),
-    scaffoldBackgroundColor: AppColors.darkBg,
-    cardColor: AppColors.darkSurface,
-    dividerColor: AppColors.darkBorder,
-    hintColor: AppColors.darkTextSecondary,
-    shadowColor: Colors.black.withValues(alpha: 0.2),
-    canvasColor: AppColors.darkBg,
-    fontFamily: 'Inter',
-    textTheme: _textTheme(Brightness.dark),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.darkBg,
-      elevation: 0,
-      centerTitle: false,
-      iconTheme: IconThemeData(color: AppColors.darkTextPrimary),
-    ),
-    inputDecorationTheme: _inputDecorationTheme(Brightness.dark),
-    iconTheme: const IconThemeData(color: AppColors.darkTextSecondary),
-  );
+  static ThemeData _buildTheme(Brightness brightness) {
+    final isLight = brightness == Brightness.light;
+
+    final colorScheme = SeedColorScheme.fromSeeds(
+      brightness: brightness,
+      primaryKey: AppColors.primary,
+      secondaryKey: AppColors.secondary,
+      tertiaryKey: AppColors.accent,
+      surfaceTint: isLight ? AppColors.primary : Colors.transparent,
+      tones: isLight ? FlexTones.soft(brightness) : FlexTones.vivid(brightness),
+    );
+
+    return ThemeData(
+      useMaterial3: true,
+      brightness: brightness,
+      colorScheme: colorScheme,
+      scaffoldBackgroundColor: isLight ? AppColors.bg : AppColors.darkBg,
+      cardColor: isLight ? AppColors.white : AppColors.darkSurface,
+      dividerColor: isLight ? AppColors.gray200 : AppColors.darkBorder,
+      hintColor: isLight ? AppColors.textSecondary : AppColors.darkTextSecondary,
+      shadowColor: isLight ? Colors.black.withValues(alpha: 0.05) : Colors.black.withValues(alpha: 0.2),
+      canvasColor: isLight ? AppColors.bg : AppColors.darkBg,
+      fontFamily: 'Inter',
+      textTheme: _textTheme(brightness),
+      appBarTheme: AppBarTheme(
+        backgroundColor: isLight ? AppColors.bg : AppColors.darkBg,
+        elevation: 0,
+        centerTitle: false,
+        titleTextStyle: _textTheme(brightness).titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: isLight ? AppColors.textPrimary : AppColors.darkTextPrimary,
+            ),
+        iconTheme: IconThemeData(
+          color: isLight ? AppColors.textPrimary : AppColors.darkTextPrimary,
+        ),
+      ),
+      inputDecorationTheme: _inputDecorationTheme(brightness),
+      iconTheme: IconThemeData(
+        color: isLight ? AppColors.textSecondary : AppColors.darkTextSecondary,
+      ),
+      extensions: [
+        AppCustomColors(
+          success: AppColors.success,
+          warning: AppColors.warning,
+          appointmentPending: AppColors.pending,
+          doctorOnline: AppColors.online,
+          chatBubbleMine: isLight ? AppColors.chatMineLight : AppColors.chatMineDark,
+          chatBubbleOthers: isLight ? AppColors.chatOthersLight : AppColors.chatOthersDark,
+          chatBubbleMineGradientStart: AppColors.headerGradientStart,
+          chatBubbleMineGradientEnd: AppColors.headerGradientEnd,
+          rating: AppColors.star,
+          error: AppColors.error,
+        ),
+      ],
+    );
+  }
 
   static TextTheme _textTheme(Brightness brightness) {
     final isLight = brightness == Brightness.light;

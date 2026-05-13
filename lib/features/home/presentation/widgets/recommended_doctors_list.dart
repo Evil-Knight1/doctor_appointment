@@ -1,4 +1,6 @@
+import 'package:doctor_appointment/features/doctors/domain/entities/specialization.dart';
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
@@ -34,7 +36,39 @@ class RecommendedDoctorsList extends StatelessWidget {
         BlocBuilder<DoctorsCubit, DoctorsState>(
           builder: (context, state) {
             if (state is DoctorsLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return Skeletonizer(
+                enabled: true,
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 3,
+                  separatorBuilder: (_, _) => SizedBox(height: AppSpacing.sm),
+                  itemBuilder: (_, index) {
+                    return DoctorCard(
+                      doctor: HomeDoctorModel(
+                        doctor: Doctor(
+                          id: 1,
+                          fullName: 'Doctor Full Name',
+                          email: 'doctor@example.com',
+                          phone: '1234567890',
+                          specializationId: 1,
+                          specialization: Specialization(
+                            id: 0,
+                            name: "General",
+                          ),
+                          isApproved: true,
+                          totalReviews: 120,
+                          createdAt: DateTime.now(),
+                          isAvailable: true,
+                          averageRating: 4.5,
+                          clinicAddress: '123 Medical St',
+                          hospital: 'General Hospital',
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
             } else if (state is DoctorsFailure) {
               return Center(child: Text('Error: ${state.message}'));
             } else if (state is DoctorsSuccess) {

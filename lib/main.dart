@@ -19,6 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:doctor_appointment/l10n/app_localizations.dart';
 import 'package:doctor_appointment/core/logic/locale_cubit.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -27,21 +28,31 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  
-  await loadEnv();
-  await SharedPreferencesHelper.init();
-  setupServiceLocator();
-  await getIt<NotificationService>().init();
-  await getIt<LogService>().init();
-  await SentryFlutter.init((options) {
-    options.dsn =
-        'https://6c8cfc852f0c2cd49d7017c1a33b72d3@o4508477044031488.ingest.us.sentry.io/4511279429582848';
-    options.tracesSampleRate = 1.0;
-    options.profilesSampleRate = 1.0;
-  }, appRunner: () => runApp(const DoctorAppointment()));
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://6c8cfc852f0c2cd49d7017c1a33b72d3@o4508477044031488.ingest.us.sentry.io/4511279429582848';
+      options.tracesSampleRate = 1.0;
+      // ignore: experimental_member_use
+      options.profilesSampleRate = 1.0;
+    },
+    appRunner: () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      FirebaseMessaging.onBackgroundMessage(
+        _firebaseMessagingBackgroundHandler,
+      );
+
+      await loadEnv();
+      await SharedPreferencesHelper.init();
+      setupServiceLocator();
+      await getIt<NotificationService>().init();
+      await getIt<LogService>().init();
+      runApp(const DoctorAppointment());
+    },
+  );
 }
 
 class DoctorAppointment extends StatelessWidget {
@@ -65,53 +76,117 @@ class DoctorAppointment extends StatelessWidget {
                   return AnnotatedRegion<SystemUiOverlayStyle>(
                     value: SystemUiOverlayStyle(
                       statusBarColor: Colors.transparent,
-                      statusBarIconBrightness: themeMode == ThemeMode.dark ? Brightness.light : Brightness.dark,
-                      systemNavigationBarColor: themeMode == ThemeMode.dark ? AppColors.darkBg : AppColors.bg,
-                      systemNavigationBarIconBrightness: themeMode == ThemeMode.dark ? Brightness.light : Brightness.dark,
+                      statusBarIconBrightness: themeMode == ThemeMode.dark
+                          ? Brightness.light
+                          : Brightness.dark,
+                      systemNavigationBarColor: themeMode == ThemeMode.dark
+                          ? AppColors.darkBg
+                          : AppColors.bg,
+                      systemNavigationBarIconBrightness:
+                          themeMode == ThemeMode.dark
+                          ? Brightness.light
+                          : Brightness.dark,
                     ),
                     child: MaterialApp.router(
                       theme: AppTheme.theme,
                       darkTheme: AppTheme.darkTheme,
                       themeMode: themeMode,
                       locale: locale,
-                      localizationsDelegates: AppLocalizations.localizationsDelegates,
+                      localizationsDelegates:
+                          AppLocalizations.localizationsDelegates,
                       supportedLocales: AppLocalizations.supportedLocales,
-                      // ignore: deprecated_member_use
-                      useInheritedMediaQuery: true,
                       builder: (context, child) {
-                        final appChild = DevicePreview.appBuilder(context, child);
+                        final appChild = DevicePreview.appBuilder(
+                          context,
+                          child,
+                        );
+                        final responsiveChild = ResponsiveBreakpoints.builder(
+                          child: Builder(
+                            builder: (context) {
+                              return MaxWidthBox(
+                                maxWidth: 1200,
+                                backgroundColor: const Color(0xFFF5F5F5),
+                                child: ResponsiveScaledBox(
+                                  width: ResponsiveValue<double>(
+                                    context,
+                                    defaultValue: 450,
+                                    conditionalValues: [
+                                      const Condition.equals(
+                                        name: MOBILE,
+                                        value: 450,
+                                      ),
+                                      const Condition.between(
+                                        start: 800,
+                                        end: 1100,
+                                        value: 800,
+                                      ),
+                                      const Condition.largerThan(name: TABLET, value: 1000),
+                                    ],
+                                  ).value,
+                                  child: appChild,
+                                ),
+                              );
+                            }
+                          ),
+                          breakpoints: [
+                            const Breakpoint(start: 0, end: 450, name: MOBILE),
+                            const Breakpoint(
+                              start: 451,
+                              end: 800,
+                              name: TABLET,
+                            ),
+                            const Breakpoint(
+                              start: 801,
+                              end: 1920,
+                              name: DESKTOP,
+                            ),
+                            const Breakpoint(
+                              start: 1921,
+                              end: double.infinity,
+                              name: '4K',
+                            ),
+                          ],
+                        );
                         return OfflineBuilder(
-                          connectivityBuilder: (
-                            BuildContext context,
-                            List<ConnectivityResult> connectivity,
-                            Widget child,
-                          ) {
-                            final bool connected = !connectivity.contains(ConnectivityResult.none);
-                            return Stack(
-                              fit: StackFit.expand,
-                              children: [
-                                child,
-                                if (!connected)
-                                  Positioned(
-                                    top: MediaQuery.of(context).padding.top,
-                                    left: 0,
-                                    right: 0,
-                                    child: Material(
-                                      color: Colors.red,
-                                      child: const Padding(
-                                        padding: EdgeInsets.symmetric(vertical: 8.0),
-                                        child: Text(
-                                          'No Internet Connection',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(color: Colors.white, fontSize: 14),
+                          connectivityBuilder:
+                              (
+                                BuildContext context,
+                                List<ConnectivityResult> connectivity,
+                                Widget child,
+                              ) {
+                                final bool connected = !connectivity.contains(
+                                  ConnectivityResult.none,
+                                );
+                                return Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    child,
+                                    if (!connected)
+                                      Positioned(
+                                        top: MediaQuery.of(context).padding.top,
+                                        left: 0,
+                                        right: 0,
+                                        child: Material(
+                                          color: Colors.red,
+                                          child: const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 8.0,
+                                            ),
+                                            child: Text(
+                                              'No Internet Connection',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                              ],
-                            );
-                          },
-                          child: appChild,
+                                  ],
+                                );
+                              },
+                          child: responsiveChild,
                         );
                       },
                       routerConfig: AppRouter.router,

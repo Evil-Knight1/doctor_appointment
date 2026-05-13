@@ -1,3 +1,4 @@
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
@@ -16,6 +17,7 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customColors = context.customColors;
     return Padding(
       padding: EdgeInsets.only(
         top: 2.h,
@@ -30,7 +32,7 @@ class ChatBubble extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             if (!isMe) ...[
-              _senderDot(),
+              _senderDot(context),
               SizedBox(width: 6.w),
             ],
             Flexible(
@@ -39,16 +41,16 @@ class ChatBubble extends StatelessWidget {
                     EdgeInsets.symmetric(vertical: 10.h, horizontal: 14.w),
                 decoration: BoxDecoration(
                   gradient: isMe
-                      ? const LinearGradient(
+                      ? LinearGradient(
                           colors: [
-                            AppColors.headerGradientStart,
-                            AppColors.headerGradientEnd,
+                            customColors.chatBubbleMineGradientStart!,
+                            customColors.chatBubbleMineGradientEnd!,
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         )
                       : null,
-                  color: isMe ? null : Colors.white,
+                  color: isMe ? null : customColors.chatBubbleOthers,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(18.r),
                     topRight: Radius.circular(18.r),
@@ -58,7 +60,7 @@ class ChatBubble extends StatelessWidget {
                   boxShadow: [
                     BoxShadow(
                       color: isMe
-                          ? AppColors.primary.withValues(alpha: 0.25)
+                          ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.25)
                           : Colors.black.withValues(alpha: 0.06),
                       blurRadius: 8,
                       offset: const Offset(0, 3),
@@ -112,18 +114,19 @@ class ChatBubble extends StatelessWidget {
     );
   }
 
-  Widget _senderDot() {
+  Widget _senderDot(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       width: 28.r,
       height: 28.r,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppColors.primaryLight,
+        color: colorScheme.primaryContainer,
         border: Border.all(
-            color: AppColors.primary.withValues(alpha: 0.2), width: 1.5),
+            color: colorScheme.primary.withValues(alpha: 0.2), width: 1.5),
       ),
       child: Icon(Icons.person_rounded,
-          color: AppColors.primary.withValues(alpha: 0.7), size: 16.r),
+          color: colorScheme.onPrimaryContainer.withValues(alpha: 0.7), size: 16.r),
     );
   }
 

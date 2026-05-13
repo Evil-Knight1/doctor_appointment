@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -54,9 +51,20 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDZ_z3b3zoOw9n1b3sMys0_GlZoLTPKVEE',
-    appId: '1:419065403494:android:19ea8b6465d76e884ff5a7',
+    appId: '1:419065403494:android:63b6e9c0a6d5da7a4ff5a7',
     messagingSenderId: '419065403494',
     projectId: 'medlink-cc852',
     storageBucket: 'medlink-cc852.firebasestorage.app',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBme-bMChzdn3wlqF7pKz8i84Ab4ptIpXU',
+    appId: '1:419065403494:web:691c9886d01cef884ff5a7',
+    messagingSenderId: '419065403494',
+    projectId: 'medlink-cc852',
+    authDomain: 'medlink-cc852.firebaseapp.com',
+    storageBucket: 'medlink-cc852.firebasestorage.app',
+    measurementId: 'G-B4MZHGTW1K',
+  );
+
 }

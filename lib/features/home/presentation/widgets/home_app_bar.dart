@@ -1,5 +1,6 @@
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
@@ -77,14 +78,17 @@ class _UserInfoRow extends StatelessWidget {
                   child: image != null
                       ? CachedNetworkImage(
                           imageUrl: ImageUrlHelper.getFullUrl(image),
-                                  httpHeaders: ImageUrlHelper.getImageHeaders(),
+                          httpHeaders: ImageUrlHelper.getImageHeaders(),
                           fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                            color: AppColors.primaryLight,
-                            child: const Center(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: AppColors.primary,
+                          placeholder: (context, url) => Skeletonizer(
+                            enabled: true,
+                            child: Container(
+                              color: AppColors.primaryLight,
+                              width: 45.r,
+                              height: 45.r,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
                               ),
                             ),
                           ),

@@ -133,7 +133,7 @@ class DoctorInfoRow extends StatelessWidget {
           children: [
             Text(doctor.fullName, style: AppTextStyles.headingSmall),
             Text(
-              '${doctor.specialization ?? 'General'} | ${doctor.hospital ?? 'Clinic'}',
+              '${doctor.specialization.name} | ${doctor.hospital ?? 'Clinic'}',
               style: AppTextStyles.bodySmall,
             ),
             Row(

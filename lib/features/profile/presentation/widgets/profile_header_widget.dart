@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:doctor_appointment/core/utils/image_url_helper.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 /// Profile header widget that shows avatar (with image-change support),
 /// user name and email.
@@ -170,15 +171,15 @@ class _ProfileHeaderWidgetState extends State<ProfileHeaderWidget> {
                                   httpHeaders: ImageUrlHelper.getImageHeaders(),
                                   fit: BoxFit.cover,
                                   placeholder:
-                                      (context, url) => Center(
-                                        child: SizedBox(
-                                          width: 24.w,
-                                          height: 24.h,
-                                          child:
-                                              const CircularProgressIndicator(
-                                                strokeWidth: 2,
-                                                color: AppColors.primary,
-                                              ),
+                                      (context, url) => Skeletonizer(
+                                        enabled: true,
+                                        child: Container(
+                                          width: 100.r,
+                                          height: 100.r,
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                   errorWidget:

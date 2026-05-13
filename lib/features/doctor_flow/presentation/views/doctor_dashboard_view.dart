@@ -1,3 +1,4 @@
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_stats_cubit.dart';
@@ -5,6 +6,7 @@ import 'package:doctor_appointment/features/doctor_flow/logic/doctor_stats_state
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DoctorDashboardView extends StatelessWidget {
   const DoctorDashboardView({super.key});
@@ -14,7 +16,7 @@ class DoctorDashboardView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
@@ -25,7 +27,70 @@ class DoctorDashboardView extends StatelessWidget {
       body: BlocBuilder<DoctorStatsCubit, DoctorStatsState>(
         builder: (context, state) {
           if (state is DoctorStatsLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Skeletonizer(
+              enabled: true,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(20.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Bone.text(words: 2),
+                    SizedBox(height: 8.h),
+                    const Bone.text(words: 4),
+                    SizedBox(height: 24.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildStatCard(
+                            'Patients',
+                            '00',
+                            Icons.people,
+                            Colors.grey,
+                          ),
+                        ),
+                        SizedBox(width: 16.w),
+                        Expanded(
+                          child: _buildStatCard(
+                            'Revenue',
+                            '\$000',
+                            Icons.money,
+                            Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildStatCard(
+                            'Appts',
+                            '00',
+                            Icons.calendar_today,
+                            Colors.grey,
+                          ),
+                        ),
+                        SizedBox(width: 16.w),
+                        Expanded(
+                          child: _buildStatCard(
+                            'Rating',
+                            '0.0',
+                            Icons.star,
+                            Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24.h),
+                    const Bone.text(words: 2),
+                    SizedBox(height: 12.h),
+                    _buildSummaryRow('Completed', 0, Colors.grey),
+                    _buildSummaryRow('Pending', 0, Colors.grey),
+                    _buildSummaryRow('Cancelled', 0, Colors.grey),
+                  ],
+                ),
+              ),
+            );
           } else if (state is DoctorStatsSuccess) {
             final stats = state.stats;
             return SingleChildScrollView(
@@ -38,7 +103,7 @@ class DoctorDashboardView extends StatelessWidget {
                   Text(
                     'Here is what\'s happening today.',
                     style: AppStyles.styleRegular14.copyWith(
-                      color: AppColors.textSecondary,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                     ),
                   ),
                   SizedBox(height: 24.h),
@@ -49,7 +114,7 @@ class DoctorDashboardView extends StatelessWidget {
                           'Patients',
                           stats.totalPatients.toString(),
                           Icons.people_alt_rounded,
-                          AppColors.primary,
+                          Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       SizedBox(width: 16.w),
@@ -58,7 +123,7 @@ class DoctorDashboardView extends StatelessWidget {
                           'Total Revenue',
                           '\$${stats.totalRevenue.toStringAsFixed(0)}',
                           Icons.attach_money_rounded,
-                          AppColors.green,
+                          context.customColors.success!,
                         ),
                       ),
                     ],
@@ -71,7 +136,7 @@ class DoctorDashboardView extends StatelessWidget {
                           'Appointments',
                           stats.totalAppointments.toString(),
                           Icons.calendar_today_rounded,
-                          Colors.orange,
+                          context.customColors.warning!,
                         ),
                       ),
                       SizedBox(width: 16.w),
@@ -80,7 +145,7 @@ class DoctorDashboardView extends StatelessWidget {
                           'Avg Rating',
                           stats.averageRating.toStringAsFixed(1),
                           Icons.star_rounded,
-                          Colors.amber,
+                          context.customColors.rating!,
                         ),
                       ),
                     ],
@@ -91,17 +156,17 @@ class DoctorDashboardView extends StatelessWidget {
                   _buildSummaryRow(
                     'Completed',
                     stats.completedAppointments,
-                    AppColors.green,
+                    context.customColors.success!,
                   ),
                   _buildSummaryRow(
                     'Pending',
                     stats.pendingAppointments,
-                    Colors.orange,
+                    context.customColors.warning!,
                   ),
                   _buildSummaryRow(
                     'Cancelled',
                     stats.cancelledAppointments,
-                    Colors.red,
+                    context.customColors.error!,
                   ),
                 ],
               ),
@@ -131,7 +196,7 @@ class DoctorDashboardView extends StatelessWidget {
           Text(
             value.toString(),
             style: AppStyles.styleMedium14.copyWith(
-              color: AppColors.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
         ],
@@ -148,9 +213,9 @@ class DoctorDashboardView extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: Theme.of(context).dividerColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,7 +235,7 @@ class DoctorDashboardView extends StatelessWidget {
           Text(
             title,
             style: AppStyles.styleMedium14.copyWith(
-              color: AppColors.textSecondary,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
         ],

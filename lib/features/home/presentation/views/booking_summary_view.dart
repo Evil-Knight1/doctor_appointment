@@ -14,6 +14,7 @@ import 'package:doctor_appointment/features/payments/logic/payment_cubit.dart';
 import 'package:doctor_appointment/features/payments/logic/payment_state.dart';
 import '../widgets/booking_stepper.dart';
 import '../widgets/shared_app_bar.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class BookingSummaryView extends StatelessWidget {
   const BookingSummaryView({super.key, required this.args});
@@ -92,8 +93,13 @@ class BookingSummaryView extends StatelessWidget {
                                     imageUrl: ImageUrlHelper.getFullUrl(doctor.profilePictureUrl),
                                   httpHeaders: ImageUrlHelper.getImageHeaders(),
                                     fit: BoxFit.cover,
-                                    placeholder: (context, url) => const Center(
-                                      child: CircularProgressIndicator(),
+                                    placeholder: (context, url) => Skeletonizer(
+                                      enabled: true,
+                                      child: Container(
+                                        width: 60.w,
+                                        height: 60.h,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                     errorWidget: (context, url, error) => Icon(
                                       Icons.person_rounded,
@@ -113,7 +119,7 @@ class BookingSummaryView extends StatelessWidget {
                             children: [
                               Text(doctor.fullName, style: AppTextStyles.headingSmall),
                               Text(
-                                '${doctor.specialization ?? 'General'} | ${doctor.hospital ?? 'Clinic'}',
+                                '${doctor.specialization.name} | ${doctor.hospital ?? 'Clinic'}',
                                 style: AppTextStyles.bodySmall,
                               ),
                             ],

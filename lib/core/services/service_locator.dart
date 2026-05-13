@@ -57,6 +57,7 @@ import 'package:doctor_appointment/features/doctor_flow/domain/repositories/doct
 import 'package:doctor_appointment/features/doctor_flow/domain/usecases/get_doctor_stats_usecase.dart';
 import 'package:doctor_appointment/features/doctor_flow/domain/usecases/get_doctor_profile_usecase.dart';
 import 'package:doctor_appointment/features/doctor_flow/domain/usecases/get_doctor_appointments_usecase.dart';
+import 'package:doctor_appointment/features/doctor_flow/domain/usecases/update_doctor_profile_usecase.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_stats_cubit.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_profile_cubit.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_appointments_cubit.dart';
@@ -300,6 +301,9 @@ void setupServiceLocator() {
   getIt.registerLazySingleton(
     () => GetDoctorAppointmentsUseCase(getIt<DoctorStatsRepository>()),
   );
+  getIt.registerLazySingleton(
+    () => UpdateDoctorProfileUseCase(getIt<DoctorStatsRepository>()),
+  );
   getIt.registerFactory(
     () =>
         DoctorStatsCubit(getDoctorStatsUseCase: getIt<GetDoctorStatsUseCase>()),
@@ -307,6 +311,7 @@ void setupServiceLocator() {
   getIt.registerFactory(
     () => DoctorProfileCubit(
       getDoctorProfileUseCase: getIt<GetDoctorProfileUseCase>(),
+      updateDoctorProfileUseCase: getIt<UpdateDoctorProfileUseCase>(),
     ),
   );
   getIt.registerFactory(

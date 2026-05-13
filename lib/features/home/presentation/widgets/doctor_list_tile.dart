@@ -6,6 +6,7 @@ import 'package:doctor_appointment/features/home/data/models/home_doctor_model.d
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DoctorListTile extends StatelessWidget {
   const DoctorListTile({super.key, required this.doctor, required this.onTap});
@@ -42,10 +43,15 @@ class DoctorListTile extends StatelessWidget {
               child: doctor.imageAsset.startsWith('http')
                   ? CachedNetworkImage(
                       imageUrl: doctor.imageAsset,
-                                  httpHeaders: ImageUrlHelper.getImageHeaders(),
+                      httpHeaders: ImageUrlHelper.getImageHeaders(),
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => const Center(
-                        child: CircularProgressIndicator(),
+                      placeholder: (context, url) => Skeletonizer(
+                        enabled: true,
+                        child: Container(
+                          width: 60.w,
+                          height: 60.h,
+                          color: Colors.white,
+                        ),
                       ),
                       errorWidget: (context, url, error) => Icon(
                         Icons.person_rounded,

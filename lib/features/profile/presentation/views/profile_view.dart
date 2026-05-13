@@ -14,6 +14,8 @@ import 'package:doctor_appointment/features/profile/presentation/widgets/profile
 import 'package:doctor_appointment/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:doctor_appointment/features/profile/domain/entities/patient_profile.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -63,9 +65,21 @@ class _ProfileViewState extends State<ProfileView> {
                   BlocBuilder<ProfileCubit, ProfileState>(
                     builder: (context, state) {
                       if (state is ProfileLoading) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(vertical: 20.h),
-                          child: const Center(child: CircularProgressIndicator()),
+                        return Skeletonizer(
+                          enabled: true,
+                          child: ProfileHeaderWidget(
+                            profile: PatientProfile(
+                              id: 0,
+                              fullName: 'User Full Name',
+                              email: 'user@example.com',
+                              phone: '1234567890',
+                              profilePicture: null,
+                              dateOfBirth: DateTime.now(),
+                              gender: 'Male',
+                              address: 'Address',
+                              createdAt: DateTime.now(),
+                            ),
+                          ),
                         );
                       }
                       if (state is ProfileSuccess) {

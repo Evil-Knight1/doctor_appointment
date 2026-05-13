@@ -1,3 +1,4 @@
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/utils/go_router.dart';
@@ -10,8 +11,9 @@ class AppointmentSuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customColors = context.customColors;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 32.w),
@@ -24,12 +26,12 @@ class AppointmentSuccessView extends StatelessWidget {
                 width: 100.w,
                 height: 100.w,
                 decoration: BoxDecoration(
-                  color: AppColors.green.withValues(alpha: 0.1),
+                  color: customColors.success?.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   Icons.check_circle_rounded,
-                  color: AppColors.green,
+                  color: customColors.success,
                   size: 60.sp,
                 ),
               ),

@@ -35,7 +35,11 @@ class _SplashViewState extends State<SplashView> {
     // 1. Onboarding gate
     final hasSeenOnboarding = SharedPreferencesHelper.getHasSeenOnboarding();
     if (!hasSeenOnboarding) {
-      context.go(AppRouter.kOnBoardingView);
+      if (mounted) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          context.go(AppRouter.kOnBoardingView);
+        });
+      }
       return;
     }
 

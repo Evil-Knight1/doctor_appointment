@@ -11,8 +11,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/features/doctors/logic/specializations_cubit.dart';
 import 'package:doctor_appointment/features/doctors/logic/specializations_state.dart';
+import 'package:doctor_appointment/features/doctors/domain/entities/specialization.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
@@ -249,7 +251,32 @@ class _SearchViewState extends State<SearchView> {
     return BlocBuilder<DoctorsCubit, DoctorsState>(
       builder: (context, state) {
         if (state is DoctorsLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return Skeletonizer(
+            enabled: true,
+            child: ListView.separated(
+              padding: EdgeInsets.fromLTRB(20.w, 8.h, 20.w, 100.h),
+              itemCount: 6,
+              separatorBuilder: (_, _) => SizedBox(height: 12.h),
+              itemBuilder: (_, index) => DoctorListTile(
+                doctor: HomeDoctorModel(
+                  doctor: Doctor(
+                    id: 0,
+                    fullName: 'Doctor Full Name',
+                    email: '',
+                    phone: '',
+                    specializationId: 0,
+                    specialization: const Specialization(id: 0, name: 'Specialization'),
+                    isApproved: true,
+                    totalReviews: 0,
+                    createdAt: DateTime.now(),
+                    isAvailable: true,
+                    hospital: 'Hospital Name',
+                  ),
+                ),
+                onTap: () {},
+              ),
+            ),
+          );
         }
         if (state is DoctorsFailure) {
           return Center(
@@ -328,9 +355,26 @@ class _SearchViewState extends State<SearchView> {
                   ),
                 );
               }
-              return Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.h),
-                child: const Center(child: CircularProgressIndicator()),
+              return Skeletonizer(
+                enabled: true,
+                child: DoctorListTile(
+                  doctor: HomeDoctorModel(
+                    doctor: Doctor(
+                      id: 0,
+                      fullName: 'Doctor Full Name',
+                      email: '',
+                      phone: '',
+                      specializationId: 0,
+                      specialization: const Specialization(id: 0, name: 'Specialization'),
+                      isApproved: true,
+                      totalReviews: 0,
+                      createdAt: DateTime.now(),
+                      isAvailable: true,
+                      hospital: 'Hospital Name',
+                    ),
+                  ),
+                  onTap: () {},
+                ),
               );
             },
           );

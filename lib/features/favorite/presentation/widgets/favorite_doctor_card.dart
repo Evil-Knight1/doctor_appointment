@@ -1,11 +1,13 @@
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
-import 'package:doctor_appointment/core/utils/go_router.dart';
+import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:go_router/go_router.dart';
 
 class FavoriteDoctorCard extends StatelessWidget {
   final HomeDoctorModel doctor;
@@ -20,8 +22,7 @@ class FavoriteDoctorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () =>
-          AppRouter.router.push(AppRouter.kDoctorDetail, extra: doctor),
+      onTap: () => context.pushNamed(Routes.doctorDetailsView, extra: doctor),
       child: Container(
         padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
@@ -40,33 +41,33 @@ class FavoriteDoctorCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12.r),
-              child: doctor.imageAsset.startsWith('http')
-                  ? CachedNetworkImage(
-                      imageUrl: doctor.imageAsset,
-                                  httpHeaders: ImageUrlHelper.getImageHeaders(),
-                      width: 65.w,
-                      height: 65.h,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      errorWidget: (_, _, _) => Container(
-                        width: 65.w,
-                        height: 65.h,
-                        color: AppColors.primaryLight,
-                        child: Icon(
-                          Icons.person,
-                          color: AppColors.primary,
-                          size: 30.sp,
-                        ),
-                      ),
-                    )
-                  : Image.asset(
-                      doctor.imageAsset,
-                      width: 65.w,
-                      height: 65.h,
-                      fit: BoxFit.cover,
-                    ),
+              child: CachedNetworkImage(
+                imageUrl: ImageUrlHelper.getFullUrl(
+                  doctor.doctor.profilePictureUrl,
+                ),
+                httpHeaders: ImageUrlHelper.getImageHeaders(),
+                width: 65.w,
+                height: 65.h,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Skeletonizer(
+                  enabled: true,
+                  child: Container(
+                    width: 65.w,
+                    height: 65.h,
+                    color: Colors.white,
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  width: 65.w,
+                  height: 65.h,
+                  color: AppColors.surfaceVariant,
+                  child: Icon(
+                    Icons.person,
+                    color: AppColors.primary,
+                    size: 30.sp,
+                  ),
+                ),
+              ),
             ),
             SizedBox(width: 12.w),
             Expanded(
@@ -79,7 +80,7 @@ class FavoriteDoctorCard extends StatelessWidget {
                   ),
                   SizedBox(height: 2.h),
                   Text(
-                    doctor.specialty,
+                    doctor.doctor.specialization.name,
                     style: AppStyles.styleRegular12.copyWith(
                       color: AppColors.textSecondary,
                     ),
@@ -94,7 +95,7 @@ class FavoriteDoctorCard extends StatelessWidget {
                       ),
                       SizedBox(width: 4.w),
                       Text(
-                        '${doctor.rating} (${doctor.reviews} Reviews)',
+                        '${doctor.rating} (${doctor.reviewCount} Reviews)',
                         style: AppStyles.styleRegular12.copyWith(
                           color: AppColors.textSecondary,
                           fontSize: 11.sp,
@@ -118,7 +119,7 @@ class FavoriteDoctorCard extends StatelessWidget {
                 ),
                 SizedBox(height: 10.h),
                 Text(
-                  doctor.fee,
+                  '\$${doctor.doctor.consultationFee ?? 100}',
                   style: AppStyles.styleMedium14.copyWith(
                     color: AppColors.primary,
                     fontSize: 13.sp,

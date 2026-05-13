@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DoctorProfileView extends StatefulWidget {
   const DoctorProfileView({super.key});
@@ -18,7 +19,11 @@ class DoctorProfileView extends StatefulWidget {
 }
 
 class _DoctorProfileViewState extends State<DoctorProfileView> {
-  bool _isAcceptingNewPatients = true;
+  @override
+  void initState() {
+    super.initState();
+    context.read<DoctorProfileCubit>().fetchProfile();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,109 +38,125 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
           style: AppStyles.styleSemiBold22.copyWith(fontSize: 18.sp),
         ),
       ),
-      body: BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
-        builder: (context, state) {
-          if (state is DoctorProfileLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is DoctorProfileFailure) {
-            return Center(child: Text(state.message));
-          } else if (state is DoctorProfileSuccess) {
-            final doctor = state.doctor;
-            return SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Column(
-                children: [
-                  SizedBox(height: 20.h),
-                  CircleAvatar(
-                    radius: 40.r,
-                    backgroundColor: AppColors.primaryLight,
-                    child: Icon(
-                      Icons.person,
-                      size: 40.sp,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  SizedBox(height: 16.h),
-                  Text(doctor.fullName, style: AppStyles.styleSemiBold22),
-                  Text(
-                    doctor.specialization ?? 'Specialist',
-                    style: AppStyles.styleRegular14.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                  SizedBox(height: 32.h),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Management', style: AppStyles.styleSemiBold16),
-                  ),
-                  SizedBox(height: 12.h),
-                  ProfileMenuItem(
-                    icon: Icons.personal_injury_outlined,
-                    title: 'Accepting Patients',
-                    subtitle: _isAcceptingNewPatients
-                        ? 'Currently Accepting'
-                        : 'Not Accepting',
-                    trailing: Switch(
-                      value: _isAcceptingNewPatients,
-                      onChanged: (v) =>
-                          setState(() => _isAcceptingNewPatients = v),
-                      activeThumbColor: AppColors.primary,
-                    ),
-                  ),
-                  SizedBox(height: 12.h),
-                  ProfileMenuItem(
-                    icon: Icons.payments_outlined,
-                    title: 'Setup Fees & Services',
-                    subtitle: 'Manage your consultation costs',
-                    onTap: () {},
-                  ),
-                  SizedBox(height: 12.h),
-                  ProfileMenuItem(
-                    icon: Icons.access_time_rounded,
-                    title: 'Working Hours',
-                    subtitle: 'Set auto-schedule blocks',
-                    onTap: () {},
-                  ),
-                  SizedBox(height: 32.h),
-                  GestureDetector(
-                    onTap: () => _showLogoutDialog(context),
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(vertical: 14.h),
-                      decoration: BoxDecoration(
-                        color: AppColors.accent.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(14.r),
-                        border: Border.all(
-                          color: AppColors.accent.withValues(alpha: 0.3),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.logout_rounded,
-                            color: AppColors.accent,
-                            size: 20.sp,
-                          ),
-                          SizedBox(width: 8.w),
-                          Text(
-                            'Log Out',
-                            style: AppStyles.styleMedium14.copyWith(
-                              color: AppColors.accent,
-                              fontSize: 15.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 32.h),
-                ],
+      body: BlocListener<DoctorProfileCubit, DoctorProfileState>(
+        listener: (context, state) {
+          if (state is DoctorProfileFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: AppColors.accent,
               ),
             );
           }
-          return const SizedBox.shrink();
         },
+        child: BlocBuilder<DoctorProfileCubit, DoctorProfileState>(
+          builder: (context, state) {
+            final isLoading = state is DoctorProfileLoading;
+            final doctor = state is DoctorProfileSuccess ? state.doctor : null;
+
+            return Skeletonizer(
+              enabled: isLoading,
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Column(
+                  children: [
+                    SizedBox(height: 20.h),
+                    CircleAvatar(
+                      radius: 40.r,
+                      backgroundColor: AppColors.primaryLight,
+                      child: Icon(
+                        Icons.person,
+                        size: 40.sp,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    Text(
+                      doctor?.fullName ?? 'Doctor Full Name',
+                      style: AppStyles.styleSemiBold22,
+                    ),
+                    Text(
+                      doctor?.specialization.name ?? 'Specialization',
+                      style: AppStyles.styleRegular14.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    SizedBox(height: 32.h),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Management', style: AppStyles.styleSemiBold16),
+                    ),
+                    SizedBox(height: 12.h),
+                    ProfileMenuItem(
+                      icon: Icons.personal_injury_outlined,
+                      title: 'Accepting Patients',
+                      subtitle: (doctor?.isAvailable ?? true)
+                          ? 'Currently Accepting'
+                          : 'Not Accepting',
+                      trailing: Switch(
+                        value: doctor?.isAvailable ?? true,
+                        onChanged: (v) {
+                          context
+                              .read<DoctorProfileCubit>()
+                              .updateAcceptingPatients(v);
+                        },
+                        activeThumbColor: AppColors.primary,
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    ProfileMenuItem(
+                      icon: Icons.payments_outlined,
+                      title: 'Setup Fees & Services',
+                      subtitle: 'Manage your consultation costs',
+                      onTap: () {},
+                    ),
+                    SizedBox(height: 12.h),
+                    ProfileMenuItem(
+                      icon: Icons.access_time_rounded,
+                      title: 'Working Hours',
+                      subtitle: 'Set auto-schedule blocks',
+                      onTap: () {},
+                    ),
+                    SizedBox(height: 32.h),
+                    GestureDetector(
+                      onTap: () => _showLogoutDialog(context),
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(vertical: 14.h),
+                        decoration: BoxDecoration(
+                          color: AppColors.accent.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(14.r),
+                          border: Border.all(
+                            color: AppColors.accent.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.logout_rounded,
+                              color: AppColors.accent,
+                              size: 20.sp,
+                            ),
+                            SizedBox(width: 8.w),
+                            Text(
+                              'Log Out',
+                              style: AppStyles.styleMedium14.copyWith(
+                                color: AppColors.accent,
+                                fontSize: 15.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 32.h),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

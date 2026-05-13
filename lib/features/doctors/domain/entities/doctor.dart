@@ -1,9 +1,11 @@
+import 'package:doctor_appointment/features/doctors/domain/entities/specialization.dart';
+
 class Doctor {
   final int id;
   final String fullName;
   final String email;
   final String phone;
-  final String? specialization;
+  final Specialization specialization;
   final int specializationId;
   final String? bio;
   final int? yearsOfExperience;
@@ -24,7 +26,7 @@ class Doctor {
     required this.email,
     required this.phone,
     required this.specializationId,
-    this.specialization,
+    required this.specialization,
     this.bio,
     this.yearsOfExperience,
     this.clinicAddress,

@@ -46,4 +46,16 @@ class DoctorStatsRepositoryImpl implements DoctorStatsRepository {
       return Result.failure(const ServerFailure('Unexpected error fetching appointments'));
     }
   }
+
+  @override
+  Future<Result<Doctor>> updateDoctorProfile(Map<String, dynamic> data) async {
+    try {
+      final profile = await remoteDataSource.updateDoctorProfile(data);
+      return Result.success(profile);
+    } on ApiException catch (e) {
+      return Result.failure(ServerFailure(e.message));
+    } catch (e) {
+      return Result.failure(const ServerFailure('Unexpected error updating profile'));
+    }
+  }
 }

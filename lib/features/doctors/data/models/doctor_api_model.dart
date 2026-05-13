@@ -1,3 +1,4 @@
+import 'package:doctor_appointment/features/doctors/data/models/specialization_model.dart';
 import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 
 class DoctorApiModel extends Doctor {
@@ -28,9 +29,13 @@ class DoctorApiModel extends Doctor {
       fullName: json['fullName'] as String? ?? '',
       email: json['email'] as String? ?? '',
       phone: json['phone'] as String? ?? '',
-      specialization:
-          (json['specialization'] as String?) ??
-          (json['specializationName'] as String?),
+      specialization: SpecializationModel(
+        id: json['specializationId'] as int? ?? 0,
+        name:
+            (json['specialization'] as String?) ??
+            (json['specializationName'] as String?) ??
+            'General',
+      ),
       bio: json['bio'] as String?,
       yearsOfExperience: json['yearsOfExperience'] as int?,
       clinicAddress: json['clinicAddress'] as String?,

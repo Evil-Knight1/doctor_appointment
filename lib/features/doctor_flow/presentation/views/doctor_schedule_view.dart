@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DoctorScheduleView extends StatelessWidget {
   const DoctorScheduleView({super.key});
@@ -26,34 +27,60 @@ class DoctorScheduleView extends StatelessWidget {
       ),
       body: BlocBuilder<DoctorAppointmentsCubit, DoctorAppointmentsState>(
         builder: (context, state) {
-          if (state is DoctorAppointmentsLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is DoctorAppointmentsFailure) {
+          final isLoading = state is DoctorAppointmentsLoading;
+          final appointments = state is DoctorAppointmentsSuccess
+              ? state.appointments
+              : [];
+
+          if (state is DoctorAppointmentsFailure) {
             return Center(child: Text(state.message));
-          } else if (state is DoctorAppointmentsSuccess) {
-            if (state.appointments.isEmpty) {
-              return Center(
-                child: Text(
-                  'No appointments scheduled yet.',
-                  style: AppStyles.styleMedium14.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
+          }
+
+          if (state is DoctorAppointmentsSuccess && appointments.isEmpty) {
+            return Center(
+              child: Text(
+                'No appointments scheduled yet.',
+                style: AppStyles.styleMedium14.copyWith(
+                  color: AppColors.textSecondary,
                 ),
-              );
-            }
-            return ListView.separated(
+              ),
+            );
+          }
+
+          return Skeletonizer(
+            enabled: isLoading,
+            child: ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-              itemCount: state.appointments.length,
+              itemCount: isLoading ? 5 : appointments.length,
               separatorBuilder: (context, index) => SizedBox(height: 16.h),
               itemBuilder: (context, index) {
                 return _buildScheduleRequest(
                   context,
-                  state.appointments[index],
+                  isLoading
+                      ? Appointment(
+                          id: 0,
+                          patientName: 'Patient Name',
+                          reason: 'Appointment Reason',
+                          status: 0,
+                          startTime: DateTime.now(),
+                          endTime: DateTime.now(),
+                          doctorId: 0,
+                          patientId: 0,
+                          doctorName: '',
+                          isPaid: false,
+                          paymentMethod: null,
+                          paymentStatus: null,
+                          paymentTransactionId: '',
+                          paymentDate: null,
+                          amount: 0,
+                          doctorNotes: '',
+                          createdAt: DateTime.now(),
+                        )
+                      : appointments[index],
                 );
               },
-            );
-          }
-          return const SizedBox.shrink();
+            ),
+          );
         },
       ),
     );

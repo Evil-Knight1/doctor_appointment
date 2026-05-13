@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
@@ -32,7 +33,28 @@ class SpecialitiesList extends StatelessWidget {
         BlocBuilder<SpecializationsCubit, SpecializationsState>(
           builder: (context, state) {
             if (state is SpecializationsLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return Skeletonizer(
+                enabled: true,
+                child: SizedBox(
+                  height: 92.h,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                    itemCount: 5,
+                    separatorBuilder: (_, _) => SizedBox(width: AppSpacing.md),
+                    itemBuilder: (_, index) {
+                      return const SpecialityCard(
+                        speciality: SpecialityModel(
+                          name: 'Loading...',
+                          icon: Icons.medical_services,
+                          color: Colors.grey,
+                          bgColor: Colors.grey,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              );
             } else if (state is SpecializationsSuccess) {
               final uniqueNames = state.uniqueNames.toList();
               return SizedBox(
@@ -44,8 +66,12 @@ class SpecialitiesList extends StatelessWidget {
                   separatorBuilder: (_, _) => SizedBox(width: AppSpacing.md),
                   itemBuilder: (_, index) {
                     final name = uniqueNames[index];
-                    final spec = state.specializations.firstWhere((s) => s.name == name);
-                    final theme = SpecialtyMapper.getThemeForSpecialty(spec.name);
+                    final spec = state.specializations.firstWhere(
+                      (s) => s.name == name,
+                    );
+                    final theme = SpecialtyMapper.getThemeForSpecialty(
+                      spec.name,
+                    );
                     final model = SpecialityModel(
                       name: spec.name,
                       icon: theme.icon,
@@ -63,7 +89,6 @@ class SpecialitiesList extends StatelessWidget {
       ],
     );
   }
-
 }
 
 class SpecialityCard extends StatelessWidget {
@@ -74,10 +99,8 @@ class SpecialityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.pushNamed(
-        Routes.recommendationView,
-        extra: speciality.name,
-      ),
+      onTap: () =>
+          context.pushNamed(Routes.recommendationView, extra: speciality.name),
       child: Container(
         width: 76.w,
         decoration: BoxDecoration(

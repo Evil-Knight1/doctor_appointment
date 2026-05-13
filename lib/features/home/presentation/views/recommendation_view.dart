@@ -1,6 +1,9 @@
+import 'package:doctor_appointment/features/doctors/domain/entities/specialization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
@@ -28,8 +31,8 @@ class _RecommendationViewState extends State<RecommendationView> {
     super.initState();
     // Initial fetch
     context.read<DoctorsCubit>().fetchDoctors(
-          searchTerm: widget.filterSpeciality ?? '',
-        );
+      searchTerm: widget.filterSpeciality ?? '',
+    );
   }
 
   void _onSearchChanged(String query) {
@@ -37,11 +40,11 @@ class _RecommendationViewState extends State<RecommendationView> {
   }
 
   void _showSortSheet() => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
-        builder: (_) => const SortBottomSheet(),
-      );
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (_) => const SortBottomSheet(),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +77,41 @@ class _RecommendationViewState extends State<RecommendationView> {
             child: BlocBuilder<DoctorsCubit, DoctorsState>(
               builder: (context, state) {
                 if (state is DoctorsLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Skeletonizer(
+                    enabled: true,
+                    child: ListView.separated(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSpacing.lg,
+                        vertical: AppSpacing.sm,
+                      ),
+                      itemCount: 6,
+                      separatorBuilder: (_, _) =>
+                          SizedBox(height: AppSpacing.md),
+                      itemBuilder: (context, index) {
+                        return DoctorListTile(
+                          doctor: HomeDoctorModel(
+                            doctor: Doctor(
+                              id: 0,
+                              fullName: 'Doctor Full Name',
+                              email: '',
+                              phone: '',
+                              specializationId: 0,
+                              specialization: Specialization(
+                                id: 0,
+                                name: 'Specialization',
+                              ),
+                              isApproved: true,
+                              totalReviews: 0,
+                              createdAt: DateTime.now(),
+                              isAvailable: true,
+                              hospital: 'Hospital Name',
+                            ),
+                          ),
+                          onTap: () {},
+                        );
+                      },
+                    ),
+                  );
                 } else if (state is DoctorsFailure) {
                   return Center(child: Text('Error: ${state.message}'));
                 } else if (state is DoctorsSuccess) {
@@ -92,7 +129,7 @@ class _RecommendationViewState extends State<RecommendationView> {
                     itemBuilder: (context, index) {
                       final doctor = doctors[index];
                       final homeModel = HomeDoctorModel(doctor: doctor);
-                      
+
                       return DoctorListTile(
                         doctor: homeModel,
                         onTap: () => context.pushNamed(

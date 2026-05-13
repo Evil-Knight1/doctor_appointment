@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:doctor_appointment/core/services/service_locator.dart';
 import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
@@ -236,7 +237,21 @@ class _ReviewsTab extends StatelessWidget {
     return BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
       builder: (context, state) {
         if (state is DoctorDetailsLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return Skeletonizer(
+            enabled: true,
+            child: ListView.separated(
+              padding: EdgeInsets.all(AppSpacing.lg),
+              itemCount: 3,
+              separatorBuilder: (_, _) =>
+                  Divider(height: AppSpacing.xxl, color: AppColors.divider),
+              itemBuilder: (_, index) => _ReviewTile(
+                name: 'Patient Name Loading',
+                text: 'Review comment content loading placeholder text.',
+                stars: 5,
+                date: DateTime.now(),
+              ),
+            ),
+          );
         } else if (state is DoctorDetailsError) {
           return Center(
             child: Text(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:doctor_appointment/features/home/data/models/notification_model.dart';
 import 'package:doctor_appointment/core/services/service_locator.dart';
 import 'package:doctor_appointment/features/home/logic/notification_cubit.dart';
 import 'package:doctor_appointment/features/home/logic/notification_state.dart';
@@ -36,7 +38,10 @@ class NotificationsView extends StatelessWidget {
                 padding: EdgeInsets.only(right: 16.w),
                 child: Center(
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 4.h,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.primary,
                       borderRadius: BorderRadius.circular(AppRadius.full),
@@ -64,7 +69,26 @@ class NotificationsView extends StatelessWidget {
     return BlocBuilder<NotificationCubit, NotificationState>(
       builder: (context, state) {
         if (state is NotificationLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return Skeletonizer(
+            enabled: true,
+            child: ListView.builder(
+              padding: EdgeInsets.all(AppSpacing.lg),
+              itemCount: 8,
+              itemBuilder: (context, index) {
+                return NotificationTile(
+                  notification: NotificationModel(
+                    id: index,
+                    title: 'Notification Title Loading...',
+                    message:
+                        'Notification body content loading placeholder text.',
+                    createdAt: DateTime.now(),
+                    isRead: false,
+                    type: 0,
+                  ),
+                );
+              },
+            ),
+          );
         } else if (state is NotificationError) {
           return Center(child: Text(state.message));
         } else if (state is NotificationSuccess) {
@@ -99,7 +123,8 @@ class NotificationsView extends StatelessWidget {
 
           // Simple grouping for UI (can be enhanced to group by Today/Yesterday)
           return RefreshIndicator(
-            onRefresh: () => context.read<NotificationCubit>().fetchNotifications(),
+            onRefresh: () =>
+                context.read<NotificationCubit>().fetchNotifications(),
             child: ListView.builder(
               padding: EdgeInsets.all(AppSpacing.lg),
               itemCount: notifications.length + 1, // +1 for the Mark All label
@@ -109,14 +134,17 @@ class NotificationsView extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: AppSpacing.md),
                     child: _SectionLabel(
                       label: 'All Notifications',
-                      onMarkAll: () => context.read<NotificationCubit>().markAllAsRead(),
+                      onMarkAll: () =>
+                          context.read<NotificationCubit>().markAllAsRead(),
                     ),
                   );
                 }
                 final notification = notifications[index - 1];
                 return NotificationTile(
                   notification: notification,
-                  onTap: () => context.read<NotificationCubit>().markAsRead(notification.id),
+                  onTap: () => context.read<NotificationCubit>().markAsRead(
+                    notification.id,
+                  ),
                 );
               },
             ),
@@ -142,10 +170,7 @@ class _SectionLabel extends StatelessWidget {
         if (onMarkAll != null)
           GestureDetector(
             onTap: onMarkAll,
-            child: Text(
-              'Mark all as read',
-              style: AppTextStyles.labelLarge,
-            ),
+            child: Text('Mark all as read', style: AppTextStyles.labelLarge),
           ),
       ],
     );

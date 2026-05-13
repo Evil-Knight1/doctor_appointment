@@ -7,4 +7,5 @@ abstract class DoctorStatsRepository {
   Future<Result<DoctorStats>> getDoctorStats();
   Future<Result<Doctor>> getDoctorProfile();
   Future<Result<List<Appointment>>> getDoctorAppointments();
+  Future<Result<Doctor>> updateDoctorProfile(Map<String, dynamic> data);
 }

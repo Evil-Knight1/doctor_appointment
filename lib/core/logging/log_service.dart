@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/foundation.dart';
 
 class LogService {
   late Logger _logger;
@@ -10,6 +11,23 @@ class LogService {
 
   Future<void> init() async {
     if (_initialized) return;
+
+    if (kIsWeb) {
+      _logger = Logger(
+        printer: PrettyPrinter(
+          methodCount: 2,
+          errorMethodCount: 8,
+          lineLength: 120,
+          colors: true,
+          printEmojis: true,
+          dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
+        ),
+        output: ConsoleOutput(),
+      );
+      _initialized = true;
+      _logger.i('LogService Initialized. Logging to console only (Web).');
+      return;
+    }
 
     final directory = await getApplicationDocumentsDirectory();
     final logsDir = Directory('${directory.path}/logs');

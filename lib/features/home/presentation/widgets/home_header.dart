@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/core/utils/app_colors.dart';
 import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 
@@ -72,12 +74,12 @@ class _AvatarButton extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: AppColors.primary.withValues(alpha: 0.2),
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
           width: 2.w,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Theme.of(context).shadowColor,
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -87,18 +89,17 @@ class _AvatarButton extends StatelessWidget {
         child: userImageUrl != null
             ? CachedNetworkImage(
                 imageUrl: ImageUrlHelper.getFullUrl(userImageUrl),
-                                  httpHeaders: ImageUrlHelper.getImageHeaders(),
+                httpHeaders: ImageUrlHelper.getImageHeaders(),
                 fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  color: AppColors.primaryLight,
-                  child: Center(
-                    child: SizedBox(
-                      width: 16.w,
-                      height: 16.h,
-                      child: const CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppColors.primary,
-                      ),
+                placeholder: (context, url) => Skeletonizer(
+                  enabled: true,
+                  child: Container(
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                    width: 48.r,
+                    height: 48.r,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).cardColor,
                     ),
                   ),
                 ),
@@ -111,9 +112,12 @@ class _AvatarButton extends StatelessWidget {
 
   Widget _buildPlaceholder() {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
+          colors: [
+            context.customColors.chatBubbleMineGradientStart!,
+            context.customColors.chatBubbleMineGradientEnd!,
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -132,14 +136,17 @@ class _HeroBanner extends StatelessWidget {
       height: 190.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppRadius.xl),
-        gradient: const LinearGradient(
-          colors: [AppColors.headerGradientStart, AppColors.headerGradientEnd],
+        gradient: LinearGradient(
+          colors: [
+            context.customColors.chatBubbleMineGradientStart!,
+            context.customColors.chatBubbleMineGradientEnd!,
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.35),
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.35),
             blurRadius: 20.r,
             offset: Offset(0, 8.h),
           ),
@@ -166,7 +173,7 @@ class _BannerDecoration extends StatelessWidget {
                 height: 130.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.07),
+                  color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.07),
                 ),
               ),
             ),
@@ -178,7 +185,7 @@ class _BannerDecoration extends StatelessWidget {
                 height: 90.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.05),
+                  color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.05),
                 ),
               ),
             ),
@@ -242,11 +249,11 @@ class _FindNearbyButton extends StatelessWidget {
         vertical: AppSpacing.sm,
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(AppRadius.full),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
+            color: Theme.of(context).shadowColor,
             blurRadius: 8.r,
             offset: Offset(0, 2.h),
           ),
@@ -257,7 +264,7 @@ class _FindNearbyButton extends StatelessWidget {
         style: TextStyle(
           fontSize: 12.sp,
           fontWeight: FontWeight.w600,
-          color: AppColors.primary,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );
@@ -273,7 +280,7 @@ class _BannerImage extends StatelessWidget {
       width: 90.w,
       height: 100.h,
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.15),
+        color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Center(

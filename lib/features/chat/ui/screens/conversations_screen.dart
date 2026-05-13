@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/core/services/service_locator.dart';
 import 'package:doctor_appointment/features/chat/logic/conversations_cubit.dart';
@@ -49,10 +50,25 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                   builder: (context, state) {
                     if (state.status == ConversationsStatus.loading &&
                         state.conversations.isEmpty) {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primary,
-                          strokeWidth: 2.5,
+                      return Skeletonizer(
+                        enabled: true,
+                        child: ListView.builder(
+                          padding: EdgeInsets.only(top: 8.h, bottom: 24.h),
+                          itemCount: 10,
+                          itemBuilder: (context, index) {
+                            return ConversationTile(
+                              conversation: ConversationModel(
+                                otherUserId: index,
+                                otherUserName: 'User Name Loading',
+                                otherUserRole: 'Doctor',
+                                unreadCount: 0,
+                                lastMessage:
+                                    'This is a loading message placeholder',
+                                lastMessageTime: DateTime.now(),
+                              ),
+                              onTap: () {},
+                            );
+                          },
                         ),
                       );
                     }
@@ -61,13 +77,16 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                     final filtered = _query.isEmpty
                         ? all
                         : all
-                            .where((c) => c.otherUserName
-                                .toLowerCase()
-                                .contains(_query.toLowerCase()))
-                            .toList();
+                              .where(
+                                (c) => c.otherUserName.toLowerCase().contains(
+                                  _query.toLowerCase(),
+                                ),
+                              )
+                              .toList();
 
                     // AI entry + filtered real conversations
-                    final bool showAi = _query.isEmpty ||
+                    final bool showAi =
+                        _query.isEmpty ||
                         'ai health assistant'.contains(_query.toLowerCase());
 
                     final int total = filtered.length + (showAi ? 1 : 0);
@@ -155,7 +174,9 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                   color: Colors.white.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(14.r),
                   border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.3), width: 1),
+                    color: Colors.white.withValues(alpha: 0.3),
+                    width: 1,
+                  ),
                 ),
                 child: TextField(
                   controller: _searchController,
@@ -164,10 +185,14 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                   decoration: InputDecoration(
                     hintText: 'Search conversations…',
                     hintStyle: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.6),
-                        fontSize: 14.sp),
-                    prefixIcon: Icon(Icons.search_rounded,
-                        color: Colors.white.withValues(alpha: 0.7), size: 20),
+                      color: Colors.white.withValues(alpha: 0.6),
+                      fontSize: 14.sp,
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search_rounded,
+                      color: Colors.white.withValues(alpha: 0.7),
+                      size: 20,
+                    ),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(vertical: 12.h),
                   ),
@@ -185,12 +210,18 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.chat_bubble_outline_rounded,
-              size: 64.r, color: AppColors.textLight),
+          Icon(
+            Icons.chat_bubble_outline_rounded,
+            size: 64.r,
+            color: AppColors.textLight,
+          ),
           SizedBox(height: 12.h),
-          Text('No conversations found',
-              style: AppTextStyles.bodyMedium
-                  .copyWith(color: AppColors.textSecondary)),
+          Text(
+            'No conversations found',
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
         ],
       ),
     );

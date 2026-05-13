@@ -16,6 +16,7 @@ import 'package:map_launcher/map_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doctor_appointment/core/widgets/full_screen_image_viewer.dart';
 import 'package:doctor_appointment/core/utils/image_url_helper.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DoctorDetailsView extends StatefulWidget {
   final HomeDoctorModel doctor;
@@ -133,12 +134,14 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView>
                   },
                   child: CachedNetworkImage(
                     imageUrl: ImageUrlHelper.getFullUrl(widget.doctor.doctor.profilePictureUrl),
-                                  httpHeaders: ImageUrlHelper.getImageHeaders(),
+                    httpHeaders: ImageUrlHelper.getImageHeaders(),
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                        strokeWidth: 2,
+                    placeholder: (context, url) => Skeletonizer(
+                      enabled: true,
+                      child: Container(
+                        width: double.infinity,
+                        height: 300.h,
+                        color: Colors.white,
                       ),
                     ),
                     errorWidget: (_, _, _) => Icon(Icons.person,
@@ -382,24 +385,23 @@ class _AddressTab extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12.r),
                     child: CachedNetworkImage(
                       imageUrl: ImageUrlHelper.getFullUrl(doctor.doctor.clinicImagesUrls![index]),
-                                  httpHeaders: ImageUrlHelper.getImageHeaders(),
-                      width: 150.w,
+                      httpHeaders: ImageUrlHelper.getImageHeaders(),
+                      width: 140.w,
                       height: 100.h,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        width: 150.w,
-                        height: 100.h,
-                        color: AppColors.primaryLight,
-                        child: const Center(
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                      placeholder: (context, url) => Skeletonizer(
+                        enabled: true,
+                        child: Container(
+                          width: 140.w,
+                          height: 100.h,
+                          color: Colors.white,
                         ),
                       ),
                       errorWidget: (context, url, error) => Container(
-                        width: 150.w,
+                        width: 140.w,
                         height: 100.h,
-                        color: AppColors.primaryLight,
-                        child: Icon(Icons.image_not_supported,
-                            color: AppColors.primary),
+                        color: AppColors.surfaceVariant,
+                        child: Icon(Icons.image_not_supported_rounded, color: AppColors.textSecondary),
                       ),
                     ),
                   ),
@@ -408,9 +410,9 @@ class _AddressTab extends StatelessWidget {
             ),
           ),
         ],
-        SizedBox(height: 20.h),
+        SizedBox(height: 30.h),
         Text(
-          'Location Map',
+          'Clinic Location',
           style: AppStyles.styleSemiBold22.copyWith(fontSize: 16.sp),
         ),
         SizedBox(height: 12.h),
@@ -419,28 +421,39 @@ class _AddressTab extends StatelessWidget {
             final availableMaps = await MapLauncher.installedMaps;
             if (availableMaps.isNotEmpty) {
               await availableMaps.first.showMarker(
-                coords: Coords(30.0444, 31.2357), // Default Cairo coords
-                title: doctor.name,
-                description: 'Clinic Location',
+                coords: Coords(30.0444, 31.2357), // Default Cairo coordinates
+                title: doctor.doctor.clinicAddress ?? "Clinic Location",
               );
             }
           },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16.r),
-            child: Container(
-              height: 200.h,
-              color: AppColors.primaryLight,
-              child: Center(
-                child: Icon(
-                  Icons.map_rounded,
-                  color: AppColors.primary,
-                  size: 40.sp,
+          child: Container(
+            height: 160.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.r),
+              image: const DecorationImage(
+                image: AssetImage('assets/images/map_placeholder.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Center(
+              child: Container(
+                padding: EdgeInsets.all(12.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 10.r,
+                    ),
+                  ],
                 ),
+                child: Icon(Icons.location_on_rounded, color: AppColors.primary, size: 28.sp),
               ),
             ),
           ),
         ),
-        SizedBox(height: 100.h), // padding for bottom buttons
+        SizedBox(height: 100.h),
       ],
     );
   }
@@ -449,96 +462,26 @@ class _AddressTab extends StatelessWidget {
 class _ReviewsTab extends StatelessWidget {
   const _ReviewsTab();
 
-  void _showAddReviewDialog(BuildContext context, int doctorId) {
-    int selectedStars = 5;
-    final commentController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
-          builder: (statefulContext, setState) {
-            return AlertDialog(
-              title: const Text('Add Review'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(5, (index) {
-                      return IconButton(
-                        icon: Icon(
-                          index < selectedStars
-                              ? Icons.star_rounded
-                              : Icons.star_border_rounded,
-                          color: AppColors.star,
-                          size: 32.sp,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            selectedStars = index + 1;
-                          });
-                        },
-                      );
-                    }),
-                  ),
-                  SizedBox(height: 16.h),
-                  TextField(
-                    controller: commentController,
-                    decoration: InputDecoration(
-                      hintText: 'Write your review here...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                    ),
-                    maxLines: 3,
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(dialogContext),
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    final comment = commentController.text.trim();
-                    if (comment.isNotEmpty) {
-                      context.read<DoctorDetailsCubit>().addReview(
-                            doctorId: doctorId,
-                            stars: selectedStars,
-                            comment: comment,
-                          );
-                      Navigator.pop(dialogContext);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                  ),
-                  child: const Text('Submit'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
       builder: (context, state) {
         if (state is DoctorDetailsLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is DoctorDetailsError) {
-          return Center(
-            child: Text(
-              state.message,
-              style: AppStyles.styleMedium14.copyWith(color: AppColors.error),
+          return Skeletonizer(
+            enabled: true,
+            child: ListView.separated(
+              padding: EdgeInsets.all(20.w),
+              itemCount: 5,
+              separatorBuilder: (context, index) => Divider(height: 30.h, color: AppColors.border),
+              itemBuilder: (context, index) => const _ReviewTile(
+                name: 'Patient Name',
+                text: 'This is a placeholder review text that will be skeletonized during loading.',
+                stars: 5,
+              ),
             ),
           );
+        } else if (state is DoctorDetailsError) {
+          return Center(child: Text(state.message));
         } else if (state is DoctorDetailsLoaded) {
           final reviews = state.reviews;
           final doctorId = context.read<DoctorDetailsCubit>().doctorId ?? 0;
@@ -592,6 +535,64 @@ class _ReviewsTab extends StatelessWidget {
       },
     );
   }
+
+  void _showAddReviewDialog(BuildContext context, int doctorId) {
+    final commentController = TextEditingController();
+    int selectedStars = 5;
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: const Text('Add Review'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  5,
+                  (index) => IconButton(
+                    onPressed: () => setState(() => selectedStars = index + 1),
+                    icon: Icon(
+                      index < selectedStars ? Icons.star_rounded : Icons.star_outline_rounded,
+                      color: AppColors.star,
+                      size: 32.sp,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.h),
+              TextField(
+                controller: commentController,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  hintText: 'Write your review...',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+            ElevatedButton(
+              onPressed: () {
+                if (commentController.text.isNotEmpty) {
+                  context.read<DoctorDetailsCubit>().addReview(
+                        doctorId: doctorId,
+                        stars: selectedStars,
+                        comment: commentController.text,
+                      );
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _ReviewTile extends StatelessWidget {
@@ -638,9 +639,7 @@ class _ReviewTile extends StatelessWidget {
                       (index) => Icon(
                         Icons.star_rounded,
                         size: 14.sp,
-                        color: index < stars
-                            ? AppColors.star
-                            : AppColors.divider,
+                        color: index < stars ? AppColors.star : AppColors.divider,
                       ),
                     ),
                   ),
