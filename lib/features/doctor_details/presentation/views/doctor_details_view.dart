@@ -1,4 +1,3 @@
-
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:doctor_appointment/features/doctor_details/presentation/widgets/doctor_info_widget.dart';
@@ -17,6 +16,7 @@ import 'package:doctor_appointment/core/widgets/full_screen_image_viewer.dart';
 import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 
 class DoctorDetailsView extends StatefulWidget {
   final HomeDoctorModel doctor;
@@ -97,9 +97,7 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView>
         ),
         indicatorSize: TabBarIndicatorSize.tab,
         labelStyle: context.styleSemiBold16.copyWith(fontSize: 13.sp),
-        unselectedLabelStyle: context.styleRegular14.copyWith(
-          fontSize: 13.sp,
-        ),
+        unselectedLabelStyle: context.styleRegular14.copyWith(fontSize: 13.sp),
         labelColor: Theme.of(context).colorScheme.onPrimary,
         unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
         dividerColor: Colors.transparent,
@@ -118,37 +116,55 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView>
         Container(
           width: double.infinity,
           height: 300.h,
-          color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.4),
-          child: widget.doctor.doctor.profilePictureUrl != null
-              ? GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FullScreenImageViewer(
-                          images: [ImageUrlHelper.getFullUrl(widget.doctor.doctor.profilePictureUrl)],
-                          initialIndex: 0,
+          color: Theme.of(
+            context,
+          ).colorScheme.primaryContainer.withValues(alpha: 0.4),
+          child: Hero(
+            tag: 'doctor-${widget.doctor.id}',
+            child: widget.doctor.doctor.profilePictureUrl != null
+                ? GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FullScreenImageViewer(
+                            images: [
+                              ImageUrlHelper.getFullUrl(
+                                widget.doctor.doctor.profilePictureUrl,
+                              ),
+                            ],
+                            initialIndex: 0,
+                          ),
+                        ),
+                      );
+                    },
+                    child: CachedNetworkImage(
+                      imageUrl: ImageUrlHelper.getFullUrl(
+                        widget.doctor.doctor.profilePictureUrl,
+                      ),
+                      httpHeaders: ImageUrlHelper.getImageHeaders(),
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Skeletonizer(
+                        enabled: true,
+                        child: Container(
+                          width: double.infinity,
+                          height: 300.h,
+                          color: Theme.of(context).colorScheme.surface,
                         ),
                       ),
-                    );
-                  },
-                  child: CachedNetworkImage(
-                    imageUrl: ImageUrlHelper.getFullUrl(widget.doctor.doctor.profilePictureUrl),
-                    httpHeaders: ImageUrlHelper.getImageHeaders(),
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Skeletonizer(
-                      enabled: true,
-                      child: Container(
-                        width: double.infinity,
-                        height: 300.h,
-                        color: Theme.of(context).colorScheme.surface,
+                      errorWidget: (_, _, _) => Icon(
+                        Icons.person,
+                        size: 80.sp,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
-                    errorWidget: (_, _, _) => Icon(Icons.person,
-                        size: 80.sp, color: Theme.of(context).colorScheme.primary),
+                  )
+                : Icon(
+                    Icons.person,
+                    size: 80.sp,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                )
-              : Icon(Icons.person, size: 80.sp, color: Theme.of(context).colorScheme.primary),
+          ),
         ),
         Positioned(
           top: 48.h,
@@ -186,7 +202,9 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView>
                     icon: isFav
                         ? Icons.favorite_rounded
                         : Icons.favorite_border,
-                    color: isFav ? context.customColors.error : Theme.of(context).colorScheme.onSurface,
+                    color: isFav
+                        ? context.customColors.error
+                        : Theme.of(context).colorScheme.onSurface,
                     onTap: () async =>
                         await SharedPreferencesHelper.toggleFavoriteDoctor(
                           widget.doctor,
@@ -265,7 +283,9 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView>
                   extra: widget.doctor.name,
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer,
                   foregroundColor: Theme.of(context).colorScheme.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14.r),
@@ -323,19 +343,30 @@ class _AboutTab extends StatelessWidget {
       padding: EdgeInsets.all(20.w),
       physics: const NeverScrollableScrollPhysics(),
       children: [
-        Text(
-          'About',
-          style: context.styleSemiBold22.copyWith(fontSize: 16.sp),
-        ),
+        Text('About', style: context.styleSemiBold22.copyWith(fontSize: 16.sp)),
         SizedBox(height: 8.h),
         Text(
           doctor.doctor.bio ??
-              'Dr. ${doctor.name} is a top specialist. They have received several awards for their outstanding contribution in the medical field and are available for private consultation.',
+              'Dr. ${doctor.name} is a top specialist${doctor.doctor.hospital != null ? ' at ${doctor.doctor.hospital}' : ''}. They have received several awards for their outstanding contribution in the medical field and are available for private consultation.',
           style: context.styleRegular14.copyWith(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
             height: 1.6,
           ),
         ),
+        if (doctor.doctor.hospital != null) ...[
+          SizedBox(height: 20.h),
+          Text(
+            'Hospital',
+            style: context.styleSemiBold22.copyWith(fontSize: 16.sp),
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            doctor.doctor.hospital!,
+            style: context.styleRegular14.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
         SizedBox(height: 20.h),
         const DoctorWorkingTimeWidget(),
         SizedBox(height: 100.h), // padding for bottom buttons
@@ -386,7 +417,9 @@ class _AddressTab extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => FullScreenImageViewer(
-                          images: doctor.doctor.clinicImagesUrls!.map((url) => ImageUrlHelper.getFullUrl(url)).toList(),
+                          images: doctor.doctor.clinicImagesUrls!
+                              .map((url) => ImageUrlHelper.getFullUrl(url))
+                              .toList(),
                           initialIndex: index,
                         ),
                       ),
@@ -395,7 +428,9 @@ class _AddressTab extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12.r),
                     child: CachedNetworkImage(
-                      imageUrl: ImageUrlHelper.getFullUrl(doctor.doctor.clinicImagesUrls![index]),
+                      imageUrl: ImageUrlHelper.getFullUrl(
+                        doctor.doctor.clinicImagesUrls![index],
+                      ),
                       httpHeaders: ImageUrlHelper.getImageHeaders(),
                       width: 140.w,
                       height: 100.h,
@@ -434,8 +469,29 @@ class _AddressTab extends StatelessWidget {
           onTap: () async {
             final availableMaps = await MapLauncher.installedMaps;
             if (availableMaps.isNotEmpty) {
+              double? lat = doctor.doctor.latitude;
+              double? lng = doctor.doctor.longitude;
+
+              // If coordinates are missing, try geocoding the address
+              if (lat == null && doctor.doctor.clinicAddress != null) {
+                try {
+                  final locations = await geo.locationFromAddress(
+                    doctor.doctor.clinicAddress!,
+                  );
+                  if (locations.isNotEmpty) {
+                    lat = locations.first.latitude;
+                    lng = locations.first.longitude;
+                  }
+                } catch (e) {
+                  debugPrint('Geocoding error: $e');
+                }
+              }
+
+              lat ??= 30.0444;
+              lng ??= 31.2357;
+
               await availableMaps.first.showMarker(
-                coords: Coords(30.0444, 31.2357), // Default Cairo coordinates
+                coords: Coords(lat, lng),
                 title: doctor.doctor.clinicAddress ?? "Clinic Location",
               );
             }
@@ -496,7 +552,8 @@ class _ReviewsTab extends StatelessWidget {
               ),
               itemBuilder: (context, index) => const _ReviewTile(
                 name: 'Patient Name',
-                text: 'This is a placeholder review text that will be skeletonized during loading.',
+                text:
+                    'This is a placeholder review text that will be skeletonized during loading.',
                 stars: 5,
               ),
             ),
@@ -585,7 +642,9 @@ class _ReviewsTab extends StatelessWidget {
                   (index) => IconButton(
                     onPressed: () => setState(() => selectedStars = index + 1),
                     icon: Icon(
-                      index < selectedStars ? Icons.star_rounded : Icons.star_outline_rounded,
+                      index < selectedStars
+                          ? Icons.star_rounded
+                          : Icons.star_outline_rounded,
                       color: context.customColors.rating,
                       size: 32.sp,
                     ),
@@ -598,21 +657,26 @@ class _ReviewsTab extends StatelessWidget {
                 maxLines: 3,
                 decoration: InputDecoration(
                   hintText: 'Write your review...',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
                 ),
               ),
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
             ElevatedButton(
               onPressed: () {
                 if (commentController.text.isNotEmpty) {
                   context.read<DoctorDetailsCubit>().addReview(
-                        doctorId: doctorId,
-                        stars: selectedStars,
-                        comment: commentController.text,
-                      );
+                    doctorId: doctorId,
+                    stars: selectedStars,
+                    comment: commentController.text,
+                  );
                   Navigator.pop(context);
                 }
               },

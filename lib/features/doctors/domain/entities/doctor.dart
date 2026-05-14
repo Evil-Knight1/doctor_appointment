@@ -19,6 +19,8 @@ class Doctor {
   final List<String>? clinicImagesUrls;
   final bool isAvailable;
   final double? consultationFee;
+  final double? latitude;
+  final double? longitude;
 
   const Doctor({
     required this.id,
@@ -39,5 +41,7 @@ class Doctor {
     this.clinicImagesUrls,
     required this.isAvailable,
     this.consultationFee,
+    this.latitude,
+    this.longitude,
   });
 }

@@ -21,6 +21,8 @@ class DoctorApiModel extends Doctor {
     required super.profilePictureUrl,
     required super.clinicImagesUrls,
     super.consultationFee,
+    super.latitude,
+    super.longitude,
   });
 
   factory DoctorApiModel.fromJson(Map<String, dynamic> json) {
@@ -53,6 +55,8 @@ class DoctorApiModel extends Doctor {
           ?.map((e) => e as String)
           .toList(),
       consultationFee: (json['consultationFee'] as num?)?.toDouble(),
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
     );
   }
 }

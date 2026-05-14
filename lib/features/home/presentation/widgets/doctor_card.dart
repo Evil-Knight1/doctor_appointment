@@ -71,37 +71,40 @@ class _DoctorAvatar extends StatelessWidget {
 
     return Stack(
       children: [
-        Container(
-          width: 64.w,
-          height: 64.h,
-          decoration: BoxDecoration(
-            color: colorScheme.primaryContainer,
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: doctor.imageAsset.startsWith('http')
-              ? CachedNetworkImage(
-                  imageUrl: doctor.imageAsset,
-                  httpHeaders: ImageUrlHelper.getImageHeaders(),
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Skeletonizer(
-                    enabled: true,
-                    child: Container(
-                      width: 64.w,
-                      height: 64.h,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(AppRadius.lg),
+        Hero(
+          tag: 'doctor-${doctor.id}',
+          child: Container(
+            width: 64.w,
+            height: 64.h,
+            decoration: BoxDecoration(
+              color: colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: doctor.imageAsset.startsWith('http')
+                ? CachedNetworkImage(
+                    imageUrl: doctor.imageAsset,
+                    httpHeaders: ImageUrlHelper.getImageHeaders(),
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Skeletonizer(
+                      enabled: true,
+                      child: Container(
+                        width: 64.w,
+                        height: 64.h,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(AppRadius.lg),
+                        ),
                       ),
                     ),
-                  ),
-                  errorWidget: (context, url, error) => Icon(
-                    Icons.person_rounded,
-                    size: 36.sp,
-                    color: colorScheme.primary,
-                  ),
-                )
-              : Image.asset(doctor.imageAsset, fit: BoxFit.cover),
+                    errorWidget: (context, url, error) => Icon(
+                      Icons.person_rounded,
+                      size: 36.sp,
+                      color: colorScheme.primary,
+                    ),
+                  )
+                : Image.asset(doctor.imageAsset, fit: BoxFit.cover),
+          ),
         ),
         if (doctor.isAvailable)
           Positioned(

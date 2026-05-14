@@ -10,9 +10,13 @@ import 'package:map_launcher/map_launcher.dart';
 import 'package:doctor_appointment/core/services/service_locator.dart';
 import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
+import 'package:geocoding/geocoding.dart' as geo;
 
 import 'package:doctor_appointment/features/doctors/logic/doctor_details_cubit.dart';
 import 'package:doctor_appointment/features/doctors/logic/doctor_details_state.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:doctor_appointment/core/widgets/full_screen_image_viewer.dart';
+import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 import '../widgets/doctor_details_widgets.dart';
 import '../widgets/shared_app_bar.dart';
 
@@ -123,8 +127,8 @@ class _AboutTab extends StatelessWidget {
       children: [
         InfoSection(
           title: 'About me',
-          content:
-              'Dr. ${doctor.name} is a top specialist at RSUD Gatot Subroto. They have received several awards for their outstanding contribution in the medical field and are available for private consultation.',
+          content: doctor.doctor.bio ??
+              'Dr. ${doctor.name} is a top specialist${doctor.doctor.hospital != null ? ' at ${doctor.doctor.hospital}' : ''}. They have received several awards for their outstanding contribution in the medical field and are available for private consultation.',
         ),
         SizedBox(height: AppSpacing.xl),
         const LabelValue(
@@ -132,11 +136,15 @@ class _AboutTab extends StatelessWidget {
           value: 'Monday - Friday, 08:00 AM - 20:00 PM',
         ),
         SizedBox(height: AppSpacing.lg),
+        if (doctor.doctor.hospital != null) ...[
+          LabelValue(label: 'Hospital', value: doctor.doctor.hospital!),
+          SizedBox(height: AppSpacing.lg),
+        ],
         const LabelValue(label: 'STR', value: '4726482464'),
         SizedBox(height: AppSpacing.lg),
-        const LabelValue(
+        LabelValue(
           label: 'Pengalaman Praktik',
-          value: 'RSPAD Gatot Soebroto\n2017 - sekarang',
+          value: '${doctor.doctor.hospital ?? "Klinik Utama"}\n2017 - sekarang',
         ),
       ],
     );
@@ -154,7 +162,71 @@ class _AddressTab extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.all(AppSpacing.lg),
       children: [
-        const LabelValue(label: 'Practice Place', value: 'Cairo, Egypt'),
+        LabelValue(
+          label: 'Practice Place',
+          value: doctor.doctor.clinicAddress ?? 'No address provided',
+        ),
+        if (doctor.doctor.clinicImagesUrls != null &&
+            doctor.doctor.clinicImagesUrls!.isNotEmpty) ...[
+          SizedBox(height: AppSpacing.xl),
+          Text('Clinic Images', style: context.headingSmall),
+          SizedBox(height: AppSpacing.md),
+          SizedBox(
+            height: 100.h,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: doctor.doctor.clinicImagesUrls!.length,
+              separatorBuilder: (context, index) => SizedBox(width: 12.w),
+              itemBuilder: (context, index) {
+                final imageUrl = ImageUrlHelper.getFullUrl(
+                  doctor.doctor.clinicImagesUrls![index],
+                );
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FullScreenImageViewer(
+                          images: doctor.doctor.clinicImagesUrls!
+                              .map((url) => ImageUrlHelper.getFullUrl(url))
+                              .toList(),
+                          initialIndex: index,
+                        ),
+                      ),
+                    );
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.r),
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl,
+                      httpHeaders: ImageUrlHelper.getImageHeaders(),
+                      width: 140.w,
+                      height: 100.h,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Skeletonizer(
+                        enabled: true,
+                        child: Container(
+                          width: 140.w,
+                          height: 100.h,
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        width: 140.w,
+                        height: 100.h,
+                        color: Theme.of(context).colorScheme.surfaceContainer,
+                        child: Icon(
+                          Icons.image_not_supported_rounded,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
         SizedBox(height: AppSpacing.xl),
         Text('Location Map', style: context.headingSmall),
         SizedBox(height: AppSpacing.md),
@@ -162,10 +234,31 @@ class _AddressTab extends StatelessWidget {
           onTap: () async {
             final availableMaps = await MapLauncher.installedMaps;
             if (availableMaps.isNotEmpty) {
+              double? lat = doctor.doctor.latitude;
+              double? lng = doctor.doctor.longitude;
+
+              // If coordinates are missing, try geocoding the address
+              if (lat == null && doctor.doctor.clinicAddress != null) {
+                try {
+                  final locations = await geo.locationFromAddress(
+                    doctor.doctor.clinicAddress!,
+                  );
+                  if (locations.isNotEmpty) {
+                    lat = locations.first.latitude;
+                    lng = locations.first.longitude;
+                  }
+                } catch (e) {
+                  debugPrint('Geocoding error: $e');
+                }
+              }
+
+              // Fallback to default Cairo if everything fails
+              lat ??= 30.0444;
+              lng ??= 31.2357;
+
               await availableMaps.first.showMarker(
-                coords: Coords(30.0444, 31.2357), // Cairo coords
-                title: doctor.name,
-                description: 'Clinic Location',
+                coords: Coords(lat, lng),
+                title: doctor.doctor.clinicAddress ?? "Clinic Location",
               );
             }
           },
@@ -392,7 +485,7 @@ class _AppointmentButton extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () =>
-                    context.pushNamed(Routes.bookingDateView, extra: doctor),
+                    context.pushNamed(Routes.bookingDateView, extra: doctor.doctor),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colorScheme.primary,
                   foregroundColor: colorScheme.onPrimary,

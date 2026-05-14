@@ -1,6 +1,5 @@
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/core/utils/app_images.dart';
-
 import 'package:doctor_appointment/features/appointment/domain/entities/appointment.dart';
 import 'package:doctor_appointment/features/appointment/logic/appointments_cubit.dart';
 import 'package:doctor_appointment/features/appointment/logic/appointments_state.dart';
@@ -96,12 +95,27 @@ class _CalendarViewState extends State<CalendarView>
               itemCount: 5,
               separatorBuilder: (_, _) => SizedBox(height: 14.h),
               itemBuilder: (_, index) {
-                return const AppointmentCard(
-                  name: 'Doctor Name Loading',
-                  specialty: 'Specialty Loading',
-                  date: '00-00-0000',
-                  time: '00:00',
-                  imageAsset: Assets.imagesDrSarah,
+                // Mock appointment for skeleton
+                return AppointmentCard(
+                  appointment: Appointment(
+                    id: 0,
+                    patientId: 0,
+                    patientName: '',
+                    doctorId: 0,
+                    doctorName: 'Doctor Name',
+                    startTime: DateTime.now(),
+                    endTime: DateTime.now(),
+                    reason: '',
+                    status: 1,
+                    isPaid: false,
+                    paymentMethod: 0,
+                    paymentStatus: 0,
+                    paymentTransactionId: '',
+                    paymentDate: DateTime.now(),
+                    amount: 0,
+                    doctorNotes: '',
+                    createdAt: DateTime.now(),
+                  ),
                 );
               },
             ),
@@ -123,11 +137,22 @@ class _CalendarViewState extends State<CalendarView>
             return Padding(
               padding: EdgeInsets.only(bottom: 100.h),
               child: Center(
-                child: Text(
-                  'No appointments found.',
-                  style: context.styleRegular14.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.calendar_today_outlined,
+                      size: 64.sp,
+                      color: colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
+                    ),
+                    SizedBox(height: 16.h),
+                    Text(
+                      'No appointments found.',
+                      style: context.styleRegular14.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );
@@ -142,13 +167,8 @@ class _CalendarViewState extends State<CalendarView>
             itemCount: items.length,
             separatorBuilder: (_, _) => SizedBox(height: 14.h),
             itemBuilder: (_, index) {
-              final card = _mapToCard(items[index], tab);
               return AppointmentCard(
-                name: card.name,
-                specialty: card.specialty,
-                date: card.date,
-                time: card.time,
-                imageAsset: card.imageAsset,
+                appointment: items[index],
                 isCompleted: tab == AppointmentTab.completed,
                 isCancelled: tab == AppointmentTab.cancelled,
               );
@@ -165,54 +185,19 @@ class _CalendarViewState extends State<CalendarView>
     AppointmentTab tab,
   ) {
     final now = DateTime.now();
-    if (tab == AppointmentTab.completed) {
-      return appointments.where((a) => a.endTime.isBefore(now)).toList();
-    }
     if (tab == AppointmentTab.cancelled) {
       return appointments.where((a) => a.status == 3).toList();
     }
-    return appointments.where((a) => !a.endTime.isBefore(now)).toList();
+    if (tab == AppointmentTab.completed) {
+      return appointments
+          .where((a) => a.status != 3 && a.endTime.isBefore(now))
+          .toList();
+    }
+    // Upcoming: status != 3 and not passed
+    return appointments
+        .where((a) => a.status != 3 && !a.endTime.isBefore(now))
+        .toList();
   }
-
-  _AppointmentCardData _mapToCard(Appointment appointment, AppointmentTab tab) {
-    final images = [
-      Assets.imagesDrAyeshaRahman,
-      Assets.imagesDrSarah,
-      Assets.imagesDrNobleThorme,
-    ];
-    final image = images[appointment.doctorId % images.length];
-    return _AppointmentCardData(
-      name: appointment.doctorName,
-      specialty: 'Doctor',
-      date: _formatDate(appointment.startTime),
-      time: _formatTime(appointment.startTime),
-      imageAsset: image,
-    );
-  }
-
-  String _formatDate(DateTime date) {
-    return '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}';
-  }
-
-  String _formatTime(DateTime date) {
-    return '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
-  }
-}
-
-class _AppointmentCardData {
-  final String name;
-  final String specialty;
-  final String date;
-  final String time;
-  final String imageAsset;
-
-  const _AppointmentCardData({
-    required this.name,
-    required this.specialty,
-    required this.date,
-    required this.time,
-    required this.imageAsset,
-  });
 }
 
 enum AppointmentTab { upcoming, completed, cancelled }

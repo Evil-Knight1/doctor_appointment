@@ -103,4 +103,20 @@ class AppointmentRepositoryImpl implements AppointmentRepository {
       return Result.failure(const UnknownFailure('Unexpected error occurred'));
     }
   }
+
+  @override
+  Future<Result<void>> cancelAppointment(int appointmentId) async {
+    try {
+      await remoteDataSource.cancelAppointment(appointmentId);
+      return Result.success(null);
+    } on ApiException catch (exception) {
+      return Result.failure(
+        ServerFailure(exception.message, statusCode: exception.statusCode),
+      );
+    } on DioException catch (exception) {
+      return Result.failure(_mapDioFailure(exception));
+    } catch (_) {
+      return Result.failure(const UnknownFailure('Unexpected error occurred'));
+    }
+  }
 }

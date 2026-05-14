@@ -2,13 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
+import 'package:doctor_appointment/features/appointment/logic/doctor_slots_cubit.dart';
+import 'package:doctor_appointment/features/appointment/logic/doctor_slots_state.dart';
+import 'package:doctor_appointment/features/appointment/data/models/slot_model.dart';
 
 import '../widgets/booking_stepper.dart';
 import '../widgets/shared_app_bar.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class BookingDateView extends StatefulWidget {
   const BookingDateView({super.key, required this.doctor});
@@ -20,13 +26,30 @@ class BookingDateView extends StatefulWidget {
 
 class _BookingDateViewState extends State<BookingDateView> {
   DateTime _selectedDate = DateTime.now().add(const Duration(days: 1));
-  String? _selectedTime;
+  SlotModel? _selectedSlot;
 
-  final Map<String, List<String>> _categorizedTimeSlots = {
-    'Morning': ['08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM'],
-    'Afternoon': ['12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'],
-    'Evening': ['05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM'],
-  };
+  Map<String, List<SlotModel>> _groupSlots(List<SlotModel> slots) {
+    final filteredSlots = slots.where((slot) => isSameDay(slot.startTime, _selectedDate)).toList();
+
+    final Map<String, List<SlotModel>> categorized = {
+      'Morning': [],
+      'Afternoon': [],
+      'Evening': [],
+    };
+
+    for (var slot in filteredSlots) {
+      final hour = slot.startTime.hour;
+      if (hour < 12) {
+        categorized['Morning']!.add(slot);
+      } else if (hour < 17) {
+        categorized['Afternoon']!.add(slot);
+      } else {
+        categorized['Evening']!.add(slot);
+      }
+    }
+
+    return categorized;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,72 +69,174 @@ class _BookingDateViewState extends State<BookingDateView> {
                 SizedBox(height: AppSpacing.md),
                 _CalendarPicker(
                   selectedDate: _selectedDate,
-                  onDateSelected: (d) => setState(() => _selectedDate = d),
+                  onDateSelected: (d) {
+                    setState(() {
+                      _selectedDate = d;
+                      _selectedSlot = null; // Reset selection on date change
+                    });
+                  },
                 ),
                 SizedBox(height: AppSpacing.xl),
                 Text('Select Time', style: context.headingMedium),
                 SizedBox(height: AppSpacing.md),
-                ..._categorizedTimeSlots.entries.map((entry) {
-                  final category = entry.key;
-                  final slots = entry.value;
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: AppSpacing.lg),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          category,
-                           style: context.labelLarge.copyWith(color: colorScheme.onSurfaceVariant),
-                        ),
-                        SizedBox(height: AppSpacing.sm),
-                        Wrap(
-                          spacing: AppSpacing.md,
-                          runSpacing: AppSpacing.md,
-                          children: slots.map((time) {
-                            final isSelected = _selectedTime == time;
-                            return GestureDetector(
-                              onTap: () => setState(() => _selectedTime = time),
-                              child: Container(
-                                width: (1.sw - AppSpacing.lg * 2 - AppSpacing.md * 2) / 3,
-                                padding: EdgeInsets.symmetric(vertical: 12.h),
-                                decoration: BoxDecoration(
-                                  color: isSelected ? colorScheme.primary : colorScheme.surfaceContainerLow,
-                                  borderRadius: BorderRadius.circular(AppRadius.lg),
-                                  border: Border.all(
-                                    color: isSelected ? colorScheme.primary : colorScheme.outlineVariant,
-                                  ),
+                BlocBuilder<DoctorSlotsCubit, DoctorSlotsState>(
+                  builder: (context, state) {
+                    if (state is DoctorSlotsLoading) {
+                      return _buildLoadingSlots();
+                    } else if (state is DoctorSlotsError) {
+                      return _buildErrorState(state.message);
+                    } else if (state is DoctorSlotsLoaded) {
+                      final categorized = _groupSlots(state.slots);
+                      final hasAnySlots = categorized.values.any((list) => list.isNotEmpty);
+
+                      if (!hasAnySlots) {
+                        return _buildNoSlotsAvailable();
+                      }
+
+                      return Column(
+                        children: categorized.entries.map((entry) {
+                          final category = entry.key;
+                          final slots = entry.value;
+                          if (slots.isEmpty) return const SizedBox.shrink();
+
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: AppSpacing.lg),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  category,
+                                  style: context.labelLarge.copyWith(color: colorScheme.onSurfaceVariant),
                                 ),
-                                child: Center(
-                                  child: Text(
-                                    time,
-                                    style: context.bodySmall.copyWith(
-                                      color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
-                                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                                    ),
-                                  ),
+                                SizedBox(height: AppSpacing.sm),
+                                Wrap(
+                                  spacing: AppSpacing.md,
+                                  runSpacing: AppSpacing.md,
+                                  children: slots.map((slot) {
+                                    final isSelected = _selectedSlot?.id == slot.id;
+                                    final timeStr = DateFormat('hh:mm a').format(slot.startTime);
+                                    return GestureDetector(
+                                      onTap: () => setState(() => _selectedSlot = slot),
+                                      child: Container(
+                                        width: (1.sw - AppSpacing.lg * 2 - AppSpacing.md * 2) / 3,
+                                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                                        decoration: BoxDecoration(
+                                          color: isSelected ? colorScheme.primary : colorScheme.surfaceContainerLow,
+                                          borderRadius: BorderRadius.circular(AppRadius.lg),
+                                          border: Border.all(
+                                            color: isSelected ? colorScheme.primary : colorScheme.outlineVariant,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            timeStr,
+                                            style: context.bodySmall.copyWith(
+                                              color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
+                                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
                                 ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
               ],
             ),
           ),
           _BottomAction(
-            onNext: _selectedTime == null
+            onNext: _selectedSlot == null
                 ? null
                 : () => context.pushNamed(
                       Routes.bookingPaymentView,
                       extra: {
                         'doctor': widget.doctor,
                         'date': _selectedDate,
-                        'time': _selectedTime,
+                        'time': DateFormat('hh:mm a').format(_selectedSlot!.startTime),
+                        'slotId': _selectedSlot!.id,
+                        'amount': widget.doctor.consultationFee,
                       },
                     ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoadingSlots() {
+    return Skeletonizer(
+      enabled: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(width: 80.w, height: 20.h, color: Colors.white),
+          SizedBox(height: AppSpacing.sm),
+          Wrap(
+            spacing: AppSpacing.md,
+            runSpacing: AppSpacing.md,
+            children: List.generate(
+              6,
+              (index) => Container(
+                width: (1.sw - AppSpacing.lg * 2 - AppSpacing.md * 2) / 3,
+                height: 45.h,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNoSlotsAvailable() {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(AppSpacing.xl),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+      ),
+      child: Column(
+        children: [
+          Icon(Icons.calendar_today_outlined, size: 48.sp, color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5)),
+          SizedBox(height: AppSpacing.md),
+          Text(
+            'No slots available',
+            style: context.bodyLarge.copyWith(fontWeight: FontWeight.w600),
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            'Please select another date',
+            style: context.bodySmall.copyWith(color: colorScheme.onSurfaceVariant),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorState(String message) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Center(
+      child: Column(
+        children: [
+          Icon(Icons.error_outline, color: colorScheme.error, size: 40.sp),
+          SizedBox(height: AppSpacing.sm),
+          Text(message, style: context.bodyMedium),
+          TextButton(
+            onPressed: () => context.read<DoctorSlotsCubit>().fetchSlots(widget.doctor.id),
+            child: const Text('Retry'),
           ),
         ],
       ),

@@ -4,7 +4,7 @@ import 'package:doctor_appointment/core/logging/log_service.dart';
 import 'package:doctor_appointment/core/services/notification_service.dart';
 import 'package:doctor_appointment/core/services/service_locator.dart';
 import 'package:doctor_appointment/core/services/shared_preferences_helper.dart';
-import 'package:doctor_appointment/core/utils/app_theme.dart';
+import 'package:doctor_appointment/core/theme/app_theme.dart';
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -75,14 +75,16 @@ class DoctorAppointment extends StatelessWidget {
                   return AnnotatedRegion<SystemUiOverlayStyle>(
                     value: SystemUiOverlayStyle(
                       statusBarColor: Colors.transparent,
-                      statusBarIconBrightness: themeMode == ThemeMode.dark
-                          ? Brightness.light
-                          : Brightness.dark,
-                      systemNavigationBarColor: Theme.of(context).colorScheme.surface,
+                      statusBarIconBrightness:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? Brightness.light
+                              : Brightness.dark,
+                      systemNavigationBarColor:
+                          Theme.of(context).colorScheme.surface,
                       systemNavigationBarIconBrightness:
-                          themeMode == ThemeMode.dark
-                          ? Brightness.light
-                          : Brightness.dark,
+                          Theme.of(context).brightness == Brightness.dark
+                              ? Brightness.light
+                              : Brightness.dark,
                     ),
                     child: MaterialApp.router(
                       theme: AppTheme.theme,

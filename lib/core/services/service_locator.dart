@@ -1,4 +1,5 @@
 import 'package:doctor_appointment/features/appointment/domain/repositories/appointment_repository.dart';
+import 'package:doctor_appointment/features/appointment/data/repositories/appointment_repository_impl.dart';
 import 'package:doctor_appointment/features/auth/domain/usecases/update_fcm_token_usecase.dart';
 import 'package:sentry_dio/sentry_dio.dart';
 import 'package:dio/dio.dart';
@@ -41,6 +42,7 @@ import 'package:doctor_appointment/features/appointment/domain/usecases/get_my_a
 import 'package:doctor_appointment/features/appointment/logic/appointment_cubit.dart';
 import 'package:doctor_appointment/features/appointment/logic/appointments_cubit.dart';
 import 'package:doctor_appointment/features/appointment/domain/usecases/get_doctor_slots_usecase.dart';
+import 'package:doctor_appointment/features/appointment/domain/usecases/cancel_appointment_usecase.dart';
 import 'package:doctor_appointment/features/appointment/logic/doctor_slots_cubit.dart';
 import 'package:doctor_appointment/features/payments/data/datasources/payment_remote_data_source.dart';
 import 'package:doctor_appointment/features/payments/domain/repositories/payment_repository.dart';
@@ -236,6 +238,9 @@ void setupServiceLocator() {
   getIt.registerLazySingleton(
     () => GetDoctorSlotsUseCase(getIt<AppointmentRepository>()),
   );
+  getIt.registerLazySingleton(
+    () => CancelAppointmentUseCase(getIt<AppointmentRepository>()),
+  );
   getIt.registerFactory(
     () => AppointmentCubit(
       createAppointmentUseCase: getIt<CreateAppointmentUseCase>(),
@@ -244,6 +249,7 @@ void setupServiceLocator() {
   getIt.registerFactory(
     () => AppointmentsCubit(
       getMyAppointmentsUseCase: getIt<GetMyAppointmentsUseCase>(),
+      cancelAppointmentUseCase: getIt<CancelAppointmentUseCase>(),
     ),
   );
   getIt.registerFactory(

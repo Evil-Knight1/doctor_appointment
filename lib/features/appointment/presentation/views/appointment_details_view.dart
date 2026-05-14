@@ -1,28 +1,24 @@
-
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+import 'package:doctor_appointment/core/utils/app_images.dart';
+import 'package:doctor_appointment/features/appointment/domain/entities/appointment.dart';
+import 'package:doctor_appointment/features/appointment/logic/appointments_cubit.dart';
 import 'package:doctor_appointment/features/on_boarding_view/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:doctor_appointment/core/utils/image_url_helper.dart';
-import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 
 class AppointmentDetailsView extends StatelessWidget {
-  final Map<String, dynamic> appointmentData;
+  final Appointment appointment;
 
-  const AppointmentDetailsView({super.key, required this.appointmentData});
+  const AppointmentDetailsView({super.key, required this.appointment});
 
   @override
   Widget build(BuildContext context) {
-    final name = appointmentData['name'] ?? 'Doctor Name';
-    final date = appointmentData['date'] ?? '12 Oct, 2023';
-    final time = appointmentData['time'] ?? '10:00 AM';
-    final image = appointmentData['imageAsset'] ?? appointmentData['image'];
-    final isCancelled = appointmentData['isCancelled'] == true;
-    final isCompleted = appointmentData['isCompleted'] == true;
-    final fee = appointmentData['fee'] ?? '\$15.00';
-
     final colorScheme = Theme.of(context).colorScheme;
+    final now = DateTime.now();
+    final isCancelled = appointment.status == 3;
+    final isCompleted = appointment.status != 3 && appointment.endTime.isBefore(now);
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -49,163 +45,185 @@ class AppointmentDetailsView extends StatelessWidget {
         padding: EdgeInsets.all(24.w),
         child: Column(
           children: [
-            Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16.r),
-                child:
-                    (image != null &&
-                        (image.startsWith('http') ||
-                            image.startsWith('https') ||
-                            image.startsWith('/')))
-                    ? CachedNetworkImage(
-                        imageUrl: ImageUrlHelper.getFullUrl(image),
-                        httpHeaders: ImageUrlHelper.getImageHeaders(),
-                        width: 100.w,
-                        height: 100.w,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          width: 100.w,
-                          height: 100.w,
-                          color: colorScheme.primaryContainer.withValues(alpha: 0.3),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          width: 100.w,
-                          height: 100.w,
-                          color: colorScheme.primaryContainer.withValues(alpha: 0.3),
-                          child: Icon(
-                            Icons.person,
-                            color: colorScheme.primary,
-                            size: 40.sp,
-                          ),
-                        ),
-                      )
-                    : Image.asset(
-                        image ?? 'assets/images/doctor1.png',
-                        width: 100.w,
-                        height: 100.w,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          width: 100.w,
-                          height: 100.w,
-                          color: colorScheme.primaryContainer.withValues(alpha: 0.3),
-                          child: Icon(
-                            Icons.person,
-                            color: colorScheme.primary,
-                            size: 40.sp,
-                          ),
-                        ),
-                      ),
-              ),
-            ),
-            SizedBox(height: 16.h),
-            Text(name, style: context.styleSemiBold22),
-            SizedBox(height: 4.h),
-            Text(
-              'Dentist Specialist',
-              style: context.styleMedium14.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ),
+            _buildDoctorHeader(context),
             SizedBox(height: 32.h),
-            _buildDetailRow(
-              context,
-              'Status',
-              isCancelled
-                  ? 'Cancelled'
-                  : (isCompleted ? 'Completed' : 'Upcoming'),
-              isCancelled
-                  ? context.customColors.error
-                  : (isCompleted
-                        ? context.customColors.success
-                        : colorScheme.primary),
-            ),
-            _buildDetailRow(context, 'Date', date),
-            _buildDetailRow(context, 'Time', time),
-            _buildDetailRow(context, 'Consultation Fees', fee),
+            _buildInfoCard(context, isCancelled, isCompleted),
             SizedBox(height: 40.h),
-            if (!isCancelled && !isCompleted) ...[
-              CustomButton(
-                text: 'Reschedule',
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Rescheduling...')),
-                  );
-                },
-                width: double.infinity,
-                height: 50.h,
-                circleSize: 12.r,
-                textStyle: context.styleSemiBold16,
-                buttonColor: colorScheme.primary,
-              ),
-              SizedBox(height: 16.h),
-              OutlinedButton(
-                onPressed: () => _showCancelDialog(context),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(
-                    color: context.customColors.error ?? Colors.red,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                  minimumSize: Size(double.infinity, 50.h),
-                ),
-                child: Text(
-                  'Cancel Appointment',
-                  style: context.styleSemiBold16.copyWith(
-                    color: context.customColors.error,
-                  ),
-                ),
-              ),
-            ] else ...[
-              OutlinedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Mock rebook...')),
-                  );
-                },
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: colorScheme.primary),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 14.h),
-                  minimumSize: Size(double.infinity, 50.h),
-                ),
-                child: Text(
-                  'Book Again',
-                  style: context.styleSemiBold16.copyWith(
-                    color: colorScheme.primary,
-                  ),
-                ),
-              ),
-            ],
+            _buildActions(context, isCancelled, isCompleted),
           ],
         ),
       ),
     );
   }
 
+  Widget _buildDoctorHeader(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      children: [
+        Center(
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: colorScheme.primary.withValues(alpha: 0.1), width: 4),
+              boxShadow: [
+                BoxShadow(
+                  color: colorScheme.primary.withValues(alpha: 0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: CircleAvatar(
+              radius: 60.r,
+              backgroundColor: colorScheme.primaryContainer,
+              backgroundImage: AssetImage(_getImageAsset()),
+            ),
+          ),
+        ),
+        SizedBox(height: 20.h),
+        Text(
+          appointment.doctorName,
+          style: context.styleSemiBold22.copyWith(fontSize: 20.sp),
+        ),
+        SizedBox(height: 4.h),
+        Text(
+          'Doctor',
+          style: context.styleMedium14.copyWith(
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoCard(BuildContext context, bool isCancelled, bool isCompleted) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: EdgeInsets.all(20.w),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(24.r),
+        border: Border.all(color: Theme.of(context).dividerColor.withValues(alpha: 0.5)),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).shadowColor.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          _buildDetailRow(
+            context,
+            'Status',
+            isCancelled ? 'Cancelled' : (isCompleted ? 'Completed' : 'Upcoming'),
+            icon: Icons.info_outline_rounded,
+            valueColor: isCancelled
+                ? context.customColors.error
+                : (isCompleted ? context.customColors.success : colorScheme.primary),
+          ),
+          Divider(height: 24.h),
+          _buildDetailRow(
+            context,
+            'Date',
+            _formatDate(appointment.startTime),
+            icon: Icons.calendar_today_rounded,
+          ),
+          Divider(height: 24.h),
+          _buildDetailRow(
+            context,
+            'Time',
+            _formatTime(appointment.startTime),
+            icon: Icons.access_time_rounded,
+          ),
+          Divider(height: 24.h),
+          _buildDetailRow(
+            context,
+            'Reason',
+            appointment.reason,
+            icon: Icons.chat_bubble_outline_rounded,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActions(BuildContext context, bool isCancelled, bool isCompleted) {
+    final colorScheme = Theme.of(context).colorScheme;
+    if (!isCancelled && !isCompleted) {
+      return Column(
+        children: [
+          CustomButton(
+            text: 'Reschedule',
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Rescheduling functionality coming soon')),
+              );
+            },
+            width: double.infinity,
+            height: 54.h,
+            circleSize: 12.r,
+            textStyle: context.styleSemiBold16,
+            buttonColor: colorScheme.primary,
+          ),
+          SizedBox(height: 16.h),
+          OutlinedButton(
+            onPressed: () => _showCancelDialog(context),
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(color: context.customColors.error ?? Colors.red),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 14.h),
+              minimumSize: Size(double.infinity, 54.h),
+            ),
+            child: Text(
+              'Cancel Appointment',
+              style: context.styleSemiBold16.copyWith(
+                color: context.customColors.error,
+              ),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return CustomButton(
+        text: isCompleted ? 'Leave Review' : 'Book Again',
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(isCompleted ? 'Leave Review coming soon' : 'Booking again...')),
+          );
+        },
+        width: double.infinity,
+        height: 54.h,
+        circleSize: 12.r,
+        textStyle: context.styleSemiBold16,
+        buttonColor: isCompleted ? colorScheme.secondary : colorScheme.primary,
+      );
+    }
+  }
+
   void _showCancelDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(20.r),
         ),
         title: Text(
           'Cancel Appointment',
-          style: context.styleSemiBold22.copyWith(fontSize: 16.sp),
+          style: context.styleSemiBold18,
         ),
         content: Text(
-          'Are you sure you want to cancel this appointment?',
+          'Are you sure you want to cancel your appointment with ${appointment.doctorName}?',
           style: context.styleRegular14.copyWith(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: Text(
               'Back',
               style: context.styleMedium14.copyWith(
@@ -215,17 +233,13 @@ class AppointmentDetailsView extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context); // Close dialog
-              context.pop(); // Go back to calendar
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Appointment Cancelled Successfully'),
-                ),
-              );
+              Navigator.pop(dialogContext);
+              context.read<AppointmentsCubit>().cancelAppointment(appointment.id);
+              context.pop(); // Go back after cancellation
             },
             child: Text(
-              'Cancel',
-              style: context.styleMedium14.copyWith(
+              'Yes, Cancel',
+              style: context.styleSemiBold14.copyWith(
                 color: context.customColors.error,
               ),
             ),
@@ -238,29 +252,59 @@ class AppointmentDetailsView extends StatelessWidget {
   Widget _buildDetailRow(
     BuildContext context,
     String label,
-    String value, [
+    String value, {
+    required IconData icon,
     Color? valueColor,
-  ]) {
+  }) {
     final colorScheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 12.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: context.styleRegular14.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
+    return Row(
+      children: [
+        Container(
+          padding: EdgeInsets.all(8.w),
+          decoration: BoxDecoration(
+            color: colorScheme.primary.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(10.r),
           ),
-          Text(
-            value,
-            style: context.styleSemiBold16.copyWith(
-              color: valueColor ?? colorScheme.onSurface,
+          child: Icon(icon, size: 18.sp, color: colorScheme.primary),
+        ),
+        SizedBox(width: 12.w),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: context.styleRegular12.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
             ),
-          ),
-        ],
-      ),
+            SizedBox(height: 2.h),
+            Text(
+              value,
+              style: context.styleSemiBold16.copyWith(
+                color: valueColor ?? colorScheme.onSurface,
+                fontSize: 14.sp,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
+  }
+
+  String _getImageAsset() {
+    final images = [
+      Assets.imagesDrAyeshaRahman,
+      Assets.imagesDrSarah,
+      Assets.imagesDrNobleThorme,
+    ];
+    return images[appointment.doctorId % images.length];
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}';
+  }
+
+  String _formatTime(DateTime date) {
+    return '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
   }
 }

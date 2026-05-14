@@ -15,6 +15,7 @@ abstract class AppointmentRemoteDataSource {
   Future<List<AppointmentModel>> getMyAppointments();
   
   Future<List<SlotModel>> getDoctorSlots(int doctorId);
+  Future<void> cancelAppointment(int appointmentId);
 }
 
 class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
@@ -105,6 +106,15 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
         .toList();
   }
 
+  @override
+  Future<void> cancelAppointment(int appointmentId) async {
+    final response = await apiService.delete('/api/Appointment/$appointmentId');
+    final success = response['success'] == true;
+    if (!success) {
+      throw ApiException(_extractMessage(response));
+    }
+  }
+
   String _extractMessage(Map<String, dynamic> json) {
     final message = json['message'] as String?;
     if (message != null && message.trim().isNotEmpty) {
@@ -113,6 +123,11 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
     final errors = json['errors'];
     if (errors is List && errors.isNotEmpty) {
       return errors.map((e) => e.toString()).join(', ');
+    } else if (errors is Map) {
+      return errors.values.map((e) {
+        if (e is List) return e.join(', ');
+        return e.toString();
+      }).join(' | ');
     }
     return 'Request failed';
   }

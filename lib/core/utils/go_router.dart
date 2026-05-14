@@ -1,5 +1,7 @@
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/core/widgets/bottom_navigation_bar.dart';
+import 'package:doctor_appointment/features/appointment/domain/entities/appointment.dart';
+import 'package:doctor_appointment/features/appointment/logic/doctor_slots_cubit.dart';
 import 'package:doctor_appointment/features/appointment/presentation/views/appointment_success_view.dart';
 import 'package:doctor_appointment/features/appointment/presentation/views/new_appointment_view.dart';
 import 'package:doctor_appointment/features/appointment/presentation/views/patient_details_view.dart';
@@ -245,8 +247,8 @@ abstract class AppRouter {
         name: Routes.appointmentDetailsView,
         path: kAppointmentDetailsView,
         builder: (context, state) {
-          final data = state.extra as Map<String, dynamic>? ?? {};
-          return AppointmentDetailsView(appointmentData: data);
+          final appointment = state.extra as Appointment;
+          return AppointmentDetailsView(appointment: appointment);
         },
       ),
       GoRoute(
@@ -381,7 +383,11 @@ abstract class AppRouter {
         path: kBookingDateView,
         builder: (context, state) {
           final doctor = state.extra as Doctor;
-          return BookingDateView(doctor: doctor);
+          return BlocProvider(
+            create: (context) =>
+                getIt<DoctorSlotsCubit>()..fetchSlots(doctor.id),
+            child: BookingDateView(doctor: doctor),
+          );
         },
       ),
       GoRoute(

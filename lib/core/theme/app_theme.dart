@@ -42,14 +42,59 @@ class AppTheme {
         backgroundColor: colorScheme.surface,
         foregroundColor: colorScheme.onSurface,
         elevation: 0,
+        scrolledUnderElevation: 0.5,
+        shadowColor: colorScheme.shadow.withValues(alpha: 0.1),
         centerTitle: false,
-        titleTextStyle: _textTheme(brightness, colorScheme).titleLarge?.copyWith(
+        titleTextStyle: _textTheme(brightness, colorScheme).titleLarge
+            ?.copyWith(
               fontWeight: FontWeight.bold,
               color: colorScheme.onSurface,
             ),
-        iconTheme: IconThemeData(
-          color: colorScheme.onSurface,
+        iconTheme: IconThemeData(color: colorScheme.onSurface),
+        surfaceTintColor: Colors.transparent,
+      ),
+      tabBarTheme: TabBarThemeData(
+        labelColor: colorScheme.primary,
+        unselectedLabelColor: colorScheme.onSurfaceVariant,
+        indicatorColor: colorScheme.primary,
+        indicatorSize: TabBarIndicatorSize.label,
+        labelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 14.sp),
+        unselectedLabelStyle: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 14.sp,
         ),
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: colorScheme.surface,
+        selectedItemColor: colorScheme.primary,
+        unselectedItemColor: colorScheme.onSurfaceVariant,
+        type: BottomNavigationBarType.fixed,
+        elevation: 8,
+        selectedLabelStyle: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 12.sp,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: 12.sp,
+        ),
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        elevation: 4,
+        highlightElevation: 6,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: isLight
+            ? colorScheme.onSurface
+            : colorScheme.surfaceContainerHighest,
+        contentTextStyle: TextStyle(
+          color: isLight ? colorScheme.surface : colorScheme.onSurface,
+        ),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -59,8 +104,8 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 24.w),
+          textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -70,23 +115,61 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 24.w),
+          textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: colorScheme.primary,
+          textStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
         ),
       ),
       cardTheme: CardThemeData(
         color: colorScheme.surfaceContainerLow,
-        elevation: 0,
+        elevation: isLight ? 0 : 2,
+        margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(
             color: colorScheme.outlineVariant,
+            width: isLight ? 1 : 0.5,
           ),
         ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: colorScheme.surface,
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        titleTextStyle: _textTheme(brightness, colorScheme).headlineSmall,
+        contentTextStyle: _textTheme(brightness, colorScheme).bodyMedium,
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: colorScheme.primary,
+        circularTrackColor: colorScheme.primary.withValues(alpha: 0.1),
+      ),
+      tooltipTheme: TooltipThemeData(
+        decoration: BoxDecoration(
+          color: colorScheme.onSurface.withValues(alpha: 0.8),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        textStyle: TextStyle(color: colorScheme.surface, fontSize: 12.sp),
       ),
       inputDecorationTheme: _inputDecorationTheme(brightness, colorScheme),
       iconTheme: IconThemeData(
         color: colorScheme.onSurfaceVariant,
+        size: 24.sp,
+      ),
+      dividerTheme: DividerThemeData(
+        thickness: 1,
+        color: colorScheme.outlineVariant,
+        space: 1,
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: colorScheme.surfaceContainerLow,
+        labelStyle: TextStyle(color: colorScheme.onSurface, fontSize: 12.sp),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        side: BorderSide(color: colorScheme.outlineVariant),
       ),
       extensions: [
         AppCustomColors(
@@ -206,7 +289,9 @@ class AppTheme {
   }
 
   static InputDecorationTheme _inputDecorationTheme(
-      Brightness brightness, ColorScheme colorScheme) {
+    Brightness brightness,
+    ColorScheme colorScheme,
+  ) {
     final isDark = brightness == Brightness.dark;
 
     return InputDecorationTheme(
@@ -218,10 +303,7 @@ class AppTheme {
         color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
         fontSize: 14,
       ),
-      labelStyle: TextStyle(
-        color: colorScheme.onSurface,
-        fontSize: 14,
-      ),
+      labelStyle: TextStyle(color: colorScheme.onSurface, fontSize: 14),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: _buildBorder(colorScheme.outlineVariant),
       enabledBorder: _buildBorder(colorScheme.outlineVariant),
