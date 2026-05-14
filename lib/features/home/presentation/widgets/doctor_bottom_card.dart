@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 
 class DoctorBottomCard extends StatelessWidget {

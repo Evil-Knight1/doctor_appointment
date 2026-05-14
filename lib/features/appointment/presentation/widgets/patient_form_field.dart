@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -23,7 +24,7 @@ class PatientFormField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppStyles.styleMedium14.copyWith(fontSize: 13.sp)),
+        Text(label, style: context.styleMedium14.copyWith(fontSize: 13.sp)),
         SizedBox(height: 6.h),
         Container(
           decoration: BoxDecoration(
@@ -34,10 +35,10 @@ class PatientFormField extends StatelessWidget {
             controller: controller,
             keyboardType: keyboardType,
             maxLines: maxLines,
-            style: AppStyles.styleMedium14.copyWith(fontSize: 13.sp),
+            style: context.styleMedium14.copyWith(fontSize: 13.sp),
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: AppStyles.styleRegular14.copyWith(
+              hintStyle: context.styleRegular14.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 fontSize: 12.sp,
               ),

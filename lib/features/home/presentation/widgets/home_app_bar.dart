@@ -4,7 +4,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/features/home/logic/notification_cubit.dart';
 import 'package:doctor_appointment/features/home/logic/notification_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +15,7 @@ import 'package:doctor_appointment/features/profile/logic/profile_state.dart';
 import 'package:doctor_appointment/core/services/shared_preferences_helper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doctor_appointment/core/utils/image_url_helper.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});

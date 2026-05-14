@@ -1,4 +1,4 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -15,7 +15,7 @@ class CustomDivider extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 12.w),
           child: Text(
             'Or continue with',
-            style: AppStyles.styleRegular14.copyWith(
+            style: context.bodyMedium.copyWith(
               color: theme.hintColor,
             ),
           ),

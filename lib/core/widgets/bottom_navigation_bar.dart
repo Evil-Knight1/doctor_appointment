@@ -1,7 +1,8 @@
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/features/calendar/presentation/views/calendar_view.dart';
 
@@ -49,7 +50,7 @@ class _RootState extends State<Root> {
               size: 26.sp,
             ),
             label: 'Home',
-            labelStyle: AppStyles.styleMedium14(context).copyWith(
+            labelStyle: context.styleMedium14.copyWith(
               color: _currentIndex == 0
                   ? colorScheme.primary
                   : colorScheme.onSurfaceVariant,
@@ -65,7 +66,7 @@ class _RootState extends State<Root> {
               size: 26.sp,
             ),
             label: 'Chat',
-            labelStyle: AppStyles.styleMedium14(context).copyWith(
+            labelStyle: context.styleMedium14.copyWith(
               color: _currentIndex == 1
                   ? colorScheme.primary
                   : colorScheme.onSurfaceVariant,
@@ -81,7 +82,7 @@ class _RootState extends State<Root> {
               size: 26.sp,
             ),
             label: 'Search',
-            labelStyle: AppStyles.styleMedium14(context).copyWith(
+            labelStyle: context.styleMedium14.copyWith(
               color: _currentIndex == 2
                   ? colorScheme.primary
                   : colorScheme.onSurfaceVariant,
@@ -97,7 +98,7 @@ class _RootState extends State<Root> {
               size: 26.sp,
             ),
             label: 'Bookings',
-            labelStyle: AppStyles.styleMedium14(context).copyWith(
+            labelStyle: context.styleMedium14.copyWith(
               color: _currentIndex == 3
                   ? colorScheme.primary
                   : colorScheme.onSurfaceVariant,
@@ -113,7 +114,7 @@ class _RootState extends State<Root> {
               size: 26.sp,
             ),
             label: 'Profile',
-            labelStyle: AppStyles.styleMedium14(context).copyWith(
+            labelStyle: context.styleMedium14.copyWith(
               color: _currentIndex == 4
                   ? colorScheme.primary
                   : colorScheme.onSurfaceVariant,

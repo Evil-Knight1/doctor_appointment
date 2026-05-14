@@ -1,5 +1,6 @@
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/core/utils/app_images.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/features/appointment/domain/entities/appointment.dart';
 import 'package:doctor_appointment/features/appointment/logic/appointments_cubit.dart';
 import 'package:doctor_appointment/features/appointment/logic/appointments_state.dart';
@@ -42,7 +43,7 @@ class _CalendarViewState extends State<CalendarView>
         automaticallyImplyLeading: false,
         title: Text(
           'Appointments',
-          style: AppStyles.styleSemiBold22.copyWith(fontSize: 18.sp),
+          style: context.styleSemiBold22.copyWith(fontSize: 18.sp),
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(44.h),
@@ -52,7 +53,7 @@ class _CalendarViewState extends State<CalendarView>
             unselectedLabelColor: colorScheme.onSurfaceVariant,
             indicatorColor: colorScheme.primary,
             indicatorSize: TabBarIndicatorSize.label,
-            labelStyle: AppStyles.styleMedium14.copyWith(fontSize: 13.sp),
+            labelStyle: context.styleMedium14.copyWith(fontSize: 13.sp),
             tabs: const [
               Tab(text: 'Upcoming'),
               Tab(text: 'Completed'),
@@ -110,7 +111,7 @@ class _CalendarViewState extends State<CalendarView>
           return Center(
             child: Text(
               state.message,
-              style: AppStyles.styleRegular14.copyWith(
+              style: context.styleRegular14.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
             ),
@@ -124,7 +125,7 @@ class _CalendarViewState extends State<CalendarView>
               child: Center(
                 child: Text(
                   'No appointments found.',
-                  style: AppStyles.styleRegular14.copyWith(
+                  style: context.styleRegular14.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
                 ),

@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/features/doctors/domain/entities/specialization.dart';
 import 'package:doctor_appointment/features/doctors/logic/specializations_cubit.dart';
 import 'package:doctor_appointment/features/doctors/logic/specializations_state.dart';
@@ -60,7 +61,7 @@ class _DoctorSpecializationFieldState extends State<DoctorSpecializationField> {
             children: [
               Text(
                 'Specialization',
-                style: AppStyles.styleMedium14.copyWith(
+                style: context.styleMedium14.copyWith(
                   color: theme.textTheme.headlineLarge?.color,
                 ),
               ),
@@ -77,7 +78,7 @@ class _DoctorSpecializationFieldState extends State<DoctorSpecializationField> {
             children: [
               Text(
                 'Specialization',
-                style: AppStyles.styleMedium14.copyWith(
+                style: context.styleMedium14.copyWith(
                   color: theme.textTheme.headlineLarge?.color,
                 ),
               ),
@@ -96,7 +97,7 @@ class _DoctorSpecializationFieldState extends State<DoctorSpecializationField> {
                     Expanded(
                       child: Text(
                         'Failed to load: ${state.message}',
-                        style: AppStyles.styleRegular12.copyWith(
+                        style: context.styleRegular12.copyWith(
                           color: theme.colorScheme.error,
                         ),
                       ),
@@ -123,7 +124,7 @@ class _DoctorSpecializationFieldState extends State<DoctorSpecializationField> {
               RichText(
                 text: TextSpan(
                   text: 'Specialization',
-                  style: AppStyles.styleMedium14.copyWith(
+                  style: context.styleMedium14.copyWith(
                     color: _isFocused
                         ? theme.colorScheme.primary
                         : theme.textTheme.headlineLarge?.color,
@@ -131,7 +132,7 @@ class _DoctorSpecializationFieldState extends State<DoctorSpecializationField> {
                   children: [
                     TextSpan(
                       text: ' *',
-                      style: AppStyles.styleMedium14.copyWith(
+                      style: context.styleMedium14.copyWith(
                         color: theme.colorScheme.error,
                       ),
                     ),
@@ -165,7 +166,7 @@ class _DoctorSpecializationFieldState extends State<DoctorSpecializationField> {
                     size: 22.sp,
                   ),
                   dropdownColor: theme.cardColor,
-                  style: AppStyles.styleMedium14.copyWith(
+                  style: context.styleMedium14.copyWith(
                     color: theme.textTheme.headlineLarge?.color,
                   ),
                   decoration: InputDecoration(
@@ -191,7 +192,7 @@ class _DoctorSpecializationFieldState extends State<DoctorSpecializationField> {
                       value: spec,
                       child: Text(
                         spec.name,
-                        style: AppStyles.styleMedium14.copyWith(
+                        style: context.styleMedium14.copyWith(
                           color: theme.textTheme.headlineLarge?.color,
                         ),
                       ),

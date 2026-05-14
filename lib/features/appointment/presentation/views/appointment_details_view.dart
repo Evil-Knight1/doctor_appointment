@@ -1,4 +1,4 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/features/on_boarding_view/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

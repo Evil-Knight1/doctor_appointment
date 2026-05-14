@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -41,7 +42,7 @@ class DatePickerWidget extends StatelessWidget {
                   children: [
                     Text(
                       DateFormat('MMMM, yyyy').format(selectedDate),
-                      style: AppStyles.styleSemiBold16.copyWith(
+                      style: context.styleSemiBold16.copyWith(
                         fontSize: 14.sp,
                         color: colorScheme.onPrimaryContainer,
                       ),
@@ -58,7 +59,7 @@ class DatePickerWidget extends StatelessWidget {
             ),
             Text(
               'Today',
-              style: AppStyles.styleMedium14.copyWith(
+              style: context.styleMedium14.copyWith(
                 color: colorScheme.primary,
                 fontSize: 13.sp,
               ),
@@ -164,7 +165,7 @@ class _DateItem extends StatelessWidget {
           children: [
             Text(
               DateFormat('EEE').format(date),
-              style: AppStyles.styleMedium14.copyWith(
+              style: context.styleMedium14.copyWith(
                 fontSize: 12.sp,
                 color: isSelected
                     ? colorScheme.onPrimary.withValues(alpha: 0.7)
@@ -176,7 +177,7 @@ class _DateItem extends StatelessWidget {
             SizedBox(height: 4.h),
             Text(
               '${date.day}',
-              style: AppStyles.styleSemiBold18.copyWith(
+              style: context.styleSemiBold18.copyWith(
                 fontSize: 18.sp,
                 color: isSelected
                     ? colorScheme.onPrimary

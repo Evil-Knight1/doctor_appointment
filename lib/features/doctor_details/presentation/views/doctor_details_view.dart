@@ -1,4 +1,4 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:doctor_appointment/features/doctor_details/presentation/widgets/doctor_info_widget.dart';

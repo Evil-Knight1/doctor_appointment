@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,7 +38,7 @@ class DoctorSignUpFooter extends StatelessWidget {
               children: [
                 Text(
                   'Already have an account? ',
-                  style: AppStyles.styleRegular14.copyWith(
+                  style: context.styleRegular14.copyWith(
                     color: theme.textTheme.bodyMedium?.color,
                   ),
                 ),
@@ -45,7 +46,7 @@ class DoctorSignUpFooter extends StatelessWidget {
                   onTap: () => context.go(AppRouter.kLoginView),
                   child: Text(
                     'Login',
-                    style: AppStyles.styleMedium14.copyWith(
+                    style: context.styleMedium14.copyWith(
                       color: theme.colorScheme.primary,
                     ),
                   ),
@@ -126,7 +127,7 @@ class _SubmitButton extends StatelessWidget {
                   SizedBox(width: 10.w),
                   Text(
                     label,
-                    style: AppStyles.styleSemiBold16.copyWith(
+                    style: context.styleSemiBold16.copyWith(
                       color: Colors.white,
                       letterSpacing: 0.5,
                     ),

@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/core/services/shared_preferences_helper.dart';
 import 'package:doctor_appointment/features/favorite/presentation/widgets/favorite_doctor_card.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +23,7 @@ class FavoriteView extends StatelessWidget {
             automaticallyImplyLeading: false,
             title: Text(
               'Favorites',
-              style: AppStyles.styleSemiBold22.copyWith(
-                fontSize: 18.sp,
-                color: colorScheme.onSurface,
-              ),
+              style: context.styleSemiBold22.copyWith(fontSize: 18.sp, color: colorScheme.onSurface),
             ),
           ),
           body: favorites.isEmpty
@@ -64,18 +62,13 @@ class FavoriteView extends StatelessWidget {
           SizedBox(height: 16.h),
           Text(
             'No favorites yet',
-            style: AppStyles.styleSemiBold22.copyWith(
-              fontSize: 18.sp,
-              color: colorScheme.onSurface,
-            ),
+            style: context.styleSemiBold22.copyWith(fontSize: 18.sp, color: colorScheme.onSurface),
           ),
           SizedBox(height: 8.h),
           Text(
             'Doctors you favorite will\nappear here',
             textAlign: TextAlign.center,
-            style: AppStyles.styleRegular14.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
+            style: context.styleRegular14.copyWith(color: colorScheme.onSurfaceVariant),
           ),
         ],
       ),

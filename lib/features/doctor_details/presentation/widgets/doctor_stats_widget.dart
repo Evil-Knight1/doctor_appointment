@@ -1,6 +1,7 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 
 class DoctorStatsWidget extends StatelessWidget {
   final double rating;

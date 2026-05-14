@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 
 class ConfirmedBadge extends StatelessWidget {
@@ -11,7 +11,7 @@ class ConfirmedBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Column(
       children: [
         Container(
@@ -35,7 +35,11 @@ class ConfirmedBadge extends StatelessWidget {
 }
 
 class ConfirmedInfoSection extends StatelessWidget {
-  const ConfirmedInfoSection({super.key, required this.title, required this.children});
+  const ConfirmedInfoSection({
+    super.key,
+    required this.title,
+    required this.children,
+  });
   final String title;
   final List<Widget> children;
 
@@ -102,12 +106,16 @@ class BookingInfoRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                label, 
-                style: context.bodySmall.copyWith(color: colorScheme.onSurfaceVariant),
+                label,
+                style: context.bodySmall.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
               ),
               Text(
-                value, 
-                style: context.headingSmall.copyWith(color: colorScheme.onSurface),
+                value,
+                style: context.headingSmall.copyWith(
+                  color: colorScheme.onSurface,
+                ),
               ),
             ],
           ),
@@ -147,24 +155,30 @@ class DoctorInfoRow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              doctor.fullName, 
-              style: context.headingSmall.copyWith(color: colorScheme.onSurface),
+              doctor.fullName,
+              style: context.headingSmall.copyWith(
+                color: colorScheme.onSurface,
+              ),
             ),
             Text(
               '${doctor.specialization.name} | ${doctor.hospital ?? 'Clinic'}',
-              style: context.bodySmall.copyWith(color: colorScheme.onSurfaceVariant),
+              style: context.bodySmall.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
             ),
             Row(
               children: [
                 Icon(
-                  Icons.star_rounded, 
-                  size: 12.sp, 
+                  Icons.star_rounded,
+                  size: 12.sp,
                   color: customColors.rating ?? Colors.amber,
                 ),
                 SizedBox(width: 2.w),
                 Text(
                   '${doctor.averageRating?.toStringAsFixed(1) ?? '0.0'} (${doctor.totalReviews} reviews)',
-                  style: context.bodySmall.copyWith(color: colorScheme.onSurfaceVariant),
+                  style: context.bodySmall.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
@@ -212,10 +226,7 @@ class BookingConfirmedActions extends StatelessWidget {
               ),
               child: Text(
                 'Done',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15.sp,
-                ),
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15.sp),
               ),
             ),
           ),

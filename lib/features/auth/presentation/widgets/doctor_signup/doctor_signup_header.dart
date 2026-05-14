@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -23,14 +24,14 @@ class DoctorSignUpHeader extends StatelessWidget {
                 children: [
                   Text(
                     'Doctor\nRegistration',
-                    style: AppStyles.styleSemiBold24.copyWith(
+                    style: context.styleSemiBold24.copyWith(
                       color: theme.textTheme.headlineLarge?.color,
                     ),
                   ),
                   SizedBox(height: 8.h),
                   Text(
                     'Join our network of healthcare professionals.',
-                    style: AppStyles.styleRegular14.copyWith(
+                    style: context.styleRegular14.copyWith(
                       color: theme.hintColor,
                       height: 1.4,
                     ),

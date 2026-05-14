@@ -1,5 +1,5 @@
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,7 +38,7 @@ class AppointmentSuccessView extends StatelessWidget {
               SizedBox(height: 32.h),
               Text(
                 'Congratulations !',
-                style: AppStyles.styleSemiBold22(context).copyWith(
+                style: context.styleSemiBold22.copyWith(
                   fontSize: 22.sp,
                   color: colorScheme.onSurface,
                 ),
@@ -47,7 +47,7 @@ class AppointmentSuccessView extends StatelessWidget {
               RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                  style: AppStyles.styleRegular14(context).copyWith(
+                  style: context.styleRegular14.copyWith(
                     color: colorScheme.onSurfaceVariant,
                     height: 1.6,
                   ),
@@ -57,7 +57,7 @@ class AppointmentSuccessView extends StatelessWidget {
                     ),
                     TextSpan(
                       text: 'Dr. Ayesha Rahman',
-                      style: AppStyles.styleMedium14(context).copyWith(
+                      style: context.styleMedium14.copyWith(
                         color: colorScheme.onSurface,
                       ),
                     ),
@@ -85,7 +85,7 @@ class AppointmentSuccessView extends StatelessWidget {
                 ),
                 child: Text(
                   'See Appointment',
-                  style: AppStyles.styleSemiBold16(context),
+                  style: context.styleSemiBold16,
                 ),
               ),
               SizedBox(height: 32.h),
@@ -105,7 +105,7 @@ class AppointmentSuccessView extends StatelessWidget {
         SizedBox(width: 8.w),
         Text(
           text,
-          style: AppStyles.styleMedium14(context).copyWith(color: colorScheme.onSurface),
+          style: context.styleMedium14.copyWith(color: colorScheme.onSurface),
         ),
       ],
     );

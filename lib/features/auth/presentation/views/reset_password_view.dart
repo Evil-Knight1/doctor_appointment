@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/features/auth/logic/forgot_password_cubit.dart';
 import 'package:doctor_appointment/features/auth/logic/forgot_password_state.dart';
@@ -84,11 +85,11 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 20.h),
-                    Text('Reset Password', style: AppStyles.styleBold32),
+                    Text('Reset Password', style: context.styleBold32),
                     SizedBox(height: 8.h),
                     Text(
                       'Please enter your new password.',
-                      style: AppStyles.styleRegular14,
+                      style: context.styleRegular14,
                     ),
                     SizedBox(height: 36.h),
                     CustomTextFormField(
@@ -140,7 +141,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                                     );
                               },
                         buttonColor: Theme.of(context).colorScheme.primary,
-                        textStyle: AppStyles.styleSemiBold16.copyWith(
+                        textStyle: context.styleSemiBold16.copyWith(
                           color: Colors.white,
                         ),
                         circleSize: 16.r,

@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/features/on_boarding_view/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +35,7 @@ class OnBoardingView extends StatelessWidget {
                   ),
                   Text(
                     'MedLink',
-                    style: AppStyles.styleBold32.copyWith(
-                      color: colorScheme.onSurface,
-                    ),
+                    style: context.styleBold32.copyWith(color: colorScheme.onSurface),
                   ),
                 ],
               ),
@@ -75,9 +74,7 @@ class OnBoardingView extends StatelessWidget {
                     child: Text(
                       'Best Doctor\nAppointment App',
                       textAlign: TextAlign.center,
-                      style: AppStyles.styleBold32.copyWith(
-                        color: colorScheme.onSurface,
-                      ),
+                      style: context.styleBold32.copyWith(color: colorScheme.onSurface),
                     ),
                   ),
                 ],
@@ -89,9 +86,7 @@ class OnBoardingView extends StatelessWidget {
                 child: Text(
                   'Manage and schedule all of your medical appointments easily with Docdoc to get a new experience.',
                   textAlign: TextAlign.center,
-                  style: AppStyles.styleRegular12.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
+                  style: context.styleRegular12.copyWith(color: colorScheme.onSurfaceVariant),
                 ),
               ),
               SizedBox(height: 35.h),
@@ -109,9 +104,7 @@ class OnBoardingView extends StatelessWidget {
                     }
                   },
                   buttonColor: colorScheme.primary,
-                  textStyle: AppStyles.styleSemiBold16.copyWith(
-                    color: colorScheme.onPrimary,
-                  ),
+                  textStyle: context.styleSemiBold16.copyWith(color: colorScheme.onPrimary),
                   circleSize: 16.r,
                 ),
               ),
@@ -123,4 +116,3 @@ class OnBoardingView extends StatelessWidget {
     );
   }
 }
-

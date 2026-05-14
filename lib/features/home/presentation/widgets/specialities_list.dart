@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/features/home/data/models/home_model.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/core/utils/specialty_mapper.dart';
 import 'section_header.dart';
 
@@ -14,6 +14,7 @@ import 'package:doctor_appointment/features/doctors/logic/specializations_cubit.
 import 'package:doctor_appointment/features/doctors/logic/specializations_state.dart';
 
 import 'package:doctor_appointment/l10n/app_localizations.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 
 class SpecialitiesList extends StatelessWidget {
   const SpecialitiesList({super.key});

@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -47,7 +48,7 @@ class DoctorApprovalNotice extends StatelessWidget {
               children: [
                 Text(
                   'Verification Required',
-                  style: AppStyles.styleMedium14.copyWith(
+                  style: context.styleMedium14.copyWith(
                     color: onContainerColor,
                     fontWeight: FontWeight.bold,
                   ),
@@ -55,7 +56,7 @@ class DoctorApprovalNotice extends StatelessWidget {
                 SizedBox(height: 4.h),
                 Text(
                   'Your account will be reviewed by our admin team before activation. This usually takes 1-2 business days.',
-                  style: AppStyles.styleRegular12.copyWith(
+                  style: context.styleRegular12.copyWith(
                     color: onContainerColor.withValues(alpha: 0.9),
                     height: 1.4,
                   ),

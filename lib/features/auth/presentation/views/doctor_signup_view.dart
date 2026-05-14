@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/features/auth/presentation/widgets/doctor_signup/doctor_signup_footer.dart';
 import 'package:doctor_appointment/features/auth/presentation/widgets/doctor_signup/doctor_signup_form.dart';
@@ -171,7 +172,7 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
                 color: theme.colorScheme.primary,
               ),
               SizedBox(width: 12.w),
-              Text('Registration Help', style: AppStyles.styleBold18),
+              Text('Registration Help', style: context.styleBold18),
             ],
           ),
           content: SingleChildScrollView(
@@ -194,7 +195,7 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
                 SizedBox(height: 12.h),
                 Text(
                   'Note: All registrations are reviewed by our administration team before approval.',
-                  style: AppStyles.styleRegular12.copyWith(
+                  style: context.styleRegular12.copyWith(
                     color: theme.hintColor,
                     fontStyle: FontStyle.italic,
                   ),
@@ -207,9 +208,7 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
               onPressed: () => Navigator.pop(context),
               child: Text(
                 'Got it',
-                style: AppStyles.styleSemiBold16.copyWith(
-                  color: theme.colorScheme.primary,
-                ),
+                style: context.styleSemiBold16.copyWith(color: theme.colorScheme.primary),
               ),
             ),
           ],
@@ -226,12 +225,10 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
         children: [
           Text(
             title,
-            style: AppStyles.styleSemiBold14.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-            ),
+            style: context.styleSemiBold14.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           SizedBox(height: 4.h),
-          Text(description, style: AppStyles.styleRegular14),
+          Text(description, style: context.styleRegular14),
         ],
       ),
     );
@@ -305,15 +302,13 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
                               ).createShader(bounds),
                               child: Text(
                                 'Doctor Registration',
-                                style: AppStyles.styleBold16.copyWith(
-                                  color: Colors.white,
-                                ),
+                                style: context.styleSemiBold16.copyWith(color: Colors.white),
                               ),
                             ),
                             SizedBox(height: 2.h),
                             Text(
                               'Step ${_currentStep + 1} of 3',
-                              style: AppStyles.styleMedium12.copyWith(
+                              style: context.styleRegular12.copyWith(
                                 color: Theme.of(
                                   context,
                                 ).textTheme.bodyMedium?.color,
@@ -396,16 +391,14 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
         children: [
           Text(
             'Account Credentials',
-            style: AppStyles.styleSemiBold20.copyWith(
+            style: context.styleSemiBold16.copyWith(
               color: Theme.of(context).textTheme.headlineMedium?.color,
             ),
           ),
           SizedBox(height: 8.h),
           Text(
             'Enter your email, password and phone to get started.',
-            style: AppStyles.styleRegular14.copyWith(
-              color: Theme.of(context).textTheme.bodyMedium?.color,
-            ),
+            style: context.styleRegular14.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
           ),
           SizedBox(height: 24.h),
           DoctorSignUpForm(
@@ -456,16 +449,14 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
         children: [
           Text(
             'Personal Information',
-            style: AppStyles.styleSemiBold20.copyWith(
+            style: context.styleSemiBold16.copyWith(
               color: Theme.of(context).textTheme.headlineMedium?.color,
             ),
           ),
           SizedBox(height: 8.h),
           Text(
             'Tell us more about your professional background.',
-            style: AppStyles.styleRegular14.copyWith(
-              color: Theme.of(context).textTheme.bodyMedium?.color,
-            ),
+            style: context.styleRegular14.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
           ),
           SizedBox(height: 24.h),
           DoctorSignUpForm(
@@ -516,16 +507,14 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
         children: [
           Text(
             'Clinic Information',
-            style: AppStyles.styleSemiBold20.copyWith(
+            style: context.styleSemiBold16.copyWith(
               color: Theme.of(context).textTheme.headlineMedium?.color,
             ),
           ),
           SizedBox(height: 8.h),
           Text(
             'Provide details about your practice location.',
-            style: AppStyles.styleRegular14.copyWith(
-              color: Theme.of(context).textTheme.bodyMedium?.color,
-            ),
+            style: context.styleRegular14.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
           ),
           SizedBox(height: 24.h),
           DoctorSignUpForm(

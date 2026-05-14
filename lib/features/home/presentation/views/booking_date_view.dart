@@ -5,9 +5,10 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import '../widgets/booking_stepper.dart';
 import '../widgets/shared_app_bar.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 
 class BookingDateView extends StatefulWidget {
   const BookingDateView({super.key, required this.doctor});

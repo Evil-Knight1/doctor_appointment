@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -47,7 +48,7 @@ class ConsultationTypeWidget extends StatelessWidget {
                 SizedBox(width: 4.w),
                 Text(
                   type,
-                  style: AppStyles.styleRegular12.copyWith(
+                  style: context.styleRegular12.copyWith(
                     color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
                   ),
                 ),

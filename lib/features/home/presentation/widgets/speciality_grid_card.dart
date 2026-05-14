@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/features/home/data/models/home_model.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 
 class SpecialityGridCard extends StatelessWidget {
   const SpecialityGridCard({super.key, required this.speciality, required this.onTap});

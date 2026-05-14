@@ -1,5 +1,5 @@
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 
-import 'package:doctor_appointment/core/utils/app_styles.dart';
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,17 +30,12 @@ class DoctorPendingApprovalView extends StatelessWidget {
               Text(
                 'Application Received',
                 textAlign: TextAlign.center,
-                style: AppStyles.styleSemiBold24.copyWith(
-                  color: theme.textTheme.headlineLarge?.color,
-                ),
+                style: context.styleSemiBold16.copyWith(color: theme.textTheme.headlineLarge?.color),
               ),
               SizedBox(height: 16.h),
               Text(
                 'Your registration as a Doctor has been successfully submitted. Our administration team is reviewing your details to verify your medical credentials. You will receive an email once approved.',
-                style: AppStyles.styleRegular14.copyWith(
-                  color: theme.hintColor,
-                  height: 1.5,
-                ),
+                style: context.styleRegular14.copyWith(color: theme.hintColor, height: 1.5),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 40.h),
@@ -52,7 +47,7 @@ class DoctorPendingApprovalView extends StatelessWidget {
                 width: double.infinity,
                 height: 50.h,
                 circleSize: 12.r,
-                textStyle: AppStyles.styleSemiBold16,
+                textStyle: context.styleSemiBold16,
                 buttonColor: theme.colorScheme.primary,
               ),
             ],

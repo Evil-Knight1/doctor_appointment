@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import '../widgets/shared_app_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

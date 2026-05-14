@@ -8,7 +8,7 @@ import 'package:doctor_appointment/features/chat/logic/conversations_state.dart'
 import 'package:doctor_appointment/features/chat/ui/widgets/conversation_tile.dart';
 import 'package:doctor_appointment/features/chat/data/models/conversation_model.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';

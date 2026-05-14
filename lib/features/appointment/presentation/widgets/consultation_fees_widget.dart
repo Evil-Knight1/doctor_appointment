@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -36,14 +37,14 @@ class ConsultationFeesWidget extends StatelessWidget {
                 SizedBox(height: 4.h),
                 Text(
                   _fees[i]['amount'] as String,
-                  style: AppStyles.styleSemiBold22.copyWith(
+                  style: context.styleSemiBold22.copyWith(
                     fontSize: 14.sp,
                     color: colorScheme.primary,
                   ),
                 ),
                 Text(
                   _fees[i]['label'] as String,
-                  style: AppStyles.styleRegular12.copyWith(
+                  style: context.styleRegular12.copyWith(
                     color: colorScheme.onSurfaceVariant,
                     fontSize: 10.sp,
                   ),

@@ -1,5 +1,6 @@
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/features/appointment/presentation/models/appointment_draft.dart';
 import 'package:doctor_appointment/features/on_boarding_view/presentation/widgets/custom_button.dart';
@@ -70,7 +71,7 @@ class _CheckoutViewState extends State<CheckoutView> {
           ),
           title: Text(
             'Payment',
-            style: AppStyles.styleSemiBold22.copyWith(fontSize: 18.sp),
+            style: context.styleSemiBold22.copyWith(fontSize: 18.sp),
           ),
         ),
         body: Padding(
@@ -78,7 +79,10 @@ class _CheckoutViewState extends State<CheckoutView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Select Payment Method', style: AppStyles.styleSemiBold16),
+              Text(
+                'Select Payment Method',
+                style: context.styleSemiBold16,
+              ),
               SizedBox(height: 16.h),
               _buildPaymentMethod(
                 4,
@@ -99,15 +103,13 @@ class _CheckoutViewState extends State<CheckoutView> {
                 children: [
                   Text(
                     'Total Fees:',
-                    style: AppStyles.styleMedium14.copyWith(
+                    style: context.styleMedium14.copyWith(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                   Text(
                     '\$${amount.toStringAsFixed(2)}',
-                    style: AppStyles.styleSemiBold24.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                    style: context.styleSemiBold24.copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
                 ],
               ),
@@ -155,7 +157,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                     width: double.infinity,
                     height: 50.h,
                     circleSize: 12.r,
-                    textStyle: AppStyles.styleSemiBold16,
+                    textStyle: context.styleSemiBold16.copyWith(color: Theme.of(context).colorScheme.onPrimary),
                     buttonColor: isLoading
                         ? Theme.of(context).colorScheme.outlineVariant
                         : Theme.of(context).colorScheme.primary,
@@ -177,7 +179,9 @@ class _CheckoutViewState extends State<CheckoutView> {
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
           color: isSelected
-              ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.1)
+              ? Theme.of(
+                  context,
+                ).colorScheme.primaryContainer.withValues(alpha: 0.1)
               : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
@@ -199,7 +203,7 @@ class _CheckoutViewState extends State<CheckoutView> {
             Expanded(
               child: Text(
                 label,
-                style: AppStyles.styleMedium14.copyWith(
+                style: context.styleMedium14.copyWith(
                   color: isSelected
                       ? Theme.of(context).colorScheme.primary
                       : Theme.of(context).colorScheme.onSurface,

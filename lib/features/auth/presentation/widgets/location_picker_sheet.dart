@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -119,7 +120,7 @@ class _LocationPickerSheetState extends State<LocationPickerSheet> {
               children: [
                 Text(
                   widget.title,
-                  style: AppStyles.styleBold18.copyWith(
+                  style: context.styleBold18.copyWith(
                     color: theme.textTheme.headlineLarge?.color,
                   ),
                 ),
@@ -233,12 +234,12 @@ class _LocationPickerSheetState extends State<LocationPickerSheet> {
                     ),
                     child: TextField(
                       controller: _searchController,
-                      style: AppStyles.styleMedium14.copyWith(
+                      style: context.styleMedium14.copyWith(
                         color: theme.textTheme.bodyLarge?.color,
                       ),
                       decoration: InputDecoration(
                         hintText: 'Search for a place...',
-                        hintStyle: AppStyles.styleRegular14.copyWith(
+                        hintStyle: context.styleRegular14.copyWith(
                           color: theme.hintColor,
                         ),
                         border: InputBorder.none,
@@ -329,7 +330,7 @@ class _LocationPickerSheetState extends State<LocationPickerSheet> {
                       Expanded(
                         child: Text(
                           _address,
-                          style: AppStyles.styleMedium14.copyWith(
+                          style: context.styleMedium14.copyWith(
                             color: theme.textTheme.bodyLarge?.color,
                           ),
                           maxLines: 2,
@@ -405,7 +406,7 @@ class _SubmitButton extends StatelessWidget {
               )
             : Text(
                 label,
-                style: AppStyles.styleSemiBold16.copyWith(color: Colors.white),
+                style: context.styleSemiBold16.copyWith(color: Colors.white),
               ),
       ),
     );

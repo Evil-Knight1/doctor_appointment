@@ -1,4 +1,4 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -61,7 +61,7 @@ class UserSelectionView extends StatelessWidget {
                   SizedBox(height: 16.h),
                   Text(
                     'MedLink+',
-                    style: AppStyles.styleBold24.copyWith(
+                    style: context.styleBold32.copyWith(
                       color: theme.colorScheme.primary,
                       letterSpacing: -0.5,
                     ),
@@ -72,7 +72,7 @@ class UserSelectionView extends StatelessWidget {
                   // Welcome Text
                   Text(
                     'Choose Your Role',
-                    style: AppStyles.styleBold32.copyWith(
+                    style: context.styleBold24.copyWith(
                       fontSize: 28.sp,
                       color: theme.textTheme.headlineLarge?.color,
                     ),
@@ -80,7 +80,7 @@ class UserSelectionView extends StatelessWidget {
                   SizedBox(height: 12.h),
                   Text(
                     'Are you looking for medical care or\noffering professional services?',
-                    style: AppStyles.styleRegular14.copyWith(
+                    style: context.bodyMedium.copyWith(
                       color: theme.textTheme.bodyMedium?.color,
                       height: 1.5,
                     ),
@@ -139,7 +139,7 @@ class UserSelectionView extends StatelessWidget {
                         children: [
                           Text(
                             'Already a member? ',
-                            style: AppStyles.styleRegular14.copyWith(
+                            style: context.bodyMedium.copyWith(
                               color: theme.textTheme.bodyMedium?.color,
                             ),
                           ),
@@ -147,7 +147,7 @@ class UserSelectionView extends StatelessWidget {
                             onTap: () => context.push(AppRouter.kLoginView),
                             child: Text(
                               'Sign In',
-                              style: AppStyles.styleSemiBold16.copyWith(
+                              style: context.bodyMedium.copyWith(
                                 color: theme.colorScheme.primary,
                                 fontSize: 14.sp,
                               ),
@@ -257,7 +257,7 @@ class _RoleCardState extends State<_RoleCard> {
               SizedBox(height: 24.h),
               Text(
                 widget.title,
-                style: AppStyles.styleBold32.copyWith(
+                style: context.styleBold20.copyWith(
                   fontSize: 20.sp,
                   color: active
                       ? theme.colorScheme.onPrimary
@@ -268,7 +268,7 @@ class _RoleCardState extends State<_RoleCard> {
               Text(
                 widget.description,
                 textAlign: TextAlign.center,
-                style: AppStyles.styleRegular12.copyWith(
+                style: context.bodySmall.copyWith(
                   fontSize: 12.sp,
                   color: active
                       ? theme.colorScheme.onPrimary.withValues(alpha: 0.9)

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/core/services/service_locator.dart';
 import 'package:doctor_appointment/features/auth/presentation/widgets/registration_date_picker.dart';
 import 'package:doctor_appointment/features/auth/presentation/widgets/registration_dropdown.dart';
@@ -83,9 +83,7 @@ class _EditProfileViewState extends State<EditProfileView> {
           ),
           title: Text(
             'Edit Profile',
-            style: AppStyles.styleSemiBold18.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+            style: context.styleSemiBold18.copyWith(color: Theme.of(context).colorScheme.onSurface),
           ),
         ),
         body: BlocConsumer<ProfileCubit, ProfileState>(
@@ -120,7 +118,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                             height: 100.r,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Theme.of(context).colorScheme.primaryContainer,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primaryContainer,
                               border: Border.all(color: Colors.white, width: 3),
                               boxShadow: [
                                 BoxShadow(
@@ -138,30 +138,37 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     )
                                   : (widget.profile.profilePicture != null
                                         ? CachedNetworkImage(
-                                            imageUrl:
-                                                ImageUrlHelper.getFullUrl(widget.profile.profilePicture),
-                                            httpHeaders: ImageUrlHelper.getImageHeaders(),
+                                            imageUrl: ImageUrlHelper.getFullUrl(
+                                              widget.profile.profilePicture,
+                                            ),
+                                            httpHeaders:
+                                                ImageUrlHelper.getImageHeaders(),
                                             fit: BoxFit.cover,
                                             placeholder: (context, url) =>
                                                 Center(
                                                   child:
                                                       CircularProgressIndicator(
                                                         strokeWidth: 2,
-                                                        color:
-                                                            Theme.of(context).colorScheme.primary,
+                                                        color: Theme.of(
+                                                          context,
+                                                        ).colorScheme.primary,
                                                       ),
                                                 ),
                                             errorWidget:
                                                 (context, url, error) => Icon(
                                                   Icons.person_rounded,
                                                   size: 50.sp,
-                                                  color: Theme.of(context).colorScheme.primary,
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.primary,
                                                 ),
                                           )
                                         : Icon(
                                             Icons.person_rounded,
                                             size: 50.sp,
-                                            color: Theme.of(context).colorScheme.primary,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.primary,
                                           )),
                             ),
                           ),
@@ -176,7 +183,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                                   color: Theme.of(context).colorScheme.primary,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: Theme.of(context).colorScheme.surface,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surface,
                                     width: 2,
                                   ),
                                 ),
@@ -250,7 +259,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                       child: ElevatedButton(
                         onPressed: isLoading ? null : _submit,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14.r),
                           ),
@@ -267,9 +278,12 @@ class _EditProfileViewState extends State<EditProfileView> {
                               )
                             : Text(
                                 'Save Changes',
-                                style: AppStyles.styleSemiBold16.copyWith(
-                                  color: Theme.of(context).colorScheme.onPrimary,
-                                ),
+                                style: context.styleSemiBold16
+                                    .copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onPrimary,
+                                    ),
                               ),
                       ),
                     ),

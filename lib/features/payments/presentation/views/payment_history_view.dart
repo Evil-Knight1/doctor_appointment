@@ -1,5 +1,5 @@
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,10 +27,7 @@ class PaymentHistoryView extends StatelessWidget {
         ),
         title: Text(
           'Payment History',
-          style: AppStyles.styleSemiBold22.copyWith(
-            fontSize: 18.sp,
-            color: colorScheme.onSurface,
-          ),
+          style: context.styleSemiBold22.copyWith(fontSize: 18.sp, color: colorScheme.onSurface),
         ),
       ),
       body: ListView.separated(
@@ -52,11 +49,23 @@ class PaymentHistoryView extends StatelessWidget {
   Widget _buildTransactionCard(BuildContext context, int index) {
     final colorScheme = Theme.of(context).colorScheme;
     final customColors = context.customColors;
-    
+
     final amounts = ['\$15.00', '\$20.00', '\$18.00', '\$15.00', '\$25.00'];
-    final labels = ['Dentist Consultation', 'ENT Specialist', 'Ophthalmologist check', 'Follow-up', 'Therapy Session'];
-    final statuses = ['Completed', 'Completed', 'Refunded', 'Completed', 'Completed'];
-    
+    final labels = [
+      'Dentist Consultation',
+      'ENT Specialist',
+      'Ophthalmologist check',
+      'Follow-up',
+      'Therapy Session',
+    ];
+    final statuses = [
+      'Completed',
+      'Completed',
+      'Refunded',
+      'Completed',
+      'Completed',
+    ];
+
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
@@ -87,14 +96,12 @@ class PaymentHistoryView extends StatelessWidget {
                 children: [
                   Text(
                     labels[index % labels.length],
-                    style: AppStyles.styleMedium14.copyWith(
-                      color: colorScheme.onSurface,
-                    ),
+                    style: context.styleMedium14.copyWith(color: colorScheme.onSurface),
                   ),
                   SizedBox(height: 4.h),
                   Text(
                     statuses[index % statuses.length],
-                    style: AppStyles.styleRegular12.copyWith(
+                    style: context.styleRegular12.copyWith(
                       color: statuses[index % statuses.length] == 'Refunded'
                           ? customColors.error
                           : customColors.success,
@@ -106,9 +113,7 @@ class PaymentHistoryView extends StatelessWidget {
           ),
           Text(
             amounts[index % amounts.length],
-            style: AppStyles.styleSemiBold16.copyWith(
-              color: colorScheme.onSurface,
-            ),
+            style: context.styleSemiBold16.copyWith(color: colorScheme.onSurface),
           ),
         ],
       ),

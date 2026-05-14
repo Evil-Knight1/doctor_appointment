@@ -81,5 +81,58 @@ class AppCustomColors extends ThemeExtension<AppCustomColors> {
 }
 
 extension CustomTheme on BuildContext {
-  AppCustomColors get customColors => Theme.of(this).extension<AppCustomColors>()!;
+  AppCustomColors get customColors =>
+      Theme.of(this).extension<AppCustomColors>()!;
+
+  TextTheme get textTheme => Theme.of(this).textTheme;
+
+  // Standard Material 3 Text Styles
+  TextStyle get displayLarge => textTheme.displayLarge!;
+  TextStyle get displayMedium => textTheme.displayMedium!;
+  TextStyle get displaySmall => textTheme.displaySmall!;
+  TextStyle get headlineLarge => textTheme.headlineLarge!;
+  TextStyle get headlineMedium => textTheme.headlineMedium!;
+  TextStyle get headlineSmall => textTheme.headlineSmall!;
+  TextStyle get titleLarge => textTheme.titleLarge!;
+  TextStyle get titleMedium => textTheme.titleMedium!;
+  TextStyle get titleSmall => textTheme.titleSmall!;
+  TextStyle get bodyLarge => textTheme.bodyLarge!;
+  TextStyle get bodyMedium => textTheme.bodyMedium!;
+  TextStyle get bodySmall => textTheme.bodySmall!;
+  TextStyle get labelLarge => textTheme.labelLarge!;
+  TextStyle get labelMedium => textTheme.labelMedium!;
+  TextStyle get labelSmall => textTheme.labelSmall!;
+
+  // Legacy & Specific App Styles (Aliases)
+  TextStyle get styleBold32 => textTheme.displayLarge!;
+  TextStyle get styleBold24 => textTheme.displaySmall!;
+  TextStyle get styleBold20 => textTheme.headlineSmall!;
+  TextStyle get styleSemiBold24 =>
+      textTheme.displaySmall!.copyWith(fontWeight: FontWeight.w600);
+  TextStyle get styleSemiBold22 => textTheme.headlineMedium!;
+  TextStyle get styleSemiBold20 => textTheme.headlineSmall!;
+  TextStyle get styleSemiBold18 =>
+      textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600);
+  TextStyle get styleSemiBold16 => textTheme.titleMedium!;
+  TextStyle get styleSemiBold14 => textTheme.titleSmall!;
+  TextStyle get styleBold18 => textTheme.titleLarge!;
+  TextStyle get styleBold16 =>
+      textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold);
+  TextStyle get styleBold14 =>
+      textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold);
+  TextStyle get styleMedium14 =>
+      textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w500);
+  TextStyle get styleMedium12 => textTheme.labelMedium!;
+  TextStyle get styleRegular14 => textTheme.bodyMedium!;
+  TextStyle get styleRegular12 => textTheme.bodySmall!;
+  TextStyle get styleRegular10 => textTheme.labelSmall!;
+
+  // AppTextStyles & Semantic Aliases
+  TextStyle get headingLarge => textTheme.titleLarge!;
+  TextStyle get headingMedium => textTheme.titleSmall!.copyWith(fontSize: 15);
+  TextStyle get headingSmall => textTheme.titleSmall!;
+  TextStyle get sectionTitle =>
+      textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold);
+  TextStyle get greetingTitle =>
+      textTheme.titleLarge!.copyWith(color: Colors.white, height: 1.3);
 }

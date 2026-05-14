@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -84,7 +85,7 @@ class _RegistrationTextFieldState extends State<RegistrationTextField> {
         RichText(
           text: TextSpan(
             text: widget.label,
-            style: AppStyles.styleMedium14.copyWith(
+            style: context.styleMedium14.copyWith(
               color: _isFocused 
                   ? theme.colorScheme.primary 
                   : theme.textTheme.headlineLarge?.color,
@@ -93,7 +94,7 @@ class _RegistrationTextFieldState extends State<RegistrationTextField> {
               if (widget.isRequired)
                 TextSpan(
                   text: ' *',
-                  style: AppStyles.styleMedium14.copyWith(
+                  style: context.styleMedium14.copyWith(
                     color: theme.colorScheme.error,
                   ),
                 ),
@@ -124,7 +125,7 @@ class _RegistrationTextFieldState extends State<RegistrationTextField> {
             textInputAction: widget.textInputAction,
             focusNode: _focusNode,
             onFieldSubmitted: widget.onFieldSubmitted,
-            style: AppStyles.styleMedium14.copyWith(
+            style: context.styleMedium14.copyWith(
               color: theme.textTheme.headlineLarge?.color,
             ),
             validator: widget.validator ?? (value) {

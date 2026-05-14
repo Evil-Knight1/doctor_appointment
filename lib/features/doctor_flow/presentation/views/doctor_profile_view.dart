@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_profile_cubit.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_profile_state.dart';
@@ -35,10 +36,7 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
         automaticallyImplyLeading: false,
         title: Text(
           'Doctor Profile',
-          style: AppStyles.styleSemiBold22.copyWith(
-            fontSize: 18.sp,
-            color: colorScheme.onSurface,
-          ),
+          style: context.styleSemiBold22.copyWith(fontSize: 18.sp, color: colorScheme.onSurface),
         ),
       ),
       body: BlocListener<DoctorProfileCubit, DoctorProfileState>(
@@ -76,24 +74,18 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
                     SizedBox(height: 16.h),
                     Text(
                       doctor?.fullName ?? 'Doctor Full Name',
-                      style: AppStyles.styleSemiBold22.copyWith(
-                        color: colorScheme.onSurface,
-                      ),
+                      style: context.styleSemiBold22.copyWith(color: colorScheme.onSurface),
                     ),
                     Text(
                       doctor?.specialization.name ?? 'Specialization',
-                      style: AppStyles.styleRegular14.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
+                      style: context.styleRegular14.copyWith(color: colorScheme.onSurfaceVariant),
                     ),
                     SizedBox(height: 32.h),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Management',
-                        style: AppStyles.styleSemiBold16.copyWith(
-                          color: colorScheme.onSurface,
-                        ),
+                        style: context.styleSemiBold16.copyWith(color: colorScheme.onSurface),
                       ),
                     ),
                     SizedBox(height: 12.h),
@@ -151,7 +143,7 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
                             SizedBox(width: 8.w),
                             Text(
                               'Log Out',
-                              style: AppStyles.styleMedium14.copyWith(
+                              style: context.styleMedium14.copyWith(
                                 color: colorScheme.error,
                                 fontSize: 15.sp,
                               ),
@@ -183,25 +175,18 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
         ),
         title: Text(
           'Log Out',
-          style: AppStyles.styleSemiBold22.copyWith(
-            fontSize: 16.sp,
-            color: colorScheme.onSurface,
-          ),
+          style: context.styleSemiBold22.copyWith(fontSize: 16.sp, color: colorScheme.onSurface),
         ),
         content: Text(
           'Are you sure you want to log out?',
-          style: AppStyles.styleRegular14.copyWith(
-            color: colorScheme.onSurfaceVariant,
-          ),
+          style: context.styleRegular14.copyWith(color: colorScheme.onSurfaceVariant),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
               'Cancel',
-              style: AppStyles.styleMedium14.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
+              style: context.styleMedium14.copyWith(color: colorScheme.onSurfaceVariant),
             ),
           ),
           TextButton(
@@ -213,7 +198,7 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
             },
             child: Text(
               'Log Out',
-              style: AppStyles.styleMedium14.copyWith(color: colorScheme.error),
+              style: context.styleMedium14.copyWith(color: colorScheme.error),
             ),
           ),
         ],
@@ -221,4 +206,3 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
     );
   }
 }
-

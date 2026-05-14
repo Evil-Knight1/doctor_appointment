@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import '../widgets/doctor_bottom_card.dart';
 import '../widgets/shared_app_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

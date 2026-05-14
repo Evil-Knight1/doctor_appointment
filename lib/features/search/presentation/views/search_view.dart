@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/core/services/service_locator.dart';
 import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 import 'package:doctor_appointment/features/doctors/logic/doctors_cubit.dart';
@@ -116,7 +117,7 @@ class _SearchViewState extends State<SearchView> {
       padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 8.h),
       child: Text(
         'Find a Doctor',
-        style: AppStyles.styleSemiBold22.copyWith(fontSize: 20.sp),
+        style: context.styleSemiBold22.copyWith(fontSize: 20.sp),
       ),
     );
   }
@@ -138,7 +139,7 @@ class _SearchViewState extends State<SearchView> {
           onSubmitted: (_) => _search(),
           decoration: InputDecoration(
             hintText: 'Search by name or specialty...',
-            hintStyle: AppStyles.styleRegular14.copyWith(
+            hintStyle: context.styleRegular14.copyWith(
               color: colorScheme.outline,
               fontSize: 13.sp,
             ),
@@ -212,7 +213,7 @@ class _SearchViewState extends State<SearchView> {
                   ),
                   child: Text(
                     name,
-                    style: AppStyles.styleRegular12.copyWith(
+                    style: context.styleRegular12.copyWith(
                       color: isSelected 
                           ? Theme.of(context).colorScheme.onPrimary 
                           : Theme.of(context).colorScheme.onSurfaceVariant,
@@ -242,7 +243,7 @@ class _SearchViewState extends State<SearchView> {
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
           child: Text(
             '${page.totalCount} results found',
-            style: AppStyles.styleRegular12.copyWith(
+            style: context.styleRegular12.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
@@ -295,7 +296,7 @@ class _SearchViewState extends State<SearchView> {
                 SizedBox(height: 12.h),
                 Text(
                   state.message,
-                  style: AppStyles.styleRegular14.copyWith(
+                  style: context.styleRegular14.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                   textAlign: TextAlign.center,
@@ -326,14 +327,14 @@ class _SearchViewState extends State<SearchView> {
                     SizedBox(height: 12.h),
                     Text(
                       'No doctors found',
-                      style: AppStyles.styleSemiBold22.copyWith(
+                      style: context.styleSemiBold22.copyWith(
                         fontSize: 16.sp,
                       ),
                     ),
                     SizedBox(height: 6.h),
                     Text(
                       'Try a different search or specialty',
-                      style: AppStyles.styleRegular14.copyWith(
+                      style: context.styleRegular14.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),

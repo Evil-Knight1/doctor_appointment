@@ -1,8 +1,9 @@
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/go_router.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 
 class AppointmentCard extends StatelessWidget {
   final String name;
@@ -94,7 +95,7 @@ class AppointmentCard extends StatelessWidget {
             children: [
               Text(
                 name,
-                style: AppStyles.styleMedium14.copyWith(
+                style: context.styleMedium14.copyWith(
                   fontSize: 14.sp,
                   color: colorScheme.onSurface,
                 ),
@@ -102,7 +103,7 @@ class AppointmentCard extends StatelessWidget {
               SizedBox(height: 2.h),
               Text(
                 specialty,
-                style: AppStyles.styleRegular12.copyWith(
+                style: context.styleRegular12.copyWith(
                   color: colorScheme.onSurfaceVariant,
                 ),
               ),
@@ -117,7 +118,7 @@ class AppointmentCard extends StatelessWidget {
                   SizedBox(width: 4.w),
                   Text(
                     date,
-                    style: AppStyles.styleRegular12.copyWith(
+                    style: context.styleRegular12.copyWith(
                       color: colorScheme.onSurfaceVariant,
                       fontSize: 11.sp,
                     ),
@@ -131,7 +132,7 @@ class AppointmentCard extends StatelessWidget {
                   SizedBox(width: 4.w),
                   Text(
                     time,
-                    style: AppStyles.styleRegular12.copyWith(
+                    style: context.styleRegular12.copyWith(
                       color: colorScheme.onSurfaceVariant,
                       fontSize: 11.sp,
                     ),
@@ -161,7 +162,7 @@ class AppointmentCard extends StatelessWidget {
             ),
             child: Text(
               'Re-book',
-              style: AppStyles.styleMedium14.copyWith(
+              style: context.styleMedium14.copyWith(
                 color: colorScheme.primary,
                 fontSize: 12.sp,
               ),
@@ -185,7 +186,7 @@ class AppointmentCard extends StatelessWidget {
             ),
             child: Text(
               isCompleted || isCancelled ? 'Leave Review' : 'Cancel',
-              style: AppStyles.styleMedium14.copyWith(
+              style: context.styleMedium14.copyWith(
                 color: colorScheme.onPrimary,
                 fontSize: 12.sp,
               ),

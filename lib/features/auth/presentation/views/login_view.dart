@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/features/auth/logic/auth_cubit.dart';
 import 'package:doctor_appointment/features/auth/logic/auth_state.dart';
@@ -70,11 +71,11 @@ class _LoginViewState extends State<LoginView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 30.h),
-                        Text(l10n.welcomeBack, style: AppStyles.styleBold32),
+                        Text(l10n.welcomeBack, style: context.styleBold32),
                         SizedBox(height: 8.h),
                         Text(
                           l10n.welcomeBackSubtitle,
-                          style: AppStyles.styleRegular14.copyWith(
+                          style: context.styleRegular14.copyWith(
                             color: theme.textTheme.bodyMedium?.color,
                           ),
                         ),
@@ -100,7 +101,7 @@ class _LoginViewState extends State<LoginView> {
                             },
                             child: Text(
                               l10n.forgotPassword,
-                              style: AppStyles.styleRegular12.copyWith(
+                              style: context.styleRegular12.copyWith(
                                 color: theme.colorScheme.primary,
                               ),
                             ),
@@ -126,7 +127,7 @@ class _LoginViewState extends State<LoginView> {
                                     );
                                   },
                             buttonColor: theme.colorScheme.primary,
-                            textStyle: AppStyles.styleSemiBold16.copyWith(
+                            textStyle: context.styleSemiBold16.copyWith(
                               color: Colors.white,
                             ),
                             circleSize: 16.r,
@@ -158,7 +159,7 @@ class _LoginViewState extends State<LoginView> {
                               children: [
                                 Text(
                                   l10n.dontHaveAccount,
-                                  style: AppStyles.styleRegular14.copyWith(
+                                  style: context.styleRegular14.copyWith(
                                     color: theme.textTheme.bodyMedium?.color,
                                   ),
                                 ),
@@ -168,7 +169,7 @@ class _LoginViewState extends State<LoginView> {
                                   },
                                   child: Text(
                                     l10n.signUp,
-                                    style: AppStyles.styleRegular14.copyWith(
+                                    style: context.styleRegular14.copyWith(
                                       color: theme.colorScheme.primary,
                                     ),
                                   ),

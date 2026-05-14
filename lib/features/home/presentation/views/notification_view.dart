@@ -9,7 +9,8 @@ import 'package:doctor_appointment/features/home/logic/notification_state.dart';
 import '../widgets/notification_tile.dart';
 import '../widgets/shared_app_bar.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 
 class NotificationsView extends StatelessWidget {
   const NotificationsView({super.key});

@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/features/auth/logic/auth_cubit.dart';
 import 'package:doctor_appointment/features/auth/logic/auth_state.dart';
 import 'package:doctor_appointment/core/utils/app_images.dart';
@@ -222,7 +223,7 @@ class _SignUpViewState extends State<SignUpView> {
                     ).createShader(bounds),
                     child: Text(
                       l10n.patientRegistration,
-                      style: AppStyles.styleBold16.copyWith(
+                      style: context.styleBold16.copyWith(
                         color: Colors.white,
                       ),
                     ),
@@ -230,7 +231,7 @@ class _SignUpViewState extends State<SignUpView> {
                   SizedBox(height: 2.h),
                   Text(
                     '${l10n.step} ${_currentPage + 1} ${l10n.stepOf} 2',
-                    style: AppStyles.styleMedium12.copyWith(
+                    style: context.styleMedium12.copyWith(
                       color: Theme.of(context).textTheme.bodyMedium?.color,
                     ),
                   ),
@@ -255,14 +256,14 @@ class _SignUpViewState extends State<SignUpView> {
           SizedBox(height: 12.h),
           Text(
             l10n.accountInfo,
-            style: AppStyles.styleSemiBold24.copyWith(
+            style: context.styleSemiBold24.copyWith(
               color: Theme.of(context).textTheme.headlineMedium?.color,
             ),
           ),
           SizedBox(height: 8.h),
           Text(
             l10n.accountInfoSubtitle,
-            style: AppStyles.styleRegular14.copyWith(
+            style: context.styleRegular14.copyWith(
               color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
@@ -351,14 +352,14 @@ class _SignUpViewState extends State<SignUpView> {
           SizedBox(height: 12.h),
           Text(
             l10n.personalDetails,
-            style: AppStyles.styleSemiBold24.copyWith(
+            style: context.styleSemiBold24.copyWith(
               color: Theme.of(context).textTheme.headlineMedium?.color,
             ),
           ),
           SizedBox(height: 8.h),
           Text(
             l10n.personalDetailsSubtitle,
-            style: AppStyles.styleRegular14.copyWith(
+            style: context.styleRegular14.copyWith(
               color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),

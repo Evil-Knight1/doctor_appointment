@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:doctor_appointment/features/appointment/presentation/models/appointment_draft.dart';
 import 'package:doctor_appointment/core/utils/go_router.dart';
@@ -91,7 +92,7 @@ class _NewAppointmentViewState extends State<NewAppointmentView> {
         ),
         title: Text(
           'New Appointment',
-          style: AppStyles.styleSemiBold22.copyWith(
+          style: context.styleSemiBold22.copyWith(
             fontSize: 18.sp,
             color: colorScheme.onSurface,
           ),
@@ -158,7 +159,7 @@ class _NewAppointmentViewState extends State<NewAppointmentView> {
                           return Center(
                             child: Text(
                               state.message,
-                              style: AppStyles.styleMedium14.copyWith(
+                              style: context.styleMedium14.copyWith(
                                 color: colorScheme.error,
                               ),
                             ),
@@ -192,7 +193,7 @@ class _NewAppointmentViewState extends State<NewAppointmentView> {
   }
 
   Widget _sectionTitle(String title, ColorScheme colorScheme) =>
-      Text(title, style: AppStyles.styleSemiBold22.copyWith(
+      Text(title, style: context.styleSemiBold22.copyWith(
         fontSize: 15.sp,
         color: colorScheme.onSurface,
       ));
@@ -229,7 +230,7 @@ class _NewAppointmentViewState extends State<NewAppointmentView> {
           ),
           child: Text(
             'Book Appointment',
-            style: AppStyles.styleSemiBold16.copyWith(
+            style: context.styleSemiBold16.copyWith(
               color: _selectedSlot == null
                   ? colorScheme.onSurfaceVariant
                   : colorScheme.onPrimary,

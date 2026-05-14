@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,10 +27,7 @@ class MedicalRecordsView extends StatelessWidget {
         ),
         title: Text(
           'Medical Records',
-          style: AppStyles.styleSemiBold22.copyWith(
-            fontSize: 18.sp,
-            color: colorScheme.onSurface,
-          ),
+          style: context.styleSemiBold18.copyWith(color: colorScheme.onSurface),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -54,17 +52,27 @@ class MedicalRecordsView extends StatelessWidget {
       'Blood Test Results',
       'Dental X-Ray',
       'General Checkup',
-      'Eye Vision Prescription'
+      'Eye Vision Prescription',
     ];
-    final dates = ['12 Oct, 2023', '05 Sep, 2023', '14 Jul, 2023', '22 Jan, 2023'];
+    final dates = [
+      '12 Oct, 2023',
+      '05 Sep, 2023',
+      '14 Jul, 2023',
+      '22 Jan, 2023',
+    ];
     final icons = [
       Icons.bloodtype_outlined,
       Icons.masks_outlined,
       Icons.health_and_safety_outlined,
-      Icons.remove_red_eye_outlined
+      Icons.remove_red_eye_outlined,
     ];
-    final docs = ['Dr. Sarah', 'Dr. Ayesha Rahman', 'Dr. Noble Thorme', 'Dr. Sarah'];
-    
+    final docs = [
+      'Dr. Sarah',
+      'Dr. Ayesha Rahman',
+      'Dr. Noble Thorme',
+      'Dr. Sarah',
+    ];
+
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
@@ -100,21 +108,17 @@ class MedicalRecordsView extends StatelessWidget {
               children: [
                 Text(
                   titles[index % titles.length],
-                  style: AppStyles.styleSemiBold16.copyWith(
-                    color: colorScheme.onSurface,
-                  ),
+                  style: context.styleSemiBold16.copyWith(color: colorScheme.onSurface),
                 ),
                 SizedBox(height: 4.h),
                 Text(
                   'Added by ${docs[index % docs.length]}',
-                  style: AppStyles.styleMedium14.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
+                  style: context.styleMedium14.copyWith(color: colorScheme.onSurfaceVariant),
                 ),
                 SizedBox(height: 4.h),
                 Text(
                   dates[index % dates.length],
-                  style: AppStyles.styleRegular12.copyWith(
+                  style: context.styleRegular12.copyWith(
                     color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
                   ),
                 ),

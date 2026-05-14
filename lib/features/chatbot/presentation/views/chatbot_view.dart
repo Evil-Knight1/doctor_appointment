@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/features/chatbot/logic/chat_cubit.dart';
 
 class ChatbotView extends StatefulWidget {
@@ -74,13 +74,13 @@ class _ChatbotViewState extends State<ChatbotView> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('AI Assistant', style: AppStyles.styleSemiBold16),
+                Text('AI Assistant', style: context.styleSemiBold16),
                 BlocBuilder<ChatCubit, ChatState>(
                   builder: (context, state) {
                     if (state.status == ChatStatus.loading) {
                       return Text(
                         'Connecting...',
-                        style: AppStyles.styleRegular12.copyWith(
+                        style: context.styleRegular12.copyWith(
                           color: Colors.orange,
                         ),
                       );
@@ -88,14 +88,12 @@ class _ChatbotViewState extends State<ChatbotView> {
                     if (state.status == ChatStatus.sending) {
                       return Text(
                         'Typing...',
-                        style: AppStyles.styleRegular12.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                        style: context.styleRegular12.copyWith(color: Theme.of(context).colorScheme.primary),
                       );
                     }
                     return Text(
                       'Online',
-                      style: AppStyles.styleRegular12.copyWith(
+                      style: context.styleRegular12.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     );
@@ -141,40 +139,48 @@ class _ChatbotViewState extends State<ChatbotView> {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                  _buildUserMessage(context, message.userMessage),
+                                _buildUserMessage(context, message.userMessage),
+                                SizedBox(height: 16.h),
+                                _buildBotMessage(context, message.aiMessage),
+                              ],
+                            );
+                          } else {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                if (state.pendingUserMessage != null) ...[
+                                  _buildUserMessage(
+                                    context,
+                                    state.pendingUserMessage!,
+                                  ),
                                   SizedBox(height: 16.h),
-                                  _buildBotMessage(context, message.aiMessage),
                                 ],
-                              );
-                            } else {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  if (state.pendingUserMessage != null) ...[
-                                    _buildUserMessage(context, state.pendingUserMessage!),
-                                    SizedBox(height: 16.h),
-                                  ],
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      padding: EdgeInsets.all(12.w),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).colorScheme.surface,
-                                        borderRadius: BorderRadius.circular(16.r),
-                                        border: Border.all(
-                                          color: Theme.of(context).dividerColor,
-                                        ),
-                                      ),
-                                      child: Text(
-                                        "...",
-                                        style: AppStyles.styleRegular14.copyWith(
-                                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                        ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    padding: EdgeInsets.all(12.w),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.surface,
+                                      borderRadius: BorderRadius.circular(16.r),
+                                      border: Border.all(
+                                        color: Theme.of(context).dividerColor,
                                       ),
                                     ),
+                                    child: Text(
+                                      "...",
+                                      style: context.styleRegular14
+                                          .copyWith(
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.onSurfaceVariant,
+                                          ),
+                                    ),
                                   ),
-                                ],
-                              );
+                                ),
+                              ],
+                            );
                           }
                         },
                       ),
@@ -210,10 +216,7 @@ class _ChatbotViewState extends State<ChatbotView> {
         ),
         child: Text(
           text,
-          style: AppStyles.styleRegular14.copyWith(
-            height: 1.5,
-            color: colorScheme.onSurface,
-          ),
+          style: context.styleRegular14.copyWith(height: 1.5, color: colorScheme.onSurface),
         ),
       ),
     );
@@ -236,10 +239,7 @@ class _ChatbotViewState extends State<ChatbotView> {
         ),
         child: Text(
           text,
-          style: AppStyles.styleRegular14.copyWith(
-            color: colorScheme.onPrimary,
-            height: 1.5,
-          ),
+          style: context.styleRegular14.copyWith(color: colorScheme.onPrimary, height: 1.5),
         ),
       ),
     );
@@ -271,7 +271,7 @@ class _ChatbotViewState extends State<ChatbotView> {
                   hintText: isSending
                       ? 'Wait for AI...'
                       : 'Type your message...',
-                  hintStyle: AppStyles.styleRegular14.copyWith(
+                  hintStyle: context.styleRegular14.copyWith(
                     color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
                   ),
                   border: InputBorder.none,
@@ -297,7 +297,11 @@ class _ChatbotViewState extends State<ChatbotView> {
                         strokeWidth: 2.w,
                       ),
                     )
-                  : Icon(Icons.send_rounded, color: colorScheme.onPrimary, size: 20.sp),
+                  : Icon(
+                      Icons.send_rounded,
+                      color: colorScheme.onPrimary,
+                      size: 20.sp,
+                    ),
             ),
           ),
         ],

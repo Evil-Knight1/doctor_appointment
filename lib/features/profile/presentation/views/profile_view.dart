@@ -1,7 +1,8 @@
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/core/services/shared_preferences_helper.dart';
 import 'package:doctor_appointment/core/logic/theme_cubit.dart';
@@ -41,7 +42,7 @@ class _ProfileViewState extends State<ProfileView> {
         automaticallyImplyLeading: false,
         title: Text(
           l10n.profile,
-          style: AppStyles.styleSemiBold22.copyWith(fontSize: 18.sp),
+          style: context.styleSemiBold22.copyWith(fontSize: 18.sp),
         ),
       ),
       body: LiquidPullToRefresh(
@@ -90,7 +91,7 @@ class _ProfileViewState extends State<ProfileView> {
                           padding: EdgeInsets.symmetric(vertical: 20.h),
                           child: Text(
                             state.message,
-                            style: AppStyles.styleRegular14.copyWith(
+                            style: context.styleRegular14.copyWith(
                               color: colorScheme.onSurfaceVariant,
                             ),
                           ),
@@ -230,7 +231,7 @@ class _ProfileViewState extends State<ProfileView> {
                           SizedBox(width: 8.w),
                           Text(
                             l10n.logout,
-                            style: AppStyles.styleMedium14.copyWith(
+                            style: context.styleMedium14.copyWith(
                               color: colorScheme.error,
                               fontSize: 15.sp,
                             ),
@@ -254,7 +255,7 @@ class _ProfileViewState extends State<ProfileView> {
       alignment: Alignment.centerLeft,
       child: Text(
         label,
-        style: AppStyles.styleSemiBold22.copyWith(fontSize: 14.sp),
+        style: context.styleSemiBold22.copyWith(fontSize: 14.sp),
       ),
     );
   }
@@ -289,7 +290,7 @@ class _ProfileViewState extends State<ProfileView> {
             SizedBox(height: 16.h),
             Text(
               l10n.selectLanguage,
-              style: AppStyles.styleSemiBold22.copyWith(fontSize: 16.sp),
+              style: context.styleSemiBold22.copyWith(fontSize: 16.sp),
             ),
             SizedBox(height: 16.h),
             _LanguageOption(
@@ -325,11 +326,11 @@ class _ProfileViewState extends State<ProfileView> {
         ),
         title: Text(
           l10n.logout,
-          style: AppStyles.styleSemiBold22.copyWith(fontSize: 16.sp),
+          style: context.styleSemiBold22.copyWith(fontSize: 16.sp),
         ),
         content: Text(
           l10n.logoutConfirm,
-          style: AppStyles.styleRegular14.copyWith(
+          style: context.styleRegular14.copyWith(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
@@ -338,7 +339,7 @@ class _ProfileViewState extends State<ProfileView> {
             onPressed: () => Navigator.pop(context),
             child: Text(
               l10n.cancel,
-              style: AppStyles.styleMedium14.copyWith(
+              style: context.styleMedium14.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
@@ -352,7 +353,7 @@ class _ProfileViewState extends State<ProfileView> {
             },
             child: Text(
               l10n.logout,
-              style: AppStyles.styleMedium14.copyWith(
+              style: context.styleMedium14.copyWith(
                 color: Theme.of(context).colorScheme.error,
               ),
             ),
@@ -383,7 +384,7 @@ class _LanguageOption extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(label, style: AppStyles.styleMedium14),
+            Text(label, style: context.styleMedium14),
             if (isSelected)
               Icon(
                 Icons.check_rounded,

@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/features/auth/presentation/widgets/custom_text_field.dart';
 import 'package:doctor_appointment/features/on_boarding_view/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +28,7 @@ class CreateRecordView extends StatelessWidget {
         ),
         title: Text(
           'Add Medical Record',
-          style: AppStyles.styleSemiBold22.copyWith(
-            fontSize: 18.sp,
-            color: colorScheme.onSurface,
-          ),
+          style: context.styleSemiBold18.copyWith(color: colorScheme.onSurface),
         ),
       ),
       body: SingleChildScrollView(
@@ -40,9 +38,7 @@ class CreateRecordView extends StatelessWidget {
           children: [
             Text(
               'Record Title',
-              style: AppStyles.styleMedium14.copyWith(
-                color: colorScheme.onSurface,
-              ),
+              style: context.styleMedium14.copyWith(color: colorScheme.onSurface),
             ),
             SizedBox(height: 8.h),
             const CustomTextFormField(
@@ -52,9 +48,7 @@ class CreateRecordView extends StatelessWidget {
             SizedBox(height: 20.h),
             Text(
               'Doctor/Facility Name',
-              style: AppStyles.styleMedium14.copyWith(
-                color: colorScheme.onSurface,
-              ),
+              style: context.styleMedium14.copyWith(color: colorScheme.onSurface),
             ),
             SizedBox(height: 8.h),
             const CustomTextFormField(
@@ -64,18 +58,14 @@ class CreateRecordView extends StatelessWidget {
             SizedBox(height: 20.h),
             Text(
               'Upload Document',
-              style: AppStyles.styleMedium14.copyWith(
-                color: colorScheme.onSurface,
-              ),
+              style: context.styleMedium14.copyWith(color: colorScheme.onSurface),
             ),
             SizedBox(height: 8.h),
             _buildUploadBox(context),
             SizedBox(height: 20.h),
             Text(
               'Additional Notes',
-              style: AppStyles.styleMedium14.copyWith(
-                color: colorScheme.onSurface,
-              ),
+              style: context.styleMedium14.copyWith(color: colorScheme.onSurface),
             ),
             SizedBox(height: 8.h),
             const CustomTextFormField(
@@ -87,16 +77,16 @@ class CreateRecordView extends StatelessWidget {
               text: 'Save Record',
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Record simulated successfully!')),
+                  const SnackBar(
+                    content: Text('Record simulated successfully!'),
+                  ),
                 );
                 context.pop();
               },
               width: double.infinity,
               height: 50.h,
               circleSize: 12.r,
-              textStyle: AppStyles.styleSemiBold16.copyWith(
-                color: colorScheme.onPrimary,
-              ),
+              textStyle: context.styleSemiBold16.copyWith(color: colorScheme.onPrimary),
               buttonColor: colorScheme.primary,
             ),
           ],
@@ -128,13 +118,10 @@ class CreateRecordView extends StatelessWidget {
           SizedBox(height: 12.h),
           Text(
             'Tap to upload PDF, JPG, or PNG',
-            style: AppStyles.styleMedium14.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
+            style: context.styleMedium14.copyWith(color: colorScheme.onSurfaceVariant),
           ),
         ],
       ),
     );
   }
 }
-

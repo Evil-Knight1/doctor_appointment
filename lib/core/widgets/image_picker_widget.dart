@@ -1,5 +1,6 @@
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'dart:io';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/core/utils/image_picker_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,7 +26,7 @@ class ProfileImagePicker extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppStyles.styleMedium14(context).copyWith(
+          style: context.styleMedium14.copyWith(
             color: colorScheme.onSurface,
           ),
         ),
@@ -151,7 +152,7 @@ class MultiImagePicker extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppStyles.styleMedium14(context).copyWith(
+          style: context.styleMedium14.copyWith(
             color: colorScheme.onSurface,
           ),
         ),

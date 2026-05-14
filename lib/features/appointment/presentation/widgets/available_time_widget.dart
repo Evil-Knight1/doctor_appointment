@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/features/appointment/data/models/slot_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,7 +38,7 @@ class AvailableTimeWidget extends StatelessWidget {
               SizedBox(height: 12.h),
               Text(
                 'No available slots for this date.',
-                style: AppStyles.styleMedium14.copyWith(
+                style: context.styleMedium14.copyWith(
                   color: colorScheme.onSurfaceVariant,
                 ),
               ),
@@ -104,7 +105,7 @@ class AvailableTimeWidget extends StatelessWidget {
             SizedBox(width: 6.w),
             Text(
               title,
-              style: AppStyles.styleMedium14.copyWith(
+              style: context.styleMedium14.copyWith(
                 color: colorScheme.onSurfaceVariant,
                 fontSize: 13.sp,
               ),
@@ -152,7 +153,7 @@ class AvailableTimeWidget extends StatelessWidget {
         ),
         child: Text(
           timeString,
-          style: AppStyles.styleMedium14.copyWith(
+          style: context.styleMedium14.copyWith(
             fontSize: 13.sp,
             color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
           ),

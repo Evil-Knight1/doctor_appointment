@@ -1,5 +1,6 @@
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -75,7 +76,7 @@ class _RegistrationDatePickerState extends State<RegistrationDatePicker> {
         RichText(
           text: TextSpan(
             text: widget.label,
-            style: AppStyles.styleMedium14.copyWith(
+            style: context.styleMedium14.copyWith(
               color: _isFocused 
                   ? theme.colorScheme.primary 
                   : theme.textTheme.headlineLarge?.color,
@@ -84,7 +85,7 @@ class _RegistrationDatePickerState extends State<RegistrationDatePicker> {
               if (widget.isRequired)
                 TextSpan(
                   text: ' *',
-                  style: AppStyles.styleMedium14.copyWith(
+                  style: context.styleMedium14.copyWith(
                     color: theme.colorScheme.error,
                   ),
                 ),
@@ -141,10 +142,10 @@ class _RegistrationDatePickerState extends State<RegistrationDatePicker> {
                   child: Text(
                     displayText ?? widget.hintText,
                     style: displayText != null
-                        ? AppStyles.styleMedium14.copyWith(
+                        ? context.styleMedium14.copyWith(
                             color: theme.textTheme.headlineLarge?.color,
                           )
-                        : AppStyles.styleRegular14.copyWith(
+                        : context.styleRegular14.copyWith(
                             color: theme.hintColor,
                           ),
                   ),
@@ -178,7 +179,7 @@ class _RegistrationDatePickerState extends State<RegistrationDatePicker> {
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
                 foregroundColor: theme.colorScheme.primary,
-                textStyle: AppStyles.styleBold14,
+                textStyle: context.styleBold14,
               ),
             ),
             dialogTheme: theme.dialogTheme.copyWith(

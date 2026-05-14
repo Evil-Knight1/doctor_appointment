@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -70,7 +71,7 @@ class ProfileMenuItem extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: AppStyles.styleSemiBold22.copyWith(
+                        style: context.styleSemiBold22.copyWith(
                           fontSize: 15.sp,
                           color: colorScheme.onSurface,
                         ),
@@ -79,7 +80,7 @@ class ProfileMenuItem extends StatelessWidget {
                         SizedBox(height: 2.h),
                         Text(
                           subtitle!,
-                          style: AppStyles.styleRegular12.copyWith(
+                          style: context.styleRegular12.copyWith(
                             color: colorScheme.onSurfaceVariant,
                             fontSize: 12.sp,
                           ),

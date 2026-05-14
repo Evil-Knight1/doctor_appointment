@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/features/appointment/presentation/models/appointment_draft.dart';
 import 'package:doctor_appointment/features/appointment/presentation/widgets/patient_form_field.dart';
@@ -58,7 +59,7 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
         ),
         title: Text(
           "Patient's details",
-          style: AppStyles.styleSemiBold22(context).copyWith(fontSize: 18.sp),
+          style: context.styleSemiBold22.copyWith(fontSize: 18.sp),
         ),
       ),
       body: Stack(
@@ -115,7 +116,7 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
       children: [
         Text(
           'Gender',
-          style: AppStyles.styleMedium14(context).copyWith(fontSize: 13.sp),
+          style: context.styleMedium14.copyWith(fontSize: 13.sp),
         ),
         SizedBox(height: 6.h),
         Container(
@@ -130,7 +131,7 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
               value: _selectedGender,
               hint: Text(
                 'Select your gender',
-                style: AppStyles.styleRegular14(context).copyWith(
+                style: context.styleRegular14.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 12.sp,
                 ),
@@ -145,7 +146,7 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
                   .map(
                     (g) => DropdownMenuItem(
                       value: g,
-                      child: Text(g, style: AppStyles.styleMedium14(context)),
+                      child: Text(g, style: context.styleMedium14),
                     ),
                   )
                   .toList(),
@@ -178,7 +179,7 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
           ),
           child: Text(
             'Continue to Payment',
-            style: AppStyles.styleSemiBold16(context),
+            style: context.styleSemiBold16,
           ),
         ),
       ),

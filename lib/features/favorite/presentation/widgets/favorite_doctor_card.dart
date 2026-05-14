@@ -1,6 +1,6 @@
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:doctor_appointment/core/utils/image_url_helper.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:flutter/material.dart';
@@ -79,17 +79,12 @@ class FavoriteDoctorCard extends StatelessWidget {
                 children: [
                   Text(
                     doctor.name,
-                    style: AppStyles.styleMedium14.copyWith(
-                      fontSize: 14.sp,
-                      color: colorScheme.onSurface,
-                    ),
+                    style: context.styleMedium14.copyWith(fontSize: 14.sp, color: colorScheme.onSurface),
                   ),
                   SizedBox(height: 2.h),
                   Text(
                     doctor.doctor.specialization.name,
-                    style: AppStyles.styleRegular12.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
+                    style: context.styleRegular12.copyWith(color: colorScheme.onSurfaceVariant),
                   ),
                   SizedBox(height: 6.h),
                   Row(
@@ -102,7 +97,7 @@ class FavoriteDoctorCard extends StatelessWidget {
                       SizedBox(width: 4.w),
                       Text(
                         '${doctor.rating} (${doctor.reviewCount} Reviews)',
-                        style: AppStyles.styleRegular12.copyWith(
+                        style: context.styleRegular12.copyWith(
                           color: colorScheme.onSurfaceVariant,
                           fontSize: 11.sp,
                         ),
@@ -126,10 +121,7 @@ class FavoriteDoctorCard extends StatelessWidget {
                 SizedBox(height: 10.h),
                 Text(
                   '\$${doctor.doctor.consultationFee ?? 100}',
-                  style: AppStyles.styleMedium14.copyWith(
-                    color: colorScheme.primary,
-                    fontSize: 13.sp,
-                  ),
+                  style: context.styleMedium14.copyWith(color: colorScheme.primary, fontSize: 13.sp),
                 ),
               ],
             ),

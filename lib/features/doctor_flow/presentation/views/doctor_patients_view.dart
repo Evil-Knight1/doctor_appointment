@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,19 +17,14 @@ class DoctorPatientsView extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text(
           'My Patients',
-          style: AppStyles.styleSemiBold22.copyWith(
-            fontSize: 18.sp,
-            color: colorScheme.onSurface,
-          ),
+          style: context.styleSemiBold22.copyWith(fontSize: 18.sp, color: colorScheme.onSurface),
         ),
       ),
       body: ListView.separated(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
         itemCount: 8,
-        separatorBuilder: (context, index) => Divider(
-          color: colorScheme.outlineVariant,
-          height: 24.h,
-        ),
+        separatorBuilder: (context, index) =>
+            Divider(color: colorScheme.outlineVariant, height: 24.h),
         itemBuilder: (context, index) {
           return Row(
             children: [
@@ -37,9 +33,7 @@ class DoctorPatientsView extends StatelessWidget {
                 backgroundColor: colorScheme.primaryContainer,
                 child: Text(
                   'P${index + 1}',
-                  style: AppStyles.styleSemiBold16.copyWith(
-                    color: colorScheme.primary,
-                  ),
+                  style: context.styleSemiBold16.copyWith(color: colorScheme.primary),
                 ),
               ),
               SizedBox(width: 16.w),
@@ -49,16 +43,12 @@ class DoctorPatientsView extends StatelessWidget {
                   children: [
                     Text(
                       'Patient ${index + 1}',
-                      style: AppStyles.styleSemiBold16.copyWith(
-                        color: colorScheme.onSurface,
-                      ),
+                      style: context.styleSemiBold16.copyWith(color: colorScheme.onSurface),
                     ),
                     SizedBox(height: 4.h),
                     Text(
                       'Last visit: 12 Oct 2023',
-                      style: AppStyles.styleMedium14.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
+                      style: context.styleMedium14.copyWith(color: colorScheme.onSurfaceVariant),
                     ),
                   ],
                 ),
@@ -75,4 +65,3 @@ class DoctorPatientsView extends StatelessWidget {
     );
   }
 }
-

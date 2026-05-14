@@ -17,6 +17,8 @@ class AppTheme {
       primaryKey: AppColors.primary,
       secondaryKey: AppColors.secondary,
       tertiaryKey: AppColors.accent,
+      errorKey: AppColors.error,
+      neutralKey: isLight ? AppColors.bg : AppColors.darkBg,
       surfaceTint: isLight ? AppColors.primary : Colors.transparent,
       // Use predefined tones for a balanced look
       tones: isLight ? FlexTones.soft(brightness) : FlexTones.vivid(brightness),
@@ -26,31 +28,27 @@ class AppTheme {
       useMaterial3: true,
       brightness: brightness,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: isLight ? AppColors.bg : AppColors.darkBg,
-      cardColor: isLight ? AppColors.white : AppColors.darkSurface,
-      dividerColor: isLight ? AppColors.gray200 : AppColors.darkBorder,
-      hintColor: isLight
-          ? AppColors.textSecondary
-          : AppColors.darkTextSecondary,
+      scaffoldBackgroundColor: colorScheme.surface,
+      cardColor: colorScheme.surfaceContainerLow,
+      dividerColor: colorScheme.outlineVariant,
+      hintColor: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
       shadowColor: isLight
           ? Colors.black.withValues(alpha: 0.05)
           : Colors.black.withValues(alpha: 0.2),
-      canvasColor: isLight ? AppColors.bg : AppColors.darkBg,
+      canvasColor: colorScheme.surface,
       fontFamily: 'Inter',
       textTheme: _textTheme(brightness, colorScheme),
       appBarTheme: AppBarTheme(
-        backgroundColor: isLight ? AppColors.bg : AppColors.darkBg,
+        backgroundColor: colorScheme.surface,
+        foregroundColor: colorScheme.onSurface,
         elevation: 0,
         centerTitle: false,
-        titleTextStyle: _textTheme(brightness, colorScheme).titleLarge
-            ?.copyWith(
+        titleTextStyle: _textTheme(brightness, colorScheme).titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
-              color: isLight
-                  ? AppColors.textPrimary
-                  : AppColors.darkTextPrimary,
+              color: colorScheme.onSurface,
             ),
         iconTheme: IconThemeData(
-          color: isLight ? AppColors.textPrimary : AppColors.darkTextPrimary,
+          color: colorScheme.onSurface,
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -77,18 +75,18 @@ class AppTheme {
         ),
       ),
       cardTheme: CardThemeData(
-        color: isLight ? AppColors.white : AppColors.darkSurface,
+        color: colorScheme.surfaceContainerLow,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(
-            color: isLight ? AppColors.gray200 : AppColors.darkBorder,
+            color: colorScheme.outlineVariant,
           ),
         ),
       ),
-      inputDecorationTheme: _inputDecorationTheme(brightness),
+      inputDecorationTheme: _inputDecorationTheme(brightness, colorScheme),
       iconTheme: IconThemeData(
-        color: isLight ? AppColors.textSecondary : AppColors.darkTextSecondary,
+        color: colorScheme.onSurfaceVariant,
       ),
       extensions: [
         AppCustomColors(
@@ -97,26 +95,21 @@ class AppTheme {
           appointmentPending: AppColors.pending,
           doctorOnline: AppColors.online,
           offline: AppColors.offline,
-          chatBubbleMine: isLight ? AppColors.primary : AppColors.primary,
-          chatBubbleOthers: isLight ? AppColors.gray100 : AppColors.darkSurface,
+          chatBubbleMine: colorScheme.primary,
+          chatBubbleOthers: colorScheme.surfaceContainerHigh,
           chatBubbleMineGradientStart: AppColors.headerGradientStart,
           chatBubbleMineGradientEnd: AppColors.headerGradientEnd,
           rating: AppColors.star,
-          error: AppColors.error,
+          error: colorScheme.error,
         ),
       ],
     );
   }
 
   static TextTheme _textTheme(Brightness brightness, ColorScheme colorScheme) {
-    final isLight = brightness == Brightness.light;
-    final primaryColor = isLight
-        ? AppColors.textPrimary
-        : AppColors.darkTextPrimary;
-    final secondaryColor = isLight
-        ? AppColors.textSecondary
-        : AppColors.darkTextSecondary;
-    final lightColor = isLight ? AppColors.textLight : AppColors.darkTextLight;
+    final primaryColor = colorScheme.onSurface;
+    final secondaryColor = colorScheme.onSurfaceVariant;
+    final lightColor = colorScheme.onSurfaceVariant.withValues(alpha: 0.7);
 
     return TextTheme(
       displayLarge: TextStyle(
@@ -212,28 +205,29 @@ class AppTheme {
     );
   }
 
-  static InputDecorationTheme _inputDecorationTheme(Brightness brightness) {
+  static InputDecorationTheme _inputDecorationTheme(
+      Brightness brightness, ColorScheme colorScheme) {
     final isDark = brightness == Brightness.dark;
-    final fillColor = isDark ? AppColors.darkSurface : AppColors.gray100;
-    final borderColor = isDark ? AppColors.darkBorder : AppColors.gray200;
-    final hintColor = isDark
-        ? AppColors.darkTextSecondary
-        : AppColors.textLight;
 
     return InputDecorationTheme(
       filled: true,
-      fillColor: fillColor,
-      hintStyle: TextStyle(color: hintColor, fontSize: 14),
+      fillColor: isDark
+          ? colorScheme.surfaceContainerHigh
+          : colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+      hintStyle: TextStyle(
+        color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+        fontSize: 14,
+      ),
       labelStyle: TextStyle(
-        color: isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
+        color: colorScheme.onSurface,
         fontSize: 14,
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      border: _buildBorder(borderColor),
-      enabledBorder: _buildBorder(borderColor),
-      focusedBorder: _buildBorder(AppColors.primary, width: 1.5),
-      errorBorder: _buildBorder(AppColors.accent),
-      focusedErrorBorder: _buildBorder(AppColors.accent, width: 1.5),
+      border: _buildBorder(colorScheme.outlineVariant),
+      enabledBorder: _buildBorder(colorScheme.outlineVariant),
+      focusedBorder: _buildBorder(colorScheme.primary, width: 1.5),
+      errorBorder: _buildBorder(colorScheme.error),
+      focusedErrorBorder: _buildBorder(colorScheme.error, width: 1.5),
     );
   }
 

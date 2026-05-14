@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,7 +41,7 @@ class CustomSocialButton extends StatelessWidget {
             SizedBox(width: 12.w),
             Text(
               label,
-              style: AppStyles.styleMedium14.copyWith(
+              style: context.bodyMedium.copyWith(
                 color: theme.textTheme.headlineLarge?.color,
               ),
             ),

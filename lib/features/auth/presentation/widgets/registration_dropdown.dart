@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -63,7 +64,7 @@ class _RegistrationDropdownState<T> extends State<RegistrationDropdown<T>> {
         RichText(
           text: TextSpan(
             text: widget.label,
-            style: AppStyles.styleMedium14.copyWith(
+            style: context.styleMedium14.copyWith(
               color: _isFocused 
                   ? theme.colorScheme.primary 
                   : theme.textTheme.headlineLarge?.color,
@@ -72,7 +73,7 @@ class _RegistrationDropdownState<T> extends State<RegistrationDropdown<T>> {
               if (widget.isRequired)
                 TextSpan(
                   text: ' *',
-                  style: AppStyles.styleMedium14.copyWith(
+                  style: context.styleMedium14.copyWith(
                     color: theme.colorScheme.error,
                   ),
                 ),
@@ -106,7 +107,7 @@ class _RegistrationDropdownState<T> extends State<RegistrationDropdown<T>> {
               size: 22.sp,
             ),
             dropdownColor: theme.cardColor,
-            style: AppStyles.styleMedium14.copyWith(
+            style: context.styleMedium14.copyWith(
               color: theme.textTheme.headlineLarge?.color,
             ),
             validator: widget.validator ?? (value) {

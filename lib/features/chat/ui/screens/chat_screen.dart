@@ -6,7 +6,7 @@ import 'package:doctor_appointment/core/services/service_locator.dart';
 import 'package:doctor_appointment/features/chat/logic/user_chat_cubit.dart';
 import 'package:doctor_appointment/features/chat/logic/chat_state.dart';
 import 'package:doctor_appointment/features/chat/ui/widgets/chat_bubble.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 
 class ChatScreen extends StatefulWidget {
   final int otherUserId;

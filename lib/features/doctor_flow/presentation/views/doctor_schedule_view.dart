@@ -1,5 +1,5 @@
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/features/appointment/domain/entities/appointment.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_appointments_cubit.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_appointments_state.dart';
@@ -23,10 +23,7 @@ class DoctorScheduleView extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text(
           'My Schedule',
-          style: AppStyles.styleSemiBold22.copyWith(
-            fontSize: 18.sp,
-            color: colorScheme.onSurface,
-          ),
+          style: context.styleSemiBold18.copyWith(color: colorScheme.onSurface),
         ),
       ),
       body: BlocBuilder<DoctorAppointmentsCubit, DoctorAppointmentsState>(
@@ -49,9 +46,7 @@ class DoctorScheduleView extends StatelessWidget {
             return Center(
               child: Text(
                 'No appointments scheduled yet.',
-                style: AppStyles.styleMedium14.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
+                style: context.styleMedium14.copyWith(color: colorScheme.onSurfaceVariant),
               ),
             );
           }
@@ -104,18 +99,18 @@ class DoctorScheduleView extends StatelessWidget {
     final statusText = appointment.status == 1
         ? 'Confirmed'
         : appointment.status == 2
-            ? 'Completed'
-            : appointment.status == 3
-                ? 'Cancelled'
-                : 'Pending';
+        ? 'Completed'
+        : appointment.status == 3
+        ? 'Cancelled'
+        : 'Pending';
 
     final statusColor = appointment.status == 1
         ? (customColors.success ?? Colors.green)
         : appointment.status == 2
-            ? colorScheme.primary
-            : appointment.status == 3
-                ? colorScheme.error
-                : (customColors.warning ?? Colors.orange);
+        ? colorScheme.primary
+        : appointment.status == 3
+        ? colorScheme.error
+        : (customColors.warning ?? Colors.orange);
 
     return Container(
       padding: EdgeInsets.all(16.w),
@@ -139,7 +134,10 @@ class DoctorScheduleView extends StatelessWidget {
               CircleAvatar(
                 radius: 20.r,
                 backgroundColor: colorScheme.secondaryContainer,
-                child: Icon(Icons.person, color: colorScheme.onSecondaryContainer),
+                child: Icon(
+                  Icons.person,
+                  color: colorScheme.onSecondaryContainer,
+                ),
               ),
               SizedBox(width: 12.w),
               Expanded(
@@ -148,16 +146,12 @@ class DoctorScheduleView extends StatelessWidget {
                   children: [
                     Text(
                       appointment.patientName,
-                      style: AppStyles.styleSemiBold16.copyWith(
-                        color: colorScheme.onSurface,
-                      ),
+                      style: context.styleSemiBold16.copyWith(color: colorScheme.onSurface),
                     ),
                     SizedBox(height: 2.h),
                     Text(
                       appointment.reason,
-                      style: AppStyles.styleRegular12.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
+                      style: context.styleRegular12.copyWith(color: colorScheme.onSurfaceVariant),
                     ),
                   ],
                 ),
@@ -171,10 +165,7 @@ class DoctorScheduleView extends StatelessWidget {
                   ),
                   child: Text(
                     statusText,
-                    style: AppStyles.styleMedium14.copyWith(
-                      color: statusColor,
-                      fontSize: 12.sp,
-                    ),
+                    style: context.styleMedium14.copyWith(color: statusColor, fontSize: 12.sp),
                   ),
                 ),
             ],
@@ -190,9 +181,7 @@ class DoctorScheduleView extends StatelessWidget {
               SizedBox(width: 6.w),
               Text(
                 DateFormat('MMM dd, yyyy').format(appointment.startTime),
-                style: AppStyles.styleMedium14.copyWith(
-                  color: colorScheme.onSurface,
-                ),
+                style: context.styleMedium14.copyWith(color: colorScheme.onSurface),
               ),
               SizedBox(width: 16.w),
               Icon(
@@ -203,9 +192,7 @@ class DoctorScheduleView extends StatelessWidget {
               SizedBox(width: 6.w),
               Text(
                 DateFormat('hh:mm a').format(appointment.startTime),
-                style: AppStyles.styleMedium14.copyWith(
-                  color: colorScheme.onSurface,
-                ),
+                style: context.styleMedium14.copyWith(color: colorScheme.onSurface),
               ),
             ],
           ),
@@ -228,9 +215,7 @@ class DoctorScheduleView extends StatelessWidget {
                     ),
                     child: Text(
                       'Decline',
-                      style: AppStyles.styleMedium14.copyWith(
-                        color: colorScheme.error,
-                      ),
+                      style: context.styleMedium14.copyWith(color: colorScheme.error),
                     ),
                   ),
                 ),
@@ -250,9 +235,7 @@ class DoctorScheduleView extends StatelessWidget {
                     ),
                     child: Text(
                       'Accept',
-                      style: AppStyles.styleMedium14.copyWith(
-                        color: colorScheme.onPrimary,
-                      ),
+                      style: context.styleMedium14.copyWith(color: colorScheme.onPrimary),
                     ),
                   ),
                 ),
@@ -264,4 +247,3 @@ class DoctorScheduleView extends StatelessWidget {
     );
   }
 }
-

@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -47,7 +48,7 @@ class FormSectionHeader extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: AppStyles.styleSemiBold16.copyWith(
+                      style: context.styleSemiBold16.copyWith(
                         color: theme.textTheme.headlineLarge?.color,
                       ),
                     ),
@@ -55,7 +56,7 @@ class FormSectionHeader extends StatelessWidget {
                       SizedBox(height: 2.h),
                       Text(
                         subtitle!,
-                        style: AppStyles.styleRegular12.copyWith(
+                        style: context.styleRegular12.copyWith(
                           color: theme.hintColor,
                         ),
                       ),

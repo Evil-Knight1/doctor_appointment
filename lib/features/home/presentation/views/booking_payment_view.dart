@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:doctor_appointment/core/utils/routes.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import '../widgets/booking_stepper.dart';
 import '../widgets/shared_app_bar.dart';
@@ -176,10 +176,14 @@ class _PaymentMethodTile extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: EdgeInsets.all(AppSpacing.md),
         decoration: BoxDecoration(
-          color: isSelected ? colorScheme.primaryContainer.withValues(alpha: 0.1) : colorScheme.surface,
+          color: isSelected
+              ? colorScheme.primaryContainer.withValues(alpha: 0.1)
+              : colorScheme.surface,
           borderRadius: BorderRadius.circular(AppRadius.xl),
           border: Border.all(
-            color: isSelected ? colorScheme.primary : colorScheme.outlineVariant,
+            color: isSelected
+                ? colorScheme.primary
+                : colorScheme.outlineVariant,
             width: isSelected ? 2 : 1,
           ),
           boxShadow: [
@@ -195,8 +199,8 @@ class _PaymentMethodTile extends StatelessWidget {
               width: 48.w,
               height: 48.h,
               decoration: BoxDecoration(
-                color: isSelected 
-                    ? colorScheme.primary.withValues(alpha: 0.1) 
+                color: isSelected
+                    ? colorScheme.primary.withValues(alpha: 0.1)
                     : methodColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(AppRadius.lg),
               ),
@@ -215,7 +219,9 @@ class _PaymentMethodTile extends StatelessWidget {
                     method.label,
                     style: context.bodyMedium.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: isSelected ? colorScheme.primary : colorScheme.onSurface,
+                      color: isSelected
+                          ? colorScheme.primary
+                          : colorScheme.onSurface,
                     ),
                   ),
                   SizedBox(height: 2.h),
@@ -237,7 +243,9 @@ class _PaymentMethodTile extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? colorScheme.primary : colorScheme.outlineVariant,
+                  color: isSelected
+                      ? colorScheme.primary
+                      : colorScheme.outlineVariant,
                   width: 2,
                 ),
                 color: isSelected ? colorScheme.primary : Colors.transparent,
@@ -262,9 +270,14 @@ class _ContinueBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return Container(
-      padding: EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.md, AppSpacing.lg, AppSpacing.xl),
+      padding: EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.md,
+        AppSpacing.lg,
+        AppSpacing.xl,
+      ),
       decoration: BoxDecoration(
         color: colorScheme.surface,
         boxShadow: [
@@ -290,10 +303,7 @@ class _ContinueBar extends StatelessWidget {
           ),
           child: Text(
             'Continue',
-            style: TextStyle(
-              fontWeight: FontWeight.w600, 
-              fontSize: 15.sp,
-            ),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15.sp),
           ),
         ),
       ),

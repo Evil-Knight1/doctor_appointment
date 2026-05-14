@@ -1,5 +1,6 @@
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/features/profile/domain/entities/patient_profile.dart';
 import 'package:doctor_appointment/features/profile/logic/profile_cubit.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class _ProfileHeaderWidgetState extends State<ProfileHeaderWidget> {
             SizedBox(height: 20.h),
             Text(
               'Change Profile Photo',
-              style: AppStyles.styleSemiBold22.copyWith(fontSize: 16.sp),
+              style: context.styleSemiBold22.copyWith(fontSize: 16.sp),
             ),
             SizedBox(height: 16.h),
             _PickerOption(
@@ -230,7 +231,7 @@ class _ProfileHeaderWidgetState extends State<ProfileHeaderWidget> {
           SizedBox(height: 16.h),
           Text(
             widget.profile.fullName,
-            style: AppStyles.styleSemiBold22.copyWith(
+            style: context.styleSemiBold22.copyWith(
               fontSize: 22.sp,
               color: colorScheme.onSurface,
               letterSpacing: -0.5,
@@ -239,7 +240,7 @@ class _ProfileHeaderWidgetState extends State<ProfileHeaderWidget> {
           SizedBox(height: 6.h),
           Text(
             widget.profile.email,
-            style: AppStyles.styleRegular14.copyWith(
+            style: context.styleRegular14.copyWith(
               color: colorScheme.onSurfaceVariant,
               fontSize: 14.sp,
             ),
@@ -256,7 +257,7 @@ class _ProfileHeaderWidgetState extends State<ProfileHeaderWidget> {
               ),
               child: Text(
                 'Change Photo',
-                style: AppStyles.styleMedium14.copyWith(
+                style: context.styleMedium14.copyWith(
                   color: colorScheme.onPrimaryContainer,
                   fontSize: 12.sp,
                 ),
@@ -307,7 +308,7 @@ class _PickerOption extends StatelessWidget {
               child: Icon(icon, color: color, size: 20.sp),
             ),
             SizedBox(width: 12.w),
-            Text(label, style: AppStyles.styleMedium14.copyWith(color: color)),
+            Text(label, style: context.styleMedium14.copyWith(color: color)),
           ],
         ),
       ),

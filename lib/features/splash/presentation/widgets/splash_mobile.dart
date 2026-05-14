@@ -1,4 +1,5 @@
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -26,9 +27,7 @@ class SplashMobile extends StatelessWidget {
                   ),
                   Text(
                     'MedLink',
-                    style: AppStyles.styleBold24(
-                      context,
-                    ).copyWith(color: colorScheme.onSurface),
+                    style: context.styleBold24.copyWith(color: colorScheme.onSurface),
                   ),
                 ],
               ),

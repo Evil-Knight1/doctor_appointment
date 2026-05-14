@@ -1,5 +1,5 @@
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_stats_cubit.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_stats_state.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class DoctorDashboardView extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text(
           'Dashboard',
-          style: AppStyles.styleSemiBold22.copyWith(fontSize: 18.sp),
+          style: context.styleSemiBold22.copyWith(fontSize: 18.sp),
         ),
       ),
       body: BlocBuilder<DoctorStatsCubit, DoctorStatsState>(
@@ -101,11 +101,14 @@ class DoctorDashboardView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Dashboard Overview', style: AppStyles.styleSemiBold22),
+                  Text(
+                    'Dashboard Overview',
+                    style: context.styleSemiBold22,
+                  ),
                   SizedBox(height: 8.h),
                   Text(
                     'Here is what\'s happening today.',
-                    style: AppStyles.styleRegular14.copyWith(
+                    style: context.styleRegular14.copyWith(
                       color: Theme.of(context).textTheme.bodyMedium?.color,
                     ),
                   ),
@@ -158,7 +161,10 @@ class DoctorDashboardView extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 24.h),
-                  Text('Appointment Summary', style: AppStyles.styleSemiBold16),
+                  Text(
+                    'Appointment Summary',
+                    style: context.styleSemiBold16,
+                  ),
                   SizedBox(height: 12.h),
                   _buildSummaryRow(
                     context,
@@ -190,7 +196,12 @@ class DoctorDashboardView extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryRow(BuildContext context, String label, int value, Color color) {
+  Widget _buildSummaryRow(
+    BuildContext context,
+    String label,
+    int value,
+    Color color,
+  ) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12.h),
       child: Row(
@@ -201,13 +212,11 @@ class DoctorDashboardView extends StatelessWidget {
             decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           ),
           SizedBox(width: 12.w),
-          Text(label, style: AppStyles.styleMedium14),
+          Text(label, style: context.styleMedium14),
           const Spacer(),
           Text(
             value.toString(),
-            style: AppStyles.styleMedium14.copyWith(
-              color: Theme.of(context).textTheme.bodyMedium?.color,
-            ),
+            style: context.styleMedium14.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
           ),
         ],
       ),
@@ -240,13 +249,11 @@ class DoctorDashboardView extends StatelessWidget {
             child: Icon(icon, color: color, size: 24.sp),
           ),
           SizedBox(height: 12.h),
-          Text(value, style: AppStyles.styleSemiBold22),
+          Text(value, style: context.styleSemiBold22),
           SizedBox(height: 4.h),
           Text(
             title,
-            style: AppStyles.styleMedium14.copyWith(
-              color: Theme.of(context).textTheme.bodyMedium?.color,
-            ),
+            style: context.styleMedium14.copyWith(color: Theme.of(context).textTheme.bodyMedium?.color),
           ),
         ],
       ),

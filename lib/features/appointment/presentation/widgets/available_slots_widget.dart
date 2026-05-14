@@ -1,5 +1,5 @@
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
-import 'package:doctor_appointment/core/utils/app_styles.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -48,7 +48,7 @@ class AvailableSlotsWidget extends StatelessWidget {
                 SizedBox(width: 4.w),
                 Text(
                   slot,
-                  style: AppStyles.styleMedium12.copyWith(
+                  style: context.styleMedium12.copyWith(
                     color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
                   ),
                 ),
