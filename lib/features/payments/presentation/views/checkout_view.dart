@@ -124,7 +124,14 @@ class _CheckoutViewState extends State<CheckoutView> {
                     final router = GoRouter.of(context);
                     final messenger = ScaffoldMessenger.of(context);
                     launchUrl(uri, mode: LaunchMode.externalApplication)
-                        .then((_) {
+                        .then((launched) {
+                          if (!launched) {
+                            messenger.showSnackBar(
+                              const SnackBar(
+                                content: Text('Could not open payment gateway'),
+                              ),
+                            );
+                          }
                           router.pushReplacement(AppRouter.kAppointmentSuccess);
                         })
                         .catchError((_) {
@@ -133,6 +140,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                               content: Text('Could not open payment gateway'),
                             ),
                           );
+                          router.pushReplacement(AppRouter.kAppointmentSuccess);
                         });
                   }
                 },

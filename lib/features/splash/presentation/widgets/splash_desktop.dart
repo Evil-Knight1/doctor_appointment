@@ -1,8 +1,7 @@
-
+import 'package:doctor_appointment/core/utils/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 
 class SplashDesktop extends StatelessWidget {
@@ -24,11 +23,12 @@ class SplashDesktop extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset(
-                        'assets/images/docdoc_logo.svg',
+                      Image.asset(
+                        Assets.imagesLogo,
                         width: 150.w,
                         fit: BoxFit.contain,
                       ),
+                      SizedBox(height: 12.h),
                       Text(
                         'MedLink',
                         style: context.styleBold32.copyWith(

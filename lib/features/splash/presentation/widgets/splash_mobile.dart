@@ -1,9 +1,8 @@
+import 'package:doctor_appointment/core/utils/app_images.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/svg.dart';
 
 class SplashMobile extends StatelessWidget {
   const SplashMobile({super.key});
@@ -23,11 +22,14 @@ class SplashMobile extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: 72.w,
-                    child: SvgPicture.asset('assets/images/docdoc_logo.svg'),
+                    child: Image.asset(Assets.imagesLogo, fit: BoxFit.contain),
                   ),
+                  SizedBox(height: 12.h),
                   Text(
                     'MedLink',
-                    style: context.styleBold24.copyWith(color: colorScheme.onSurface),
+                    style: context.styleBold24.copyWith(
+                      color: colorScheme.onSurface,
+                    ),
                   ),
                 ],
               ),

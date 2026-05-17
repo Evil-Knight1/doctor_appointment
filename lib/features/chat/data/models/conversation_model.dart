@@ -19,13 +19,15 @@ class ConversationModel {
 
   factory ConversationModel.fromJson(Map<String, dynamic> json) {
     return ConversationModel(
-      otherUserId: json['otherUserId'] as int,
-      otherUserName: json['otherUserName'] as String,
+      otherUserId: json['otherUserId'] as int? ?? 0,
+      otherUserName: json['otherUserName'] as String? ?? 'Unknown',
       otherUserProfilePicture: json['otherUserProfilePicture'] as String?,
-      otherUserRole: json['otherUserRole'] as String,
-      lastMessage: json['lastMessage'] as String,
-      lastMessageTime: DateTime.parse(json['lastMessageTime'] as String),
-      unreadCount: json['unreadCount'] as int,
+      otherUserRole: json['otherUserRole'] as String? ?? 'User',
+      lastMessage: json['lastMessage'] as String? ?? '',
+      lastMessageTime: json['lastMessageTime'] != null
+          ? DateTime.parse(json['lastMessageTime'] as String)
+          : DateTime.now(),
+      unreadCount: json['unreadCount'] as int? ?? 0,
     );
   }
 

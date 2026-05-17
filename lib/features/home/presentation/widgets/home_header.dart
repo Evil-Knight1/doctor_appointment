@@ -93,12 +93,11 @@ class _AvatarButton extends StatelessWidget {
                 placeholder: (context, url) => Skeletonizer(
                   enabled: true,
                   child: Container(
-                    color: Theme.of(context).colorScheme.primaryContainer,
                     width: 48.r,
                     height: 48.r,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Theme.of(context).cardColor,
+                      color: Theme.of(context).colorScheme.primaryContainer,
                     ),
                   ),
                 ),

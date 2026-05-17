@@ -38,9 +38,17 @@ class BookingSummaryView extends StatelessWidget {
         if (state is PaymentRequiresAction) {
           // Open Paymob unified checkout in browser
           final uri = Uri.parse(state.paymentUrl);
-          if (await canLaunchUrl(uri)) {
-            await launchUrl(uri, mode: LaunchMode.externalApplication);
-          } else {
+          bool launched = false;
+          try {
+            launched = await launchUrl(
+              uri,
+              mode: LaunchMode.externalApplication,
+            );
+          } catch (e) {
+            launched = false;
+          }
+
+          if (!launched) {
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Could not open payment page.')),

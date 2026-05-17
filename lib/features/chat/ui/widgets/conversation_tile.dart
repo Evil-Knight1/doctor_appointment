@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -120,8 +121,11 @@ class ConversationTile extends StatelessWidget {
                 end: Alignment.bottomRight,
               ),
             ),
-            child: Icon(Icons.smart_toy_rounded,
-                color: Colors.white, size: 26.r),
+            child: Icon(
+              Icons.smart_toy_rounded,
+              color: Colors.white,
+              size: 26.r,
+            ),
           ),
           Positioned(
             right: 1,
@@ -140,7 +144,8 @@ class ConversationTile extends StatelessWidget {
       );
     }
 
-    final hasPicture = conversation.otherUserProfilePicture != null &&
+    final hasPicture =
+        conversation.otherUserProfilePicture != null &&
         conversation.otherUserProfilePicture!.isNotEmpty;
 
     return Stack(
@@ -157,11 +162,13 @@ class ConversationTile extends StatelessWidget {
           ),
           child: ClipOval(
             child: hasPicture
-                ? Image.network(
-                    ImageUrlHelper.getFullUrl(
-                        conversation.otherUserProfilePicture),
+                ? CachedNetworkImage(
+                    imageUrl: ImageUrlHelper.getFullUrl(
+                      conversation.otherUserProfilePicture,
+                    ),
+                    httpHeaders: ImageUrlHelper.getImageHeaders(),
                     fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => _placeholder(context),
+                    errorWidget: (context, url, error) => _placeholder(context),
                   )
                 : _placeholder(context),
           ),

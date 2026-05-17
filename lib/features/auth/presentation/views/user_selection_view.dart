@@ -18,7 +18,7 @@ class UserSelectionView extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              theme.colorScheme.primary.withValues(alpha: 0.05),
+              theme.colorScheme.primary.withValues(alpha: 0.15),
               theme.scaffoldBackgroundColor,
               theme.scaffoldBackgroundColor,
             ],
@@ -44,7 +44,7 @@ class UserSelectionView extends StatelessWidget {
                         boxShadow: [
                           BoxShadow(
                             color: theme.colorScheme.primary.withValues(
-                              alpha: 0.1,
+                              alpha: 0.3,
                             ),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
@@ -129,7 +129,7 @@ class UserSelectionView extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.primary.withValues(
-                          alpha: 0.05,
+                          alpha: 0.15,
                         ),
                         borderRadius: BorderRadius.circular(20.r),
                       ),
@@ -227,7 +227,7 @@ class _RoleCardState extends State<_RoleCard> {
             boxShadow: [
               BoxShadow(
                 color: active
-                    ? theme.colorScheme.primary.withValues(alpha: 0.25)
+                    ? theme.colorScheme.primary.withValues(alpha: 0.4)
                     : theme.shadowColor.withValues(alpha: 0.05),
                 blurRadius: active ? 24 : 12,
                 offset: Offset(0, active ? 12 : 6),
@@ -243,7 +243,7 @@ class _RoleCardState extends State<_RoleCard> {
                 decoration: BoxDecoration(
                   color: active
                       ? theme.colorScheme.onPrimary.withValues(alpha: 0.2)
-                      : theme.colorScheme.primary.withValues(alpha: 0.08),
+                      : theme.colorScheme.primary.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(

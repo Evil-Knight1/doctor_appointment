@@ -1,5 +1,4 @@
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
-import 'package:doctor_appointment/core/utils/app_images.dart';
 import 'package:doctor_appointment/features/appointment/domain/entities/appointment.dart';
 import 'package:doctor_appointment/features/appointment/logic/appointments_cubit.dart';
 import 'package:doctor_appointment/features/appointment/logic/appointments_state.dart';

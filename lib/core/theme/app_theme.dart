@@ -18,10 +18,11 @@ class AppTheme {
       secondaryKey: AppColors.secondary,
       tertiaryKey: AppColors.accent,
       errorKey: AppColors.error,
-      neutralKey: isLight ? AppColors.bg : AppColors.darkBg,
-      surfaceTint: isLight ? AppColors.primary : Colors.transparent,
-      // Use predefined tones for a balanced look
-      tones: isLight ? FlexTones.soft(brightness) : FlexTones.vivid(brightness),
+      // neutralKey: isLight ? AppColors.bg : AppColors.darkBg,
+      surfaceTint: Colors.transparent,
+
+      // Use vivid tones to preserve the saturation of the primary brand color
+      tones: FlexTones.vivid(brightness),
     );
 
     return ThemeData(

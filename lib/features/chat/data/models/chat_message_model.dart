@@ -21,14 +21,16 @@ class ChatMessageModel {
 
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
     return ChatMessageModel(
-      id: json['id'] as int,
-      senderId: json['senderId'] as int,
-      senderName: json['senderName'] as String,
-      receiverId: json['receiverId'] as int,
-      receiverName: json['receiverName'] as String,
-      message: json['message'] as String,
-      timestamp: DateTime.parse(json['timestamp'] as String),
-      isRead: json['isRead'] as bool,
+      id: json['id'] as int? ?? 0,
+      senderId: json['senderId'] as int? ?? 0,
+      senderName: json['senderName'] as String? ?? 'Unknown',
+      receiverId: json['receiverId'] as int? ?? 0,
+      receiverName: json['receiverName'] as String? ?? 'Unknown',
+      message: json['message'] as String? ?? '',
+      timestamp: json['timestamp'] != null
+          ? DateTime.parse(json['timestamp'] as String)
+          : DateTime.now(),
+      isRead: json['isRead'] as bool? ?? false,
     );
   }
 

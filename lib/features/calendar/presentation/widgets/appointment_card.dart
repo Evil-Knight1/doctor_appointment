@@ -22,7 +22,6 @@ class AppointmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: () {
         context.push(AppRouter.kAppointmentDetailsView, extra: appointment);
