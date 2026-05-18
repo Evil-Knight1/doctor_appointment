@@ -104,8 +104,8 @@ class _FindNearbyViewState extends State<FindNearbyView> {
               selectedAreaLabel: _selectedAreaLabel,
               radiusKm: _radiusKm,
               isResolvingArea: _isResolvingArea,
-              onSearchSubmitted: (_) => _fetchDoctors(),
-              onSearchPressed: _fetchDoctors,
+              onSearchSubmitted: (_) => _searchForPlace(),
+              onSearchPressed: _searchForPlace,
               onRadiusChanged: (value) {
                 setState(() => _radiusKm = value);
                 final state = context.read<DoctorsCubit>().state;
@@ -179,11 +179,43 @@ class _FindNearbyViewState extends State<FindNearbyView> {
 
   Future<void> _fetchDoctors() async {
     await context.read<DoctorsCubit>().fetchDoctors(
-      searchTerm: _searchController.text.trim().isEmpty
-          ? null
-          : _searchController.text.trim(),
       pageSize: 50,
     );
+  }
+
+  Future<void> _searchForPlace() async {
+    final query = _searchController.text.trim();
+    if (query.isEmpty) {
+      await _fetchDoctors();
+      return;
+    }
+
+    setState(() => _isResolvingArea = true);
+    try {
+      final locations = await geo.locationFromAddress(query);
+      if (locations.isEmpty) {
+        if (!mounted) return;
+        setState(() => _isResolvingArea = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not find "$query" on the map.')),
+        );
+        return;
+      }
+
+      final location = locations.first;
+      final point = GeoPoint(
+        latitude: location.latitude,
+        longitude: location.longitude,
+      );
+      await _selectArea(point, moveCamera: true);
+      await _fetchDoctors();
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _isResolvingArea = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not find "$query" on the map.')),
+      );
+    }
   }
 
   Future<void> _setInitialArea() async {
@@ -403,7 +435,7 @@ class _TopControls extends StatelessWidget {
                     textInputAction: TextInputAction.search,
                     onSubmitted: onSearchSubmitted,
                     decoration: const InputDecoration(
-                      hintText: 'Search doctor, specialty, hospital',
+                      hintText: 'Search area like Tahrir',
                       border: InputBorder.none,
                     ),
                   ),
@@ -515,7 +547,7 @@ class _TopControls extends StatelessWidget {
                   onChanged: onRadiusChanged,
                 ),
                 Text(
-                  'Tip: tap anywhere on the map to search around that area.',
+                  'Tip: search a place or tap anywhere on the map to search around that area.',
                   style: context.bodySmall.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),

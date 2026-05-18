@@ -48,6 +48,8 @@ import 'package:doctor_appointment/features/payments/presentation/views/transact
 import 'package:doctor_appointment/features/payments/presentation/views/checkout_view.dart';
 import 'package:doctor_appointment/features/payments/presentation/views/payment_status_view.dart';
 import 'package:doctor_appointment/features/payments/logic/payment_cubit.dart';
+import 'package:doctor_appointment/features/payments/logic/payment_history_cubit.dart';
+import 'package:doctor_appointment/features/payments/domain/entities/payment_history_item.dart';
 import 'package:doctor_appointment/features/chatbot/presentation/views/chat_history_view.dart';
 import 'package:doctor_appointment/features/chatbot/logic/chat_cubit.dart';
 import 'package:doctor_appointment/features/chatbot/logic/chat_history_cubit.dart';
@@ -230,12 +232,18 @@ abstract class AppRouter {
       GoRoute(
         name: Routes.paymentHistoryView,
         path: kPaymentHistoryView,
-        builder: (context, state) => const PaymentHistoryView(),
+        builder: (context, state) => BlocProvider(
+          create: (_) => getIt<PaymentHistoryCubit>()..fetchPayments(),
+          child: const PaymentHistoryView(),
+        ),
       ),
       GoRoute(
         name: Routes.transactionDetailsView,
         path: kTransactionDetailsView,
-        builder: (context, state) => const TransactionDetailsView(),
+        builder: (context, state) {
+          final payment = state.extra as PaymentHistoryItem;
+          return TransactionDetailsView(payment: payment);
+        },
       ),
       GoRoute(
         name: Routes.checkoutView,

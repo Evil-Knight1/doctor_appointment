@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/core/utils/app_images.dart';
+import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 import 'package:doctor_appointment/features/appointment/domain/entities/appointment.dart';
 import 'package:doctor_appointment/features/appointment/logic/appointments_cubit.dart';
 import 'package:doctor_appointment/features/on_boarding_view/presentation/widgets/custom_button.dart';
@@ -79,7 +81,9 @@ class AppointmentDetailsView extends StatelessWidget {
             child: CircleAvatar(
               radius: 60.r,
               backgroundColor: colorScheme.primaryContainer,
-              backgroundImage: AssetImage(_getImageAsset()),
+              child: ClipOval(
+                child: _buildDoctorAvatar(context),
+              ),
             ),
           ),
         ),
@@ -96,6 +100,32 @@ class AppointmentDetailsView extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildDoctorAvatar(BuildContext context) {
+    final profilePicture = appointment.doctorProfilePicture;
+    if (profilePicture != null && profilePicture.trim().isNotEmpty) {
+      return CachedNetworkImage(
+        imageUrl: ImageUrlHelper.getFullUrl(profilePicture),
+        httpHeaders: ImageUrlHelper.getImageHeaders(),
+        fit: BoxFit.cover,
+        width: 120.r,
+        height: 120.r,
+        errorWidget: (_, _, _) => Image.asset(
+          _getImageAsset(),
+          fit: BoxFit.cover,
+          width: 120.r,
+          height: 120.r,
+        ),
+      );
+    }
+
+    return Image.asset(
+      _getImageAsset(),
+      fit: BoxFit.cover,
+      width: 120.r,
+      height: 120.r,
     );
   }
 

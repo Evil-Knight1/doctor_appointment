@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:doctor_appointment/features/home/data/models/notification_model.dart';
 import 'package:doctor_appointment/core/services/service_locator.dart';
@@ -86,7 +87,7 @@ class NotificationsView extends StatelessWidget {
                         'Notification body content loading placeholder text.',
                     createdAt: DateTime.now(),
                     isRead: false,
-                    type: 0,
+                    type: null,
                   ),
                 );
               },
@@ -102,7 +103,7 @@ class NotificationsView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.notifications_none_rounded,
+                    Iconsax.notification_bing,
                     size: 80.sp,
                     color: colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
                   ),
@@ -147,7 +148,7 @@ class NotificationsView extends StatelessWidget {
                 final notification = notifications[index - 1];
                 return NotificationTile(
                   notification: notification,
-                  onTap: () => context.read<NotificationCubit>().markAsRead(
+                  onSeen: () => context.read<NotificationCubit>().markAsRead(
                     notification.id,
                   ),
                 );
@@ -185,6 +186,7 @@ class _SectionLabel extends StatelessWidget {
               'Mark all as read',
               style: context.labelLarge.copyWith(
                 color: colorScheme.primary,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),

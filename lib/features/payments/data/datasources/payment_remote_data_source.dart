@@ -1,4 +1,5 @@
 import 'package:doctor_appointment/core/errors/exceptions.dart';
+import 'package:doctor_appointment/features/payments/data/models/payment_history_item_dto.dart';
 import 'package:doctor_appointment/core/services/api_service.dart';
 import 'package:doctor_appointment/features/payments/data/models/payment_session_dto.dart';
 import 'package:doctor_appointment/features/payments/data/models/payment_status_dto.dart';
@@ -23,6 +24,9 @@ abstract class PaymentRemoteDataSource {
     String? providerTransactionId,
     String? failureReason,
   });
+
+  /// GET /api/Payment/patient/my-payments
+  Future<List<PaymentHistoryItemDto>> getMyPayments();
 }
 
 /// Concrete implementation wired to the backend over HTTP via [ApiService].
@@ -106,6 +110,23 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
     } catch (_) {
       // Intentionally swallowed — webhook is the real confirmation.
     }
+  }
+
+  @override
+  Future<List<PaymentHistoryItemDto>> getMyPayments() async {
+    final response = await _apiService.get('/api/Payment/patient/my-payments');
+
+    _assertSuccess(response, fallback: 'Failed to retrieve payment history');
+
+    final data = response['data'];
+    if (data is! List) {
+      throw const ApiException('Invalid response: missing payment history data');
+    }
+
+    return data
+        .whereType<Map<String, dynamic>>()
+        .map(PaymentHistoryItemDto.fromJson)
+        .toList();
   }
 
   // ─── Helpers ───────────────────────────────────────────────────────────────

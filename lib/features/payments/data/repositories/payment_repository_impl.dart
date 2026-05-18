@@ -2,6 +2,7 @@ import 'package:doctor_appointment/core/errors/exceptions.dart';
 import 'package:doctor_appointment/core/errors/failures.dart';
 import 'package:doctor_appointment/core/utils/result.dart';
 import 'package:doctor_appointment/features/payments/data/datasources/payment_remote_data_source.dart';
+import 'package:doctor_appointment/features/payments/domain/entities/payment_history_item.dart';
 import 'package:doctor_appointment/features/payments/domain/entities/payment_result.dart';
 import 'package:doctor_appointment/features/payments/domain/entities/payment_session.dart';
 import 'package:doctor_appointment/features/payments/domain/repositories/payment_repository.dart';
@@ -77,6 +78,20 @@ class PaymentRepositoryImpl implements PaymentRepository {
     } catch (e) {
       // Non-fatal: best-effort report. Webhook is authoritative.
       return Result.success(null);
+    }
+  }
+
+  @override
+  Future<Result<List<PaymentHistoryItem>>> getMyPayments() async {
+    try {
+      final items = await _remoteDataSource.getMyPayments();
+      return Result.success(items.map((item) => item.toDomain()).toList());
+    } on ApiException catch (e) {
+      return Result.failure(ServerFailure(e.message));
+    } catch (e) {
+      return Result.failure(
+        ServerFailure('Failed to load payment history: $e'),
+      );
     }
   }
 }

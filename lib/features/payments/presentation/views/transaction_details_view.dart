@@ -1,12 +1,19 @@
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
-
 import 'package:doctor_appointment/features/on_boarding_view/presentation/widgets/custom_button.dart';
+import 'package:doctor_appointment/features/payments/domain/entities/payment_history_item.dart';
+import 'package:doctor_appointment/features/payments/domain/entities/payment_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class TransactionDetailsView extends StatelessWidget {
-  const TransactionDetailsView({super.key});
+  const TransactionDetailsView({
+    super.key,
+    required this.payment,
+  });
+
+  final PaymentHistoryItem payment;
 
   @override
   Widget build(BuildContext context) {
@@ -44,44 +51,78 @@ class TransactionDetailsView extends StatelessWidget {
                     height: 80.h,
                     width: 80.w,
                     decoration: BoxDecoration(
-                      color: colorScheme.primaryContainer,
+                      color: _statusAccentColor(context).withValues(alpha: 0.15),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      Icons.check_circle_rounded,
-                      color: colorScheme.primary,
+                      _statusIcon(),
+                      color: _statusAccentColor(context),
                       size: 40.sp,
                     ),
                   ),
                   SizedBox(height: 16.h),
                   Text(
-                    'Payment Success',
+                    payment.statusLabel,
                     style: context.styleSemiBold22.copyWith(
                       color: colorScheme.onSurface,
                     ),
                   ),
                   SizedBox(height: 8.h),
                   Text(
-                    '\$15.00',
+                    payment.formattedAmount,
                     style: context.styleSemiBold24.copyWith(
-                      color: colorScheme.primary,
+                      color: _statusAccentColor(context),
                     ),
                   ),
                 ],
               ),
             ),
             SizedBox(height: 48.h),
-            _buildDetailRow(context, 'Transaction ID', '#TRX-93827461'),
-            _buildDetailRow(context, 'Date & Time', '12 Oct 2023, 10:00 AM'),
-            _buildDetailRow(context, 'Payment Method', 'Visa ending in **** 4123'),
-            _buildDetailRow(context, 'Pay to', 'MediGuide Clinics'),
-            _buildDetailRow(context, 'Service', 'Dentist Consultation'),
+            _buildDetailRow(context, 'Transaction ID',
+                payment.transactionId ?? 'Unavailable'),
+            _buildDetailRow(
+              context,
+              'Date & Time',
+              DateFormat('dd MMM yyyy, hh:mm a')
+                  .format(payment.effectiveDate.toLocal()),
+            ),
+            _buildDetailRow(
+              context,
+              'Payment Method',
+              payment.paymentMethodLabel,
+            ),
+            _buildDetailRow(
+              context,
+              'Payment Provider',
+              payment.paymentProvider ?? 'Unknown',
+            ),
+            _buildDetailRow(
+              context,
+              'Doctor',
+              payment.doctorName.isEmpty ? 'Unknown' : 'Dr. ${payment.doctorName}',
+            ),
+            _buildDetailRow(
+              context,
+              'Appointment ID',
+              '#${payment.appointmentId}',
+            ),
+            if (payment.failureReason != null &&
+                payment.failureReason!.trim().isNotEmpty)
+              _buildDetailRow(context, 'Failure Reason', payment.failureReason!),
             const Spacer(),
             CustomButton(
-              text: 'Download Receipt',
+              text: payment.paymentUrl?.isNotEmpty == true
+                  ? 'Payment Link Available'
+                  : 'Receipt Unavailable',
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Receipt downloaded successfully')),
+                  SnackBar(
+                    content: Text(
+                      payment.paymentUrl?.isNotEmpty == true
+                          ? 'This payment includes a backend payment URL.'
+                          : 'No downloadable receipt is available yet.',
+                    ),
+                  ),
                 );
               },
               width: double.infinity,
@@ -98,23 +139,55 @@ class TransactionDetailsView extends StatelessWidget {
     );
   }
 
+  Color _statusAccentColor(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return switch (payment.status) {
+      PaymentStatus.paid => context.customColors.success ?? Colors.green,
+      PaymentStatus.refunded => context.customColors.error ?? colorScheme.error,
+      PaymentStatus.failed ||
+      PaymentStatus.cancelled ||
+      PaymentStatus.expired => colorScheme.error,
+      PaymentStatus.processing => colorScheme.primary,
+      _ => colorScheme.onSurfaceVariant,
+    };
+  }
+
+  IconData _statusIcon() {
+    return switch (payment.status) {
+      PaymentStatus.paid => Icons.check_circle_rounded,
+      PaymentStatus.processing => Icons.hourglass_top_rounded,
+      PaymentStatus.refunded => Icons.undo_rounded,
+      PaymentStatus.failed ||
+      PaymentStatus.cancelled ||
+      PaymentStatus.expired => Icons.cancel_rounded,
+      _ => Icons.receipt_long_rounded,
+    };
+  }
+
   Widget _buildDetailRow(BuildContext context, String label, String value) {
     final colorScheme = Theme.of(context).colorScheme;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 12.h),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: context.styleRegular14.copyWith(
-              color: colorScheme.onSurfaceVariant,
+          Expanded(
+            child: Text(
+              label,
+              style: context.styleRegular14.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
-          Text(
-            value,
-            style: context.styleSemiBold16.copyWith(
-              color: colorScheme.onSurface,
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: context.styleSemiBold16.copyWith(
+                color: colorScheme.onSurface,
+              ),
             ),
           ),
         ],

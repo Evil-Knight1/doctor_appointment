@@ -48,8 +48,10 @@ import 'package:doctor_appointment/features/payments/data/datasources/payment_re
 import 'package:doctor_appointment/features/payments/data/repositories/payment_repository_impl.dart';
 import 'package:doctor_appointment/features/payments/domain/repositories/payment_repository.dart';
 import 'package:doctor_appointment/features/payments/domain/usecases/create_payment_session_usecase.dart';
+import 'package:doctor_appointment/features/payments/domain/usecases/get_my_payments_usecase.dart';
 import 'package:doctor_appointment/features/payments/domain/usecases/get_payment_status_usecase.dart';
 import 'package:doctor_appointment/features/payments/logic/payment_cubit.dart';
+import 'package:doctor_appointment/features/payments/logic/payment_history_cubit.dart';
 import 'package:doctor_appointment/features/doctors/data/datasources/specializations_remote_data_source.dart';
 import 'package:doctor_appointment/features/doctors/data/repositories/specializations_repository_impl.dart';
 import 'package:doctor_appointment/features/doctors/domain/repositories/specializations_repository.dart';
@@ -284,6 +286,9 @@ void setupServiceLocator() {
   getIt.registerLazySingleton(
     () => GetPaymentStatusUseCase(getIt<PaymentRepository>()),
   );
+  getIt.registerLazySingleton(
+    () => GetMyPaymentsUseCase(getIt<PaymentRepository>()),
+  );
   getIt.registerFactory(
     () => PaymentCubit(
       createAppointmentUseCase: getIt<CreateAppointmentUseCase>(),
@@ -291,6 +296,9 @@ void setupServiceLocator() {
       getPaymentStatusUseCase: getIt<GetPaymentStatusUseCase>(),
       paymentRepository: getIt<PaymentRepository>(),
     ),
+  );
+  getIt.registerFactory(
+    () => PaymentHistoryCubit(getIt<GetMyPaymentsUseCase>()),
   );
 
   // Specializations

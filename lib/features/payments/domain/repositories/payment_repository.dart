@@ -1,4 +1,5 @@
 import 'package:doctor_appointment/core/utils/result.dart';
+import 'package:doctor_appointment/features/payments/domain/entities/payment_history_item.dart';
 import 'package:doctor_appointment/features/payments/domain/entities/payment_result.dart';
 import 'package:doctor_appointment/features/payments/domain/entities/payment_session.dart';
 
@@ -45,4 +46,6 @@ abstract class PaymentRepository {
     String? providerTransactionId,
     String? failureReason,
   });
+
+  Future<Result<List<PaymentHistoryItem>>> getMyPayments();
 }
