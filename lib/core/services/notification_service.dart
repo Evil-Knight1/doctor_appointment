@@ -129,6 +129,7 @@ class NotificationService {
     payloadMap['message'] ??= body;
     payloadMap['relatedEntityId'] =
         payloadMap['relatedEntityId']?.toString() ??
+        payloadMap['appointmentId']?.toString() ??
         payloadMap['chatUserId']?.toString();
 
     final notificationType = _parseNotificationType(payloadMap['type']);
@@ -503,15 +504,19 @@ class NotificationService {
   }
 
   int? _chatUserIdFromData(Map<String, dynamic> data) {
-    return _parseInt(data['relatedEntityId']) ??
+    // senderId is the explicit sender's user ID (added by backend for chat notifications)
+    // relatedEntityId is intentionally last: for chat it holds a message ID, not a user ID
+    return _parseInt(data['senderId']) ??
         _parseInt(data['chatUserId']) ??
-        _parseInt(data['senderId']) ??
+        _parseInt(data['relatedEntityId']) ??
         _parseInt(data['userId']);
   }
 
   bool _isChatPayload(Map<String, dynamic> data) =>
-      data['relatedEntityId'] != null ||
-      (data['type']?.toString().toLowerCase().contains('chat') ?? false);
+      // Use type as the primary signal; senderId presence is a secondary indicator.
+      // Avoid matching on relatedEntityId alone — appointments also carry it.
+      data['type']?.toString().toLowerCase().contains('chat') == true ||
+      (data['senderId'] != null && data['senderId'].toString().isNotEmpty);
 
   Future<void> _ensureLocalNotificationsInitialized() async {
     if (_localNotificationsInitialized) return;
