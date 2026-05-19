@@ -3,6 +3,7 @@ import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/features/appointment/domain/entities/appointment.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_appointments_cubit.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_appointments_state.dart';
+import 'package:doctor_appointment/core/utils/result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -202,10 +203,26 @@ class DoctorScheduleView extends StatelessWidget {
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Declined.')),
-                      );
+                    onPressed: () async {
+                      final cubit = context.read<DoctorAppointmentsCubit>();
+                      final res = await cubit.updateStatus(appointment.id, 2); // 2 = Rejected
+                      if (context.mounted) {
+                        if (res is Success) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Appointment declined successfully'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        } else if (res is FailureResult) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(res.failure.message),
+                              backgroundColor: colorScheme.error,
+                            ),
+                          );
+                        }
+                      }
                     },
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: colorScheme.error),
@@ -222,10 +239,26 @@ class DoctorScheduleView extends StatelessWidget {
                 SizedBox(width: 12.w),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Accepted!')),
-                      );
+                    onPressed: () async {
+                      final cubit = context.read<DoctorAppointmentsCubit>();
+                      final res = await cubit.updateStatus(appointment.id, 1); // 1 = Approved
+                      if (context.mounted) {
+                        if (res is Success) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Appointment accepted successfully'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        } else if (res is FailureResult) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(res.failure.message),
+                              backgroundColor: colorScheme.error,
+                            ),
+                          );
+                        }
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: colorScheme.primary,

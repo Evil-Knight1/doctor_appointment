@@ -101,12 +101,18 @@ class NotificationService {
     RemoteMessage message, {
     bool fromBackground = false,
   }) async {
-    print('[FCM] showRemoteMessageNotification: message received! fromBackground=$fromBackground');
+    print(
+      '[FCM] showRemoteMessageNotification: message received! fromBackground=$fromBackground',
+    );
     print('[FCM] Message Data: ${message.data}');
-    print('[FCM] Message Notification: Title="${message.notification?.title}", Body="${message.notification?.body}"');
+    print(
+      '[FCM] Message Notification: Title="${message.notification?.title}", Body="${message.notification?.body}"',
+    );
 
     if (fromBackground && message.notification != null) {
-      print('[FCM] Ignoring background notification because it contains a Notification block.');
+      print(
+        '[FCM] Ignoring background notification because it contains a Notification block.',
+      );
       return;
     }
 
@@ -149,7 +155,9 @@ class NotificationService {
     AppNotificationType? type,
     String? avatarUrl,
   }) async {
-    print('[FCM] showNotification: id=$id, title="$title", type=$type, avatarUrl="$avatarUrl"');
+    print(
+      '[FCM] showNotification: id=$id, title="$title", type=$type, avatarUrl="$avatarUrl"',
+    );
     final notificationType = type ?? AppNotificationType.unknown;
     final largeIcon = notificationType.isChat
         ? await _loadAvatarBitmap(avatarUrl)

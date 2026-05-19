@@ -44,29 +44,31 @@ class PaymentHistoryView extends StatelessWidget {
             PaymentHistoryInitial() => const _PaymentHistoryLoading(),
             PaymentHistoryLoading() => const _PaymentHistoryLoading(),
             PaymentHistoryFailure() => _PaymentHistoryFailure(
-                message: state.message,
-                onRetry: () => context.read<PaymentHistoryCubit>().fetchPayments(),
-              ),
+              message: state.message,
+              onRetry: () =>
+                  context.read<PaymentHistoryCubit>().fetchPayments(),
+            ),
             PaymentHistorySuccess() when state.payments.isEmpty =>
               const _PaymentHistoryEmpty(),
             PaymentHistorySuccess() => RefreshIndicator(
-                onRefresh: () => context.read<PaymentHistoryCubit>().fetchPayments(),
-                child: ListView.separated(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-                  itemCount: state.payments.length,
-                  separatorBuilder: (_, _) => SizedBox(height: 12.h),
-                  itemBuilder: (context, index) {
-                    final payment = state.payments[index];
-                    return GestureDetector(
-                      onTap: () => context.push(
-                        AppRouter.kTransactionDetailsView,
-                        extra: payment,
-                      ),
-                      child: _PaymentHistoryCard(payment: payment),
-                    );
-                  },
-                ),
+              onRefresh: () =>
+                  context.read<PaymentHistoryCubit>().fetchPayments(),
+              child: ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                itemCount: state.payments.length,
+                separatorBuilder: (_, _) => SizedBox(height: 12.h),
+                itemBuilder: (context, index) {
+                  final payment = state.payments[index];
+                  return GestureDetector(
+                    onTap: () => context.push(
+                      AppRouter.kTransactionDetailsView,
+                      extra: payment,
+                    ),
+                    child: _PaymentHistoryCard(payment: payment),
+                  );
+                },
               ),
+            ),
             _ => const SizedBox.shrink(),
           };
         },
@@ -139,7 +141,9 @@ class _PaymentHistoryCard extends StatelessWidget {
                   children: [
                     Text(
                       payment.statusLabel,
-                      style: context.styleRegular12.copyWith(color: statusColor),
+                      style: context.styleRegular12.copyWith(
+                        color: statusColor,
+                      ),
                     ),
                     SizedBox(width: 8.w),
                     Container(
@@ -153,8 +157,9 @@ class _PaymentHistoryCard extends StatelessWidget {
                     SizedBox(width: 8.w),
                     Flexible(
                       child: Text(
-                        DateFormat('dd MMM yyyy, hh:mm a')
-                            .format(payment.effectiveDate.toLocal()),
+                        DateFormat(
+                          'dd MMM yyyy, hh:mm a',
+                        ).format(payment.effectiveDate.toLocal()),
                         style: context.styleRegular12.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
@@ -199,7 +204,7 @@ class _PaymentHistoryLoading extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
       itemCount: 6,
       separatorBuilder: (_, _) => SizedBox(height: 12.h),
-      itemBuilder: (_, __) => Container(
+      itemBuilder: (_, _) => Container(
         height: 96.h,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainerHighest,
@@ -251,10 +256,7 @@ class _PaymentHistoryEmpty extends StatelessWidget {
 }
 
 class _PaymentHistoryFailure extends StatelessWidget {
-  const _PaymentHistoryFailure({
-    required this.message,
-    required this.onRetry,
-  });
+  const _PaymentHistoryFailure({required this.message, required this.onRetry});
 
   final String message;
   final VoidCallback onRetry;
@@ -282,10 +284,7 @@ class _PaymentHistoryFailure extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16.h),
-            ElevatedButton(
-              onPressed: onRetry,
-              child: const Text('Try again'),
-            ),
+            ElevatedButton(onPressed: onRetry, child: const Text('Try again')),
           ],
         ),
       ),

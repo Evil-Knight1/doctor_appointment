@@ -6,6 +6,8 @@ import 'package:doctor_appointment/features/doctor_flow/domain/entities/doctor_s
 import 'package:doctor_appointment/features/doctor_flow/domain/repositories/doctor_stats_repository.dart';
 import 'package:doctor_appointment/features/doctors/domain/entities/doctor.dart';
 import 'package:doctor_appointment/features/appointment/domain/entities/appointment.dart';
+import 'package:doctor_appointment/features/doctor_flow/domain/entities/doctor_monthly_revenue.dart';
+import 'package:doctor_appointment/features/doctor_flow/domain/entities/doctor_daily_revenue.dart';
 
 class DoctorStatsRepositoryImpl implements DoctorStatsRepository {
   final DoctorStatsRemoteDataSource remoteDataSource;
@@ -56,6 +58,42 @@ class DoctorStatsRepositoryImpl implements DoctorStatsRepository {
       return Result.failure(ServerFailure(e.message));
     } catch (e) {
       return Result.failure(const ServerFailure('Unexpected error updating profile'));
+    }
+  }
+
+  @override
+  Future<Result<Appointment>> updateAppointmentStatus(int appointmentId, int status, {String? notes}) async {
+    try {
+      final appointment = await remoteDataSource.updateAppointmentStatus(appointmentId, status, notes: notes);
+      return Result.success(appointment);
+    } on ApiException catch (e) {
+      return Result.failure(ServerFailure(e.message));
+    } catch (e) {
+      return Result.failure(const ServerFailure('Unexpected error updating appointment status'));
+    }
+  }
+
+  @override
+  Future<Result<List<DoctorMonthlyRevenue>>> getMonthlyRevenue(int year) async {
+    try {
+      final revenue = await remoteDataSource.getMonthlyRevenue(year);
+      return Result.success(revenue);
+    } on ApiException catch (e) {
+      return Result.failure(ServerFailure(e.message));
+    } catch (e) {
+      return Result.failure(const ServerFailure('Unexpected error fetching monthly revenue'));
+    }
+  }
+
+  @override
+  Future<Result<List<DoctorDailyRevenue>>> getDailyRevenue(int year, int month) async {
+    try {
+      final revenue = await remoteDataSource.getDailyRevenue(year, month);
+      return Result.success(revenue);
+    } on ApiException catch (e) {
+      return Result.failure(ServerFailure(e.message));
+    } catch (e) {
+      return Result.failure(const ServerFailure('Unexpected error fetching daily revenue'));
     }
   }
 }

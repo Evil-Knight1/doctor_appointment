@@ -102,9 +102,8 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
         data: {
           'appointmentId': appointmentId,
           'success': success,
-          if (providerTransactionId != null)
-            'providerTransactionId': providerTransactionId,
-          if (failureReason != null) 'failureReason': failureReason,
+          'providerTransactionId': ?providerTransactionId,
+          'failureReason': ?failureReason,
         },
       );
     } catch (_) {
@@ -120,7 +119,9 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
 
     final data = response['data'];
     if (data is! List) {
-      throw const ApiException('Invalid response: missing payment history data');
+      throw const ApiException(
+        'Invalid response: missing payment history data',
+      );
     }
 
     return data

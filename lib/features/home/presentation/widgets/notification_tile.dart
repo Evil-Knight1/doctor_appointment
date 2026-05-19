@@ -326,9 +326,7 @@ class _NotificationTileState extends State<NotificationTile> {
                   },
             style: OutlinedButton.styleFrom(
               foregroundColor: theme.color,
-              side: BorderSide(
-                color: theme.highlight.withValues(alpha: 0.35),
-              ),
+              side: BorderSide(color: theme.highlight.withValues(alpha: 0.35)),
               padding: EdgeInsets.symmetric(vertical: 10.h),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(AppRadius.full),
@@ -376,7 +374,9 @@ class _NotificationTileState extends State<NotificationTile> {
     await context.push(
       AppRouter.kChatView.replaceFirst(':userId', '$chatUserId'),
       extra: {
-        'otherUserName': _displaySenderName.isNotEmpty ? _displaySenderName : 'Chat',
+        'otherUserName': _displaySenderName.isNotEmpty
+            ? _displaySenderName
+            : 'Chat',
         'otherUserProfilePicture': _displayAvatarUrl,
       },
     );
@@ -395,9 +395,9 @@ class _NotificationTileState extends State<NotificationTile> {
           .firstWhere((_) => true, orElse: () => null);
       if (matchedConversation == null) return;
       _resolvedChatUserId = chatUserId;
-      _resolvedChatPreview ??= matchedConversation?.lastMessage;
-      _resolvedChatName ??= matchedConversation?.otherUserName;
-      _resolvedChatAvatar ??= matchedConversation?.otherUserProfilePicture;
+      _resolvedChatPreview ??= matchedConversation.lastMessage;
+      _resolvedChatName ??= matchedConversation.otherUserName;
+      _resolvedChatAvatar ??= matchedConversation.otherUserProfilePicture;
     } catch (_) {}
   }
 
@@ -491,7 +491,8 @@ class _NotificationTileState extends State<NotificationTile> {
     return baseName;
   }
 
-  String? get _displayAvatarUrl => _resolvedChatAvatar ?? notification.senderProfilePicture;
+  String? get _displayAvatarUrl =>
+      _resolvedChatAvatar ?? notification.senderProfilePicture;
 
   String _buildTitle() {
     if (notification.notificationType.isChat) {
@@ -589,8 +590,9 @@ class _NotificationTileState extends State<NotificationTile> {
           icon: Iconsax.close_circle,
           color: customColors.error ?? colorScheme.error,
           highlight: customColors.error ?? colorScheme.error,
-          softBackground: (customColors.error ?? colorScheme.error)
-              .withValues(alpha: 0.12),
+          softBackground: (customColors.error ?? colorScheme.error).withValues(
+            alpha: 0.12,
+          ),
         );
       case AppNotificationType.appointmentReminder:
         return _NotificationTheme(
@@ -642,8 +644,9 @@ class _NotificationTileState extends State<NotificationTile> {
           icon: Iconsax.empty_wallet_remove,
           color: customColors.error ?? colorScheme.error,
           highlight: customColors.error ?? colorScheme.error,
-          softBackground: (customColors.error ?? colorScheme.error)
-              .withValues(alpha: 0.12),
+          softBackground: (customColors.error ?? colorScheme.error).withValues(
+            alpha: 0.12,
+          ),
         );
       case AppNotificationType.unknown:
         return _NotificationTheme(

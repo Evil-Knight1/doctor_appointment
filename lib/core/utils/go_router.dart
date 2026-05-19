@@ -59,6 +59,7 @@ import 'package:doctor_appointment/features/doctors/logic/specializations_cubit.
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_stats_cubit.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_appointments_cubit.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_profile_cubit.dart';
+import 'package:doctor_appointment/features/doctor_flow/logic/doctor_revenue_cubit.dart';
 import 'package:doctor_appointment/features/doctors/logic/doctors_cubit.dart';
 import 'package:doctor_appointment/features/doctors/logic/doctor_details_cubit.dart';
 import 'package:doctor_appointment/features/appointment/logic/appointments_cubit.dart';
@@ -285,6 +286,9 @@ abstract class AppRouter {
             ),
             BlocProvider(
               create: (context) => getIt<DoctorProfileCubit>()..fetchProfile(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<DoctorRevenueCubit>()..fetchRevenueData(),
             ),
           ],
           child: const DoctorRoot(),

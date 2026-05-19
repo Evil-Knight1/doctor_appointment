@@ -64,9 +64,13 @@ import 'package:doctor_appointment/features/doctor_flow/domain/usecases/get_doct
 import 'package:doctor_appointment/features/doctor_flow/domain/usecases/get_doctor_profile_usecase.dart';
 import 'package:doctor_appointment/features/doctor_flow/domain/usecases/get_doctor_appointments_usecase.dart';
 import 'package:doctor_appointment/features/doctor_flow/domain/usecases/update_doctor_profile_usecase.dart';
+import 'package:doctor_appointment/features/doctor_flow/domain/usecases/update_appointment_status_usecase.dart';
+import 'package:doctor_appointment/features/doctor_flow/domain/usecases/get_doctor_monthly_revenue_usecase.dart';
+import 'package:doctor_appointment/features/doctor_flow/domain/usecases/get_doctor_daily_revenue_usecase.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_stats_cubit.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_profile_cubit.dart';
 import 'package:doctor_appointment/features/doctor_flow/logic/doctor_appointments_cubit.dart';
+import 'package:doctor_appointment/features/doctor_flow/logic/doctor_revenue_cubit.dart';
 import 'package:doctor_appointment/features/doctors/data/datasources/review_remote_data_source.dart';
 import 'package:doctor_appointment/features/doctors/data/repositories/review_repository_impl.dart';
 import 'package:doctor_appointment/features/doctors/domain/repositories/review_repository.dart';
@@ -337,6 +341,15 @@ void setupServiceLocator() {
   getIt.registerLazySingleton(
     () => UpdateDoctorProfileUseCase(getIt<DoctorStatsRepository>()),
   );
+  getIt.registerLazySingleton(
+    () => UpdateAppointmentStatusUseCase(getIt<DoctorStatsRepository>()),
+  );
+  getIt.registerLazySingleton(
+    () => GetDoctorMonthlyRevenueUseCase(getIt<DoctorStatsRepository>()),
+  );
+  getIt.registerLazySingleton(
+    () => GetDoctorDailyRevenueUseCase(getIt<DoctorStatsRepository>()),
+  );
   getIt.registerFactory(
     () =>
         DoctorStatsCubit(getDoctorStatsUseCase: getIt<GetDoctorStatsUseCase>()),
@@ -350,6 +363,13 @@ void setupServiceLocator() {
   getIt.registerFactory(
     () => DoctorAppointmentsCubit(
       getDoctorAppointmentsUseCase: getIt<GetDoctorAppointmentsUseCase>(),
+      updateAppointmentStatusUseCase: getIt<UpdateAppointmentStatusUseCase>(),
+    ),
+  );
+  getIt.registerFactory(
+    () => DoctorRevenueCubit(
+      getDoctorMonthlyRevenueUseCase: getIt<GetDoctorMonthlyRevenueUseCase>(),
+      getDoctorDailyRevenueUseCase: getIt<GetDoctorDailyRevenueUseCase>(),
     ),
   );
 

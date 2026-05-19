@@ -3,12 +3,17 @@ import 'package:doctor_appointment/core/services/api_service.dart';
 import 'package:doctor_appointment/features/doctor_flow/data/models/doctor_stats_model.dart';
 import 'package:doctor_appointment/features/doctors/data/models/doctor_api_model.dart';
 import 'package:doctor_appointment/features/appointment/data/models/appointment_model.dart';
+import 'package:doctor_appointment/features/doctor_flow/data/models/doctor_monthly_revenue_model.dart';
+import 'package:doctor_appointment/features/doctor_flow/data/models/doctor_daily_revenue_model.dart';
 
 abstract class DoctorStatsRemoteDataSource {
   Future<DoctorStatsModel> getDoctorStats();
   Future<DoctorApiModel> getDoctorProfile();
   Future<List<AppointmentModel>> getDoctorAppointments();
   Future<DoctorApiModel> updateDoctorProfile(Map<String, dynamic> data);
+  Future<AppointmentModel> updateAppointmentStatus(int appointmentId, int status, {String? notes});
+  Future<List<DoctorMonthlyRevenueModel>> getMonthlyRevenue(int year);
+  Future<List<DoctorDailyRevenueModel>> getDailyRevenue(int year, int month);
 }
 
 class DoctorStatsRemoteDataSourceImpl implements DoctorStatsRemoteDataSource {
@@ -43,7 +48,7 @@ class DoctorStatsRemoteDataSourceImpl implements DoctorStatsRemoteDataSource {
 
   @override
   Future<List<AppointmentModel>> getDoctorAppointments() async {
-    final response = await apiService.get('/api/Doctor/appointments');
+    final response = await apiService.get('/api/Appointment/doctor/my-appointments');
     if (response['success'] != true) {
       throw ApiException(response['message'] ?? 'Failed to load appointments');
     }
@@ -58,5 +63,46 @@ class DoctorStatsRemoteDataSourceImpl implements DoctorStatsRemoteDataSource {
       throw ApiException(response['message'] ?? 'Failed to update profile');
     }
     return DoctorApiModel.fromJson(response['data']);
+  }
+
+  @override
+  Future<AppointmentModel> updateAppointmentStatus(int appointmentId, int status, {String? notes}) async {
+    final response = await apiService.put(
+      '/api/Appointment/$appointmentId/status',
+      data: {
+        'status': status,
+        'doctorNotes': notes,
+      },
+    );
+    if (response['success'] != true) {
+      throw ApiException(response['message'] ?? 'Failed to update appointment status');
+    }
+    return AppointmentModel.fromJson(response['data']);
+  }
+
+  @override
+  Future<List<DoctorMonthlyRevenueModel>> getMonthlyRevenue(int year) async {
+    final response = await apiService.get(
+      '/api/Doctor/statistics/monthly-revenue',
+      queryParameters: {'year': year},
+    );
+    if (response['success'] != true) {
+      throw ApiException(response['message'] ?? 'Failed to load monthly revenue');
+    }
+    final List data = response['data'] ?? [];
+    return data.map((e) => DoctorMonthlyRevenueModel.fromJson(e)).toList();
+  }
+
+  @override
+  Future<List<DoctorDailyRevenueModel>> getDailyRevenue(int year, int month) async {
+    final response = await apiService.get(
+      '/api/Doctor/statistics/daily-revenue',
+      queryParameters: {'year': year, 'month': month},
+    );
+    if (response['success'] != true) {
+      throw ApiException(response['message'] ?? 'Failed to load daily revenue');
+    }
+    final List data = response['data'] ?? [];
+    return data.map((e) => DoctorDailyRevenueModel.fromJson(e)).toList();
   }
 }

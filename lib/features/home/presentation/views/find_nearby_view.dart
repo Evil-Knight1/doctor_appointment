@@ -178,9 +178,7 @@ class _FindNearbyViewState extends State<FindNearbyView> {
   }
 
   Future<void> _fetchDoctors() async {
-    await context.read<DoctorsCubit>().fetchDoctors(
-      pageSize: 50,
-    );
+    await context.read<DoctorsCubit>().fetchDoctors(pageSize: 50);
   }
 
   Future<void> _searchForPlace() async {
@@ -295,7 +293,7 @@ class _FindNearbyViewState extends State<FindNearbyView> {
         place.street,
         place.subLocality,
         place.locality,
-      ].where((part) => part != null && part!.trim().isNotEmpty).cast<String>();
+      ].where((part) => part != null && part.trim().isNotEmpty).cast<String>();
       return parts.isEmpty ? 'Selected area' : parts.join(', ');
     } catch (_) {
       return 'Selected area';
