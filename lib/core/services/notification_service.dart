@@ -11,7 +11,6 @@ import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 import 'package:doctor_appointment/core/utils/result.dart';
 import 'package:doctor_appointment/features/appointment/domain/entities/appointment.dart';
 import 'package:doctor_appointment/features/appointment/domain/usecases/get_my_appointments_usecase.dart';
-import 'package:doctor_appointment/features/chat/data/datasources/chat_remote_data_source.dart';
 import 'package:doctor_appointment/features/home/data/datasource/notification_remote_data_source.dart';
 import 'package:doctor_appointment/features/home/domain/entities/app_notification_type.dart';
 import 'package:dio/dio.dart';

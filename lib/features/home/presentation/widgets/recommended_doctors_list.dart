@@ -13,6 +13,7 @@ import 'doctor_card.dart';
 import 'section_header.dart';
 import 'package:doctor_appointment/l10n/app_localizations.dart';
 
+
 extension DoctorToHomeModel on Doctor {
   HomeDoctorModel toHomeModel() {
     return HomeDoctorModel(doctor: this);
@@ -72,8 +73,13 @@ class RecommendedDoctorsList extends StatelessWidget {
               );
             } else if (state is DoctorsFailure) {
               return Center(child: Text('Error: ${state.message}'));
-            } else if (state is DoctorsSuccess) {
-              final doctors = state.page.items;
+            } else if (state is DoctorsSuccess || state is DoctorsPaginationLoading) {
+              final page = state is DoctorsSuccess
+                  ? state.page
+                  : (state as DoctorsPaginationLoading).lastPage;
+              final doctors = page.items;
+              final isLoadingMore = state is DoctorsPaginationLoading;
+
               if (doctors.isEmpty) {
                 return Center(
                   child: Text(
@@ -84,11 +90,19 @@ class RecommendedDoctorsList extends StatelessWidget {
               return ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: doctors.length > 5
-                    ? 5
-                    : doctors.length, // Limit to 5 for home
+                itemCount: doctors.length + (isLoadingMore ? 1 : 0),
                 separatorBuilder: (_, _) => SizedBox(height: AppSpacing.sm),
                 itemBuilder: (_, index) {
+                  if (index == doctors.length) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    );
+                  }
                   final doctor = doctors[index];
                   return DoctorCard(
                     doctor: doctor.toHomeModel(),

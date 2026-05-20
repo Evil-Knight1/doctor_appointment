@@ -12,6 +12,9 @@ class DoctorsCubit extends Cubit<DoctorsState> {
 
   DoctorsPage? _currentPage;
   bool _isFetching = false;
+  int? _currentSpecializationId;
+  double? _currentMinRating;
+  String? _currentSearchTerm;
 
   Future<void> fetchDoctors({
     int? specializationId,
@@ -23,6 +26,12 @@ class DoctorsCubit extends Cubit<DoctorsState> {
   }) async {
     if (_isFetching) return;
     _isFetching = true;
+
+    if (!isPagination) {
+      _currentSpecializationId = specializationId;
+      _currentMinRating = minRating;
+      _currentSearchTerm = searchTerm;
+    }
 
     if (isPagination) {
       if (_currentPage != null) {
@@ -66,17 +75,13 @@ class DoctorsCubit extends Cubit<DoctorsState> {
     }
   }
 
-  void fetchNextPage({
-    int? specializationId,
-    double? minRating,
-    String? searchTerm,
-  }) {
+  void fetchNextPage() {
     if (_currentPage == null || !_currentPage!.hasNextPage || _isFetching) return;
 
     fetchDoctors(
-      specializationId: specializationId,
-      minRating: minRating,
-      searchTerm: searchTerm,
+      specializationId: _currentSpecializationId,
+      minRating: _currentMinRating,
+      searchTerm: _currentSearchTerm,
       pageNumber: _currentPage!.pageNumber + 1,
       pageSize: _currentPage!.pageSize,
       isPagination: true,

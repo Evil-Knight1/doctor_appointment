@@ -139,7 +139,7 @@ class DoctorScheduleView extends StatelessWidget {
                 backgroundColor: colorScheme.secondaryContainer,
                 backgroundImage: appointment.patientProfilePicture != null
                     ? CachedNetworkImageProvider(
-                        ImageUrlHelper.getProfileImageUrl(appointment.patientProfilePicture!),
+                        ImageUrlHelper.getFullUrl(appointment.patientProfilePicture!),
                       )
                     : null,
                 child: appointment.patientProfilePicture == null

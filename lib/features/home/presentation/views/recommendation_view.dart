@@ -119,8 +119,12 @@ class _RecommendationViewState extends State<RecommendationView> {
                       style: TextStyle(color: colorScheme.error),
                     ),
                   );
-                } else if (state is DoctorsSuccess) {
-                  final doctors = state.page.items;
+                } else if (state is DoctorsSuccess || state is DoctorsPaginationLoading) {
+                  final doctors = state is DoctorsSuccess 
+                      ? state.page.items 
+                      : (state as DoctorsPaginationLoading).lastPage.items;
+                  final isLoadingMore = state is DoctorsPaginationLoading;
+
                   if (doctors.isEmpty) {
                     return Center(
                       child: Text(
@@ -129,25 +133,44 @@ class _RecommendationViewState extends State<RecommendationView> {
                       ),
                     );
                   }
-                  return ListView.separated(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppSpacing.lg,
-                      vertical: AppSpacing.sm,
-                    ),
-                    itemCount: doctors.length,
-                    separatorBuilder: (_, _) => SizedBox(height: AppSpacing.md),
-                    itemBuilder: (context, index) {
-                      final doctor = doctors[index];
-                      final homeModel = HomeDoctorModel(doctor: doctor);
-
-                      return DoctorListTile(
-                        doctor: homeModel,
-                        onTap: () => context.pushNamed(
-                          Routes.doctorDetailsView,
-                          extra: homeModel,
-                        ),
-                      );
+                  
+                  return NotificationListener<ScrollNotification>(
+                    onNotification: (ScrollNotification scrollInfo) {
+                      if (!isLoadingMore &&
+                          scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 200) {
+                        context.read<DoctorsCubit>().fetchNextPage();
+                      }
+                      return false;
                     },
+                    child: ListView.separated(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSpacing.lg,
+                        vertical: AppSpacing.sm,
+                      ),
+                      itemCount: doctors.length + (isLoadingMore ? 1 : 0),
+                      separatorBuilder: (_, _) => SizedBox(height: AppSpacing.md),
+                      itemBuilder: (context, index) {
+                        if (index == doctors.length) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
+                            child: Center(
+                              child: CircularProgressIndicator(color: colorScheme.primary),
+                            ),
+                          );
+                        }
+
+                        final doctor = doctors[index];
+                        final homeModel = HomeDoctorModel(doctor: doctor);
+
+                        return DoctorListTile(
+                          doctor: homeModel,
+                          onTap: () => context.pushNamed(
+                            Routes.doctorDetailsView,
+                            extra: homeModel,
+                          ),
+                        );
+                      },
+                    ),
                   );
                 }
                 return const SizedBox.shrink();

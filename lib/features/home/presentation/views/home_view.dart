@@ -61,17 +61,25 @@ class _HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LiquidPullToRefresh(
-      onRefresh: () => _handleRefresh(context),
-      color: Theme.of(context).colorScheme.primary,
-      backgroundColor: Theme.of(context).cardColor,
-      showChildOpacityTransition: false,
-      child: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: [
-          SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification scrollInfo) {
+        if (scrollInfo.metrics.pixels >=
+            scrollInfo.metrics.maxScrollExtent - 200) {
+          context.read<DoctorsCubit>().fetchNextPage();
+        }
+        return false;
+      },
+      child: LiquidPullToRefresh(
+        onRefresh: () => _handleRefresh(context),
+        color: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).cardColor,
+        showChildOpacityTransition: false,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: AppSpacing.sm),
                 BlocBuilder<ProfileCubit, ProfileState>(
@@ -98,6 +106,7 @@ class _HomeBody extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

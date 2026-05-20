@@ -136,6 +136,35 @@ class UserChatCubit extends Cubit<ChatState> {
     }
   }
 
+  Future<void> loadMoreMessages() async {
+    final activeChatUserId = state.activeChatUserId;
+    if (activeChatUserId == null || state.isLoadingMore || !state.hasMore) return;
+
+    emit(state.copyWith(isLoadingMore: true));
+
+    try {
+      final nextPage = state.currentPage + 1;
+      final messages = await _remoteDataSource.getChatHistory(
+        activeChatUserId,
+        pageNumber: nextPage,
+        pageSize: 50,
+      );
+
+      final mergedMessages = _mergeMessages(state.messages, messages);
+      final hasMore = messages.length == 50;
+
+      await _cacheService.cacheMessages(activeChatUserId, mergedMessages);
+      emit(state.copyWith(
+        messages: mergedMessages,
+        currentPage: nextPage,
+        hasMore: hasMore,
+        isLoadingMore: false,
+      ));
+    } catch (e) {
+      emit(state.copyWith(isLoadingMore: false));
+    }
+  }
+
   Future<void> sendMessage(String text) async {
     if (state.activeChatUserId == null) return;
     await sendMessageViaApi(state.activeChatUserId!, text);

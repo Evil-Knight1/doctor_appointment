@@ -87,10 +87,7 @@ class _SearchViewState extends State<SearchView> {
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      _doctorsCubit.fetchNextPage(
-        specializationId: _selectedSpecializationId,
-        searchTerm: _searchTerm.isEmpty ? null : _searchTerm,
-      );
+      _doctorsCubit.fetchNextPage();
     }
   }
 
