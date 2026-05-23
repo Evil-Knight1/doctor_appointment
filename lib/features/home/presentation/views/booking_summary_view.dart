@@ -10,6 +10,8 @@ import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 import 'package:doctor_appointment/features/payments/logic/payment_cubit.dart';
 import 'package:doctor_appointment/features/payments/logic/payment_state.dart';
 import 'package:doctor_appointment/features/payments/presentation/views/payment_webview_screen.dart';
+import 'package:doctor_appointment/features/appointment/logic/appointments_cubit.dart';
+import 'package:doctor_appointment/core/utils/result.dart';
 
 import 'package:doctor_appointment/core/utils/go_router.dart' show AppRouter;
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
@@ -17,23 +19,33 @@ import '../widgets/booking_stepper.dart';
 import '../widgets/shared_app_bar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class BookingSummaryView extends StatelessWidget {
+class BookingSummaryView extends StatefulWidget {
   const BookingSummaryView({super.key, required this.args});
   final Map<String, dynamic> args;
 
   @override
+  State<BookingSummaryView> createState() => _BookingSummaryViewState();
+}
+
+class _BookingSummaryViewState extends State<BookingSummaryView> {
+  bool _isRescheduling = false;
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final Doctor doctor = args['doctor'];
-    final String time = args['time'] ?? '';
-    final int paymentMethodId = args['paymentMethod'] as int? ?? 3;
+    final Doctor doctor = widget.args['doctor'];
+    final String time = widget.args['time'] ?? '';
+    final int paymentMethodId = widget.args['paymentMethod'] as int? ?? 3;
     final String paymentLabel =
-        args['paymentLabel'] as String? ?? 'Cash at Clinic';
-    final int slotId = args['slotId'] as int? ?? 0;
-    final String reason = args['reason'] as String? ?? '';
+        widget.args['paymentLabel'] as String? ?? 'Cash at Clinic';
+    final int slotId = widget.args['slotId'] as int? ?? 0;
+    final String reason = widget.args['reason'] as String? ?? '';
     final double amount =
-        args['amount'] as double? ?? doctor.consultationFee ?? 0.0;
-    final int appointmentType = args['type'] as int? ?? 0;
+        widget.args['amount'] as double? ?? doctor.consultationFee ?? 0.0;
+    final int appointmentType = widget.args['type'] as int? ?? 0;
+    
+    final int? rescheduleAppointmentId = widget.args['rescheduleAppointmentId'] as int?;
+    final bool isReschedule = rescheduleAppointmentId != null;
 
     return BlocConsumer<PaymentCubit, PaymentState>(
       listener: (context, state) {
@@ -59,7 +71,7 @@ class BookingSummaryView extends StatelessWidget {
             },
           );
         } else if (state is PaymentSuccess || state is PaymentCashConfirmed) {
-          context.goNamed(Routes.bookingConfirmedView, extra: args);
+          context.goNamed(Routes.bookingConfirmedView, extra: widget.args);
         } else if (state is PaymentFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -187,78 +199,107 @@ class BookingSummaryView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: AppSpacing.lg),
-                    _SectionCard(
-                      title: 'Payment Method',
-                      child: _DetailRow(
-                        icon: _iconForMethod(paymentMethodId),
-                        label: 'Method',
-                        value: paymentLabel,
-                        trailing: GestureDetector(
-                          onTap: () => context.pop(),
-                          child: Text(
-                            'Change',
-                            style: TextStyle(
-                              color: colorScheme.primary,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600,
+                    if (!isReschedule) ...[
+                      SizedBox(height: AppSpacing.lg),
+                      _SectionCard(
+                        title: 'Payment Method',
+                        child: _DetailRow(
+                          icon: _iconForMethod(paymentMethodId),
+                          label: 'Method',
+                          value: paymentLabel,
+                          trailing: GestureDetector(
+                            onTap: () => context.pop(),
+                            child: Text(
+                              'Change',
+                              style: TextStyle(
+                                color: colorScheme.primary,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: AppSpacing.lg),
-                    _SectionCard(
-                      title: 'Cost Summary',
-                      child: Column(
-                        children: [
-                          _CostRow(
-                            label: 'Consultation',
-                            value: '${amount.toStringAsFixed(2)} EGP',
-                          ),
-                          Divider(
-                            height: 24.h,
-                            color: colorScheme.outlineVariant,
-                          ),
-                          _CostRow(
-                            label: 'Total',
-                            value: '${amount.toStringAsFixed(2)} EGP',
-                            isTotal: true,
-                          ),
-                        ],
+                      SizedBox(height: AppSpacing.lg),
+                      _SectionCard(
+                        title: 'Cost Summary',
+                        child: Column(
+                          children: [
+                            _CostRow(
+                              label: 'Consultation',
+                              value: '${amount.toStringAsFixed(2)} EGP',
+                            ),
+                            Divider(
+                              height: 24.h,
+                              color: colorScheme.outlineVariant,
+                            ),
+                            _CostRow(
+                              label: 'Total',
+                              value: '${amount.toStringAsFixed(2)} EGP',
+                              isTotal: true,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    if (paymentMethodId == 3) ...[
-                      SizedBox(height: AppSpacing.md),
-                      _InfoBanner(
-                        message:
-                            'You selected Cash at Clinic. Your appointment will be booked and payment confirmed by the doctor when you arrive.',
-                      ),
+                      if (paymentMethodId == 3) ...[
+                        SizedBox(height: AppSpacing.md),
+                        _InfoBanner(
+                          message:
+                              'You selected Cash at Clinic. Your appointment will be booked and payment confirmed by the doctor when you arrive.',
+                        ),
+                      ] else ...[
+                        SizedBox(height: AppSpacing.md),
+                        _InfoBanner(
+                          message:
+                              'You will complete payment securely inside the app via Paymob. No browser redirect.',
+                          isPaymob: true,
+                        ),
+                      ],
                     ] else ...[
-                      SizedBox(height: AppSpacing.md),
+                      SizedBox(height: AppSpacing.lg),
                       _InfoBanner(
-                        message:
-                            'You will complete payment securely inside the app via Paymob. No browser redirect.',
-                        isPaymob: true,
+                        message: 'You are rescheduling your appointment. No additional payment is required.',
                       ),
                     ],
                   ],
                 ),
               ),
               _BottomAction(
-                isLoading: isLoading,
-                isCash: paymentMethodId == 3,
-                onConfirm: () {
-                  final int doctorId = doctor.id;
-                  context.read<PaymentCubit>().checkout(
-                    context: context,
-                    doctorId: doctorId,
-                    slotId: slotId,
-                    reason: reason.isEmpty ? 'General Consultation' : reason,
-                    paymentMethod: paymentMethodId,
-                    amount: amount,
-                    type: appointmentType,
-                  );
+                isLoading: isLoading || _isRescheduling,
+                isCash: paymentMethodId == 3 || isReschedule,
+                onConfirm: () async {
+                  if (isReschedule) {
+                    setState(() => _isRescheduling = true);
+                    final result = await context.read<AppointmentsCubit>().selectRescheduleSlot(
+                          rescheduleAppointmentId!,
+                          slotId,
+                        );
+                    if (mounted) {
+                      setState(() => _isRescheduling = false);
+                      if (result is Success) {
+                        context.goNamed(Routes.bookingConfirmedView, extra: widget.args);
+                      } else if (result is FailureResult) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text((result as FailureResult).failure.message),
+                            backgroundColor: colorScheme.error,
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      }
+                    }
+                  } else {
+                    final int doctorId = doctor.id;
+                    context.read<PaymentCubit>().checkout(
+                      context: context,
+                      doctorId: doctorId,
+                      slotId: slotId,
+                      reason: reason.isEmpty ? 'General Consultation' : reason,
+                      paymentMethod: paymentMethodId,
+                      amount: amount,
+                      type: appointmentType,
+                    );
+                  }
                 },
               ),
             ],

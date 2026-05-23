@@ -450,6 +450,7 @@ class AppointmentDetailsView extends StatelessWidget {
     );
   }
 
+
   void _showRequestRescheduleDialog(BuildContext context) {
     final reasonController = TextEditingController();
     showDialog(

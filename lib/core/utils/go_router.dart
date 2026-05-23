@@ -423,10 +423,20 @@ abstract class AppRouter {
         name: Routes.bookingDateView,
         path: kBookingDateView,
         builder: (context, state) {
-          final doctor = state.extra as Doctor;
+          late final Doctor doctor;
+          int? rescheduleAppointmentId;
+
+          if (state.extra is Map<String, dynamic>) {
+            final map = state.extra as Map<String, dynamic>;
+            doctor = map['doctor'] as Doctor;
+            rescheduleAppointmentId = map['rescheduleAppointmentId'] as int?;
+          } else {
+            doctor = state.extra as Doctor;
+          }
+
           return BlocProvider(
             create: (context) => getIt<DoctorSlotsCubit>(),
-            child: BookingDateView(doctor: doctor),
+            child: BookingDateView(doctor: doctor, rescheduleAppointmentId: rescheduleAppointmentId),
           );
         },
       ),
@@ -443,8 +453,11 @@ abstract class AppRouter {
         path: kBookingSummaryView,
         builder: (context, state) {
           final args = state.extra as Map<String, dynamic>;
-          return BlocProvider(
-            create: (_) => getIt<PaymentCubit>(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<PaymentCubit>()),
+              BlocProvider(create: (_) => getIt<AppointmentsCubit>()),
+            ],
             child: BookingSummaryView(args: args),
           );
         },

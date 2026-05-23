@@ -65,7 +65,7 @@ class PaymentCubit extends Cubit<PaymentState> {
     required int doctorId,
     required int slotId,
     required String reason,
-    required int paymentMethod, // 1=Card, 2=Wallet, 3=Cash
+    required int paymentMethod, // 4=OnlineCard, 5=MobileWallet, 3=CashAtClinic
     required double amount,
     int? type,
   }) async {
@@ -108,7 +108,7 @@ class PaymentCubit extends Cubit<PaymentState> {
           amount: amount,
         ));
 
-        if (paymentMethod == 1) {
+        if (paymentMethod == 4) {
           await FlutterPaymob.instance.payWithCard(
             context: context,
             currency: "EGP",
@@ -121,7 +121,7 @@ class PaymentCubit extends Cubit<PaymentState> {
               );
             },
           );
-        } else if (paymentMethod == 2) {
+        } else if (paymentMethod == 5) {
           await FlutterPaymob.instance.payWithWallet(
             context: context,
             currency: "EGP",

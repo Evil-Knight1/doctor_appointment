@@ -17,8 +17,9 @@ import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class BookingDateView extends StatefulWidget {
-  const BookingDateView({super.key, required this.doctor});
+  const BookingDateView({super.key, required this.doctor, this.rescheduleAppointmentId});
   final Doctor doctor;
+  final int? rescheduleAppointmentId;
 
   @override
   State<BookingDateView> createState() => _BookingDateViewState();
@@ -203,17 +204,23 @@ class _BookingDateViewState extends State<BookingDateView> {
           _BottomAction(
             onNext: _selectedSlot == null
                 ? null
-                : () => context.pushNamed(
-                      Routes.bookingPaymentView,
-                      extra: {
+                : () {
+                      final args = {
                         'doctor': widget.doctor,
                         'date': _selectedDate,
                         'time': DateFormat('hh:mm a').format(_selectedSlot!.startTime),
                         'slotId': _selectedSlot!.id,
                         'amount': widget.doctor.consultationFee ?? 100.0,
                         'type': _selectedType,
-                      },
-                    ),
+                      };
+                      
+                      if (widget.rescheduleAppointmentId != null) {
+                        args['rescheduleAppointmentId'] = widget.rescheduleAppointmentId!;
+                        context.pushNamed(Routes.bookingSummaryView, extra: args);
+                      } else {
+                        context.pushNamed(Routes.bookingPaymentView, extra: args);
+                      }
+                    },
           ),
         ],
       ),
