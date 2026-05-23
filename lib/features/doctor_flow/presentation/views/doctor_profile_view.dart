@@ -10,6 +10,7 @@ import 'package:doctor_appointment/core/services/shared_preferences_helper.dart'
 import 'package:doctor_appointment/core/services/app_cache_service.dart';
 import 'package:doctor_appointment/core/services/chat_cache_service.dart';
 import 'package:doctor_appointment/core/services/service_locator.dart';
+import 'package:doctor_appointment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,6 +34,7 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
@@ -40,7 +42,7 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
-          'Doctor Profile',
+          l10n.doctorProfile,
           style: context.styleSemiBold22.copyWith(fontSize: 18.sp, color: colorScheme.onSurface),
         ),
       ),
@@ -78,28 +80,28 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
                     ),
                     SizedBox(height: 16.h),
                     Text(
-                      doctor?.fullName ?? 'Doctor Full Name',
+                      doctor?.fullName ?? l10n.doctorFullName,
                       style: context.styleSemiBold22.copyWith(color: colorScheme.onSurface),
                     ),
                     Text(
-                      doctor?.specialization.name ?? 'Specialization',
+                      doctor?.specialization.name ?? l10n.specialization,
                       style: context.styleRegular14.copyWith(color: colorScheme.onSurfaceVariant),
                     ),
                     SizedBox(height: 32.h),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Management',
+                        l10n.management,
                         style: context.styleSemiBold16.copyWith(color: colorScheme.onSurface),
                       ),
                     ),
                     SizedBox(height: 12.h),
                     ProfileMenuItem(
                       icon: Icons.personal_injury_outlined,
-                      title: 'Accepting Patients',
+                      title: l10n.acceptingPatients,
                       subtitle: (doctor?.isAvailable ?? true)
-                          ? 'Currently Accepting'
-                          : 'Not Accepting',
+                          ? l10n.currentlyAccepting
+                          : l10n.notAccepting,
                       trailing: Switch(
                         value: doctor?.isAvailable ?? true,
                         onChanged: (v) {
@@ -113,8 +115,8 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
                     SizedBox(height: 12.h),
                     ProfileMenuItem(
                       icon: Icons.payments_outlined,
-                      title: 'Setup Fees & Services',
-                      subtitle: 'Manage your consultation costs',
+                      title: l10n.setupFeesAndServices,
+                      subtitle: l10n.manageConsultationCosts,
                       onTap: () {
                         if (doctor != null) {
                           Navigator.push(
@@ -132,8 +134,8 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
                     SizedBox(height: 12.h),
                     ProfileMenuItem(
                       icon: Icons.access_time_rounded,
-                      title: 'Working Hours',
-                      subtitle: 'Set auto-schedule blocks',
+                      title: l10n.workingHours,
+                      subtitle: l10n.setAutoScheduleBlocks,
                       onTap: () {
                         if (doctor != null) {
                           Navigator.push(
@@ -171,7 +173,7 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
                             ),
                             SizedBox(width: 8.w),
                             Text(
-                              'Log Out',
+                              l10n.logout,
                               style: context.styleMedium14.copyWith(
                                 color: colorScheme.error,
                                 fontSize: 15.sp,
@@ -194,6 +196,7 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
 
   void _showLogoutDialog(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -203,18 +206,18 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
           borderRadius: BorderRadius.circular(16.r),
         ),
         title: Text(
-          'Log Out',
+          l10n.logout,
           style: context.styleSemiBold22.copyWith(fontSize: 16.sp, color: colorScheme.onSurface),
         ),
         content: Text(
-          'Are you sure you want to log out?',
+          l10n.logoutConfirm,
           style: context.styleRegular14.copyWith(color: colorScheme.onSurfaceVariant),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
+              l10n.cancel,
               style: context.styleMedium14.copyWith(color: colorScheme.onSurfaceVariant),
             ),
           ),
@@ -228,7 +231,7 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
               }
             },
             child: Text(
-              'Log Out',
+              l10n.logout,
               style: context.styleMedium14.copyWith(color: colorScheme.error),
             ),
           ),

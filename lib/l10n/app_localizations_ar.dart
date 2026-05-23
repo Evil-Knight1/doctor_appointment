@@ -232,4 +232,138 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get arabic => 'العربية';
+
+  @override
+  String get doctorProfile => 'الملف الشخصي للطبيب';
+
+  @override
+  String get doctorFullName => 'الاسم الكامل للطبيب';
+
+  @override
+  String get specialization => 'التخصص';
+
+  @override
+  String get management => 'الإدارة';
+
+  @override
+  String get acceptingPatients => 'استقبال المرضى';
+
+  @override
+  String get currentlyAccepting => 'يستقبل حالياً';
+
+  @override
+  String get notAccepting => 'لا يستقبل';
+
+  @override
+  String get setupFeesAndServices => 'إعداد الرسوم والخدمات';
+
+  @override
+  String get manageConsultationCosts => 'إدارة تكاليف الاستشارة';
+
+  @override
+  String get workingHours => 'ساعات العمل';
+
+  @override
+  String get setAutoScheduleBlocks => 'تعيين فترات الجدول التلقائي';
+
+  @override
+  String get appointmentDetails => 'تفاصيل الموعد';
+
+  @override
+  String get doctor => 'الطبيب';
+
+  @override
+  String get status => 'الحالة';
+
+  @override
+  String get cancelled => 'ملغى';
+
+  @override
+  String get completed => 'مكتمل';
+
+  @override
+  String get cancellationRequested => 'مطلوب الإلغاء';
+
+  @override
+  String get rescheduleApproved => 'تمت الموافقة على إعادة الجدولة';
+
+  @override
+  String get rescheduleRequested => 'مطلوب إعادة الجدولة';
+
+  @override
+  String get upcoming => 'قادم';
+
+  @override
+  String get date => 'التاريخ';
+
+  @override
+  String get time => 'الوقت';
+
+  @override
+  String get reason => 'السبب';
+
+  @override
+  String get selectNewSlot => 'اختر موعداً جديداً';
+
+  @override
+  String get rescheduleWindowExpired => 'انتهت فترة إعادة الجدولة.';
+
+  @override
+  String get reschedulePendingApproval =>
+      'طلب إعادة الجدولة الخاص بك في انتظار موافقة الطبيب.';
+
+  @override
+  String get cancellationPendingReview =>
+      'طلب الإلغاء الخاص بك في انتظار المراجعة.';
+
+  @override
+  String get requestReschedule => 'طلب إعادة جدولة';
+
+  @override
+  String get rescheduleAllowedUpTo24Hours =>
+      'يُسمح بإعادة الجدولة فقط حتى 24 ساعة قبل الموعد.';
+
+  @override
+  String get requestCancel => 'طلب إلغاء';
+
+  @override
+  String get leaveReview => 'ترك تقييم';
+
+  @override
+  String get bookAgain => 'احجز مرة أخرى';
+
+  @override
+  String get requestCancellation => 'طلب إلغاء';
+
+  @override
+  String cancelReasonPrompt(String doctorName) {
+    return 'يرجى تقديم سبب لإلغاء موعدك مع $doctorName.';
+  }
+
+  @override
+  String get cancellationReasonHint => 'سبب الإلغاء...';
+
+  @override
+  String get back => 'رجوع';
+
+  @override
+  String get pleaseEnterReason => 'يرجى إدخال سبب';
+
+  @override
+  String get cancellationSubmittedSuccessfully => 'تم تقديم طلب الإلغاء بنجاح';
+
+  @override
+  String get submit => 'إرسال';
+
+  @override
+  String rescheduleReasonPrompt(String doctorName) {
+    return 'يرجى تقديم سبب لإعادة جدولة موعدك مع $doctorName.';
+  }
+
+  @override
+  String get rescheduleReasonHint => 'سبب إعادة الجدولة...';
+
+  @override
+  String get rescheduleSubmittedSuccessfully =>
+      'تم تقديم طلب إعادة الجدولة بنجاح';
 }

@@ -232,4 +232,139 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get arabic => 'Arabic';
+
+  @override
+  String get doctorProfile => 'Doctor Profile';
+
+  @override
+  String get doctorFullName => 'Doctor Full Name';
+
+  @override
+  String get specialization => 'Specialization';
+
+  @override
+  String get management => 'Management';
+
+  @override
+  String get acceptingPatients => 'Accepting Patients';
+
+  @override
+  String get currentlyAccepting => 'Currently Accepting';
+
+  @override
+  String get notAccepting => 'Not Accepting';
+
+  @override
+  String get setupFeesAndServices => 'Setup Fees & Services';
+
+  @override
+  String get manageConsultationCosts => 'Manage your consultation costs';
+
+  @override
+  String get workingHours => 'Working Hours';
+
+  @override
+  String get setAutoScheduleBlocks => 'Set auto-schedule blocks';
+
+  @override
+  String get appointmentDetails => 'Appointment Details';
+
+  @override
+  String get doctor => 'Doctor';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get cancelled => 'Cancelled';
+
+  @override
+  String get completed => 'Completed';
+
+  @override
+  String get cancellationRequested => 'Cancellation Requested';
+
+  @override
+  String get rescheduleApproved => 'Reschedule Approved';
+
+  @override
+  String get rescheduleRequested => 'Reschedule Requested';
+
+  @override
+  String get upcoming => 'Upcoming';
+
+  @override
+  String get date => 'Date';
+
+  @override
+  String get time => 'Time';
+
+  @override
+  String get reason => 'Reason';
+
+  @override
+  String get selectNewSlot => 'Select New Slot';
+
+  @override
+  String get rescheduleWindowExpired => 'Reschedule window expired.';
+
+  @override
+  String get reschedulePendingApproval =>
+      'Your reschedule request is pending doctor approval.';
+
+  @override
+  String get cancellationPendingReview =>
+      'Your cancellation request is pending review.';
+
+  @override
+  String get requestReschedule => 'Request Reschedule';
+
+  @override
+  String get rescheduleAllowedUpTo24Hours =>
+      'Rescheduling is only allowed up to 24 hours before the appointment.';
+
+  @override
+  String get requestCancel => 'Request Cancel';
+
+  @override
+  String get leaveReview => 'Leave Review';
+
+  @override
+  String get bookAgain => 'Book Again';
+
+  @override
+  String get requestCancellation => 'Request Cancellation';
+
+  @override
+  String cancelReasonPrompt(String doctorName) {
+    return 'Please provide a reason for cancelling your appointment with $doctorName.';
+  }
+
+  @override
+  String get cancellationReasonHint => 'Cancellation reason...';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get pleaseEnterReason => 'Please enter a reason';
+
+  @override
+  String get cancellationSubmittedSuccessfully =>
+      'Cancellation request submitted successfully';
+
+  @override
+  String get submit => 'Submit';
+
+  @override
+  String rescheduleReasonPrompt(String doctorName) {
+    return 'Please provide a reason for rescheduling your appointment with $doctorName.';
+  }
+
+  @override
+  String get rescheduleReasonHint => 'Reschedule reason...';
+
+  @override
+  String get rescheduleSubmittedSuccessfully =>
+      'Reschedule request submitted successfully';
 }

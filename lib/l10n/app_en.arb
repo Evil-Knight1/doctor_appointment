@@ -72,5 +72,61 @@
   "cancel": "Cancel",
   "selectLanguage": "Select Language",
   "english": "English",
-  "arabic": "Arabic"
+  "arabic": "Arabic",
+  "doctorProfile": "Doctor Profile",
+  "doctorFullName": "Doctor Full Name",
+  "specialization": "Specialization",
+  "management": "Management",
+  "acceptingPatients": "Accepting Patients",
+  "currentlyAccepting": "Currently Accepting",
+  "notAccepting": "Not Accepting",
+  "setupFeesAndServices": "Setup Fees & Services",
+  "manageConsultationCosts": "Manage your consultation costs",
+  "workingHours": "Working Hours",
+  "setAutoScheduleBlocks": "Set auto-schedule blocks",
+  "appointmentDetails": "Appointment Details",
+  "doctor": "Doctor",
+  "status": "Status",
+  "cancelled": "Cancelled",
+  "completed": "Completed",
+  "cancellationRequested": "Cancellation Requested",
+  "rescheduleApproved": "Reschedule Approved",
+  "rescheduleRequested": "Reschedule Requested",
+  "upcoming": "Upcoming",
+  "date": "Date",
+  "time": "Time",
+  "reason": "Reason",
+  "selectNewSlot": "Select New Slot",
+  "rescheduleWindowExpired": "Reschedule window expired.",
+  "reschedulePendingApproval": "Your reschedule request is pending doctor approval.",
+  "cancellationPendingReview": "Your cancellation request is pending review.",
+  "requestReschedule": "Request Reschedule",
+  "rescheduleAllowedUpTo24Hours": "Rescheduling is only allowed up to 24 hours before the appointment.",
+  "requestCancel": "Request Cancel",
+  "leaveReview": "Leave Review",
+  "bookAgain": "Book Again",
+  "requestCancellation": "Request Cancellation",
+  "cancelReasonPrompt": "Please provide a reason for cancelling your appointment with {doctorName}.",
+  "@cancelReasonPrompt": {
+    "placeholders": {
+      "doctorName": {
+        "type": "String"
+      }
+    }
+  },
+  "cancellationReasonHint": "Cancellation reason...",
+  "back": "Back",
+  "pleaseEnterReason": "Please enter a reason",
+  "cancellationSubmittedSuccessfully": "Cancellation request submitted successfully",
+  "submit": "Submit",
+  "rescheduleReasonPrompt": "Please provide a reason for rescheduling your appointment with {doctorName}.",
+  "@rescheduleReasonPrompt": {
+    "placeholders": {
+      "doctorName": {
+        "type": "String"
+      }
+    }
+  },
+  "rescheduleReasonHint": "Reschedule reason...",
+  "rescheduleSubmittedSuccessfully": "Reschedule request submitted successfully"
 }

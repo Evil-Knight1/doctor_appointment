@@ -541,6 +541,258 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Arabic'**
   String get arabic;
+
+  /// No description provided for @doctorProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Doctor Profile'**
+  String get doctorProfile;
+
+  /// No description provided for @doctorFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Doctor Full Name'**
+  String get doctorFullName;
+
+  /// No description provided for @specialization.
+  ///
+  /// In en, this message translates to:
+  /// **'Specialization'**
+  String get specialization;
+
+  /// No description provided for @management.
+  ///
+  /// In en, this message translates to:
+  /// **'Management'**
+  String get management;
+
+  /// No description provided for @acceptingPatients.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepting Patients'**
+  String get acceptingPatients;
+
+  /// No description provided for @currentlyAccepting.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently Accepting'**
+  String get currentlyAccepting;
+
+  /// No description provided for @notAccepting.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Accepting'**
+  String get notAccepting;
+
+  /// No description provided for @setupFeesAndServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Fees & Services'**
+  String get setupFeesAndServices;
+
+  /// No description provided for @manageConsultationCosts.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your consultation costs'**
+  String get manageConsultationCosts;
+
+  /// No description provided for @workingHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Working Hours'**
+  String get workingHours;
+
+  /// No description provided for @setAutoScheduleBlocks.
+  ///
+  /// In en, this message translates to:
+  /// **'Set auto-schedule blocks'**
+  String get setAutoScheduleBlocks;
+
+  /// No description provided for @appointmentDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointment Details'**
+  String get appointmentDetails;
+
+  /// No description provided for @doctor.
+  ///
+  /// In en, this message translates to:
+  /// **'Doctor'**
+  String get doctor;
+
+  /// No description provided for @status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get status;
+
+  /// No description provided for @cancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get cancelled;
+
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// No description provided for @cancellationRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation Requested'**
+  String get cancellationRequested;
+
+  /// No description provided for @rescheduleApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Reschedule Approved'**
+  String get rescheduleApproved;
+
+  /// No description provided for @rescheduleRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Reschedule Requested'**
+  String get rescheduleRequested;
+
+  /// No description provided for @upcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get upcoming;
+
+  /// No description provided for @date.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get date;
+
+  /// No description provided for @time.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get time;
+
+  /// No description provided for @reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason'**
+  String get reason;
+
+  /// No description provided for @selectNewSlot.
+  ///
+  /// In en, this message translates to:
+  /// **'Select New Slot'**
+  String get selectNewSlot;
+
+  /// No description provided for @rescheduleWindowExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Reschedule window expired.'**
+  String get rescheduleWindowExpired;
+
+  /// No description provided for @reschedulePendingApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Your reschedule request is pending doctor approval.'**
+  String get reschedulePendingApproval;
+
+  /// No description provided for @cancellationPendingReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Your cancellation request is pending review.'**
+  String get cancellationPendingReview;
+
+  /// No description provided for @requestReschedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Reschedule'**
+  String get requestReschedule;
+
+  /// No description provided for @rescheduleAllowedUpTo24Hours.
+  ///
+  /// In en, this message translates to:
+  /// **'Rescheduling is only allowed up to 24 hours before the appointment.'**
+  String get rescheduleAllowedUpTo24Hours;
+
+  /// No description provided for @requestCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Cancel'**
+  String get requestCancel;
+
+  /// No description provided for @leaveReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave Review'**
+  String get leaveReview;
+
+  /// No description provided for @bookAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Book Again'**
+  String get bookAgain;
+
+  /// No description provided for @requestCancellation.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Cancellation'**
+  String get requestCancellation;
+
+  /// No description provided for @cancelReasonPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide a reason for cancelling your appointment with {doctorName}.'**
+  String cancelReasonPrompt(String doctorName);
+
+  /// No description provided for @cancellationReasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation reason...'**
+  String get cancellationReasonHint;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @pleaseEnterReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a reason'**
+  String get pleaseEnterReason;
+
+  /// No description provided for @cancellationSubmittedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation request submitted successfully'**
+  String get cancellationSubmittedSuccessfully;
+
+  /// No description provided for @submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submit;
+
+  /// No description provided for @rescheduleReasonPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide a reason for rescheduling your appointment with {doctorName}.'**
+  String rescheduleReasonPrompt(String doctorName);
+
+  /// No description provided for @rescheduleReasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Reschedule reason...'**
+  String get rescheduleReasonHint;
+
+  /// No description provided for @rescheduleSubmittedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Reschedule request submitted successfully'**
+  String get rescheduleSubmittedSuccessfully;
 }
 
 class _AppLocalizationsDelegate
