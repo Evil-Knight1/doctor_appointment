@@ -109,6 +109,53 @@ class _DoctorSignUpFormState extends State<DoctorSignUpForm> {
   /// Returns the server error message for a given field key, or null.
   String? _serverError(String key) => widget.fieldErrors[key.toLowerCase()];
 
+  Widget _buildPasswordStrengthChecklist() {
+    final password = widget.passwordController.text;
+    if (password.isEmpty) return const SizedBox.shrink();
+
+    bool hasUppercase = RegExp(r'[A-Z]').hasMatch(password);
+    bool hasLowercase = RegExp(r'[a-z]').hasMatch(password);
+    bool hasSpecial = RegExp(r'[\W_]').hasMatch(password);
+    bool hasMinLength = password.length >= 8;
+
+    return Padding(
+      padding: EdgeInsets.only(top: 8.h, left: 4.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildChecklistItem('Uppercase letter', hasUppercase),
+          SizedBox(height: 4.h),
+          _buildChecklistItem('Lowercase letter', hasLowercase),
+          SizedBox(height: 4.h),
+          _buildChecklistItem('Special character', hasSpecial),
+          SizedBox(height: 4.h),
+          _buildChecklistItem('8 characters', hasMinLength),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChecklistItem(String text, bool isMet) {
+    return Row(
+      children: [
+        Icon(
+          isMet ? Icons.check_circle_rounded : Icons.cancel_rounded,
+          color: isMet ? Colors.green : Colors.red,
+          size: 16.sp,
+        ),
+        SizedBox(width: 8.w),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w400,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     switch (widget.step) {
@@ -141,14 +188,36 @@ class _DoctorSignUpFormState extends State<DoctorSignUpForm> {
         SizedBox(height: 16.h),
         RegistrationTextField(
           label: 'Password',
-          hintText: '••••••••',
+          hintText: 'Min. 8 characters',
           controller: widget.passwordController,
           focusNode: _passwordFocus,
           isPassword: true,
           prefixIcon: Icons.lock_outline_rounded,
-          validator: RegistrationValidators.validatePassword,
+          onChanged: (_) {
+            setState(() {});
+            widget.formKey.currentState?.validate();
+          },
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Password is required';
+            }
+
+            final passwordRegex = RegExp(
+              r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$',
+            );
+
+            if (!passwordRegex.hasMatch(value.trim())) {
+              return 'Please meet all password requirements';
+            }
+
+            return null;
+          },
           serverError: _serverError('password'),
         ),
+        if (widget.passwordController.text.isNotEmpty) ...[
+          SizedBox(height: 8.h),
+          _buildPasswordStrengthChecklist(),
+        ],
         SizedBox(height: 16.h),
         RegistrationTextField(
           label: 'Confirm Password',

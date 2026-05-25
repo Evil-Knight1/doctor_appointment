@@ -24,6 +24,7 @@ class RegistrationTextField extends StatefulWidget {
     this.focusNode,
     this.suffixIcon,
     this.onFieldSubmitted,
+    this.onChanged,
     this.serverError,
   });
 
@@ -41,6 +42,7 @@ class RegistrationTextField extends StatefulWidget {
   final FocusNode? focusNode;
   final Widget? suffixIcon;
   final void Function(String)? onFieldSubmitted;
+  final void Function(String)? onChanged;
   final String? serverError;
 
   @override
@@ -125,6 +127,7 @@ class _RegistrationTextFieldState extends State<RegistrationTextField> {
             textInputAction: widget.textInputAction,
             focusNode: _focusNode,
             onFieldSubmitted: widget.onFieldSubmitted,
+            onChanged: widget.onChanged,
             style: context.styleMedium14.copyWith(
               color: theme.textTheme.headlineLarge?.color,
             ),

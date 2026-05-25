@@ -1,6 +1,5 @@
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -56,8 +55,18 @@ class _RegistrationDatePickerState extends State<RegistrationDatePicker> {
   }
 
   static const _months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
   String _formatDate(DateTime date) {
@@ -67,8 +76,9 @@ class _RegistrationDatePickerState extends State<RegistrationDatePicker> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final displayText =
-        widget.selectedDate != null ? _formatDate(widget.selectedDate!) : null;
+    final displayText = widget.selectedDate != null
+        ? _formatDate(widget.selectedDate!)
+        : null;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,8 +87,8 @@ class _RegistrationDatePickerState extends State<RegistrationDatePicker> {
           text: TextSpan(
             text: widget.label,
             style: context.styleMedium14.copyWith(
-              color: _isFocused 
-                  ? theme.colorScheme.primary 
+              color: _isFocused
+                  ? theme.colorScheme.primary
                   : theme.textTheme.headlineLarge?.color,
             ),
             children: [
@@ -101,25 +111,29 @@ class _RegistrationDatePickerState extends State<RegistrationDatePicker> {
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             width: double.infinity,
-            padding: EdgeInsets.symmetric(
-              horizontal: 16.w,
-              vertical: 14.h,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
             decoration: BoxDecoration(
-              color: _isFocused 
-                  ? theme.inputDecorationTheme.fillColor?.withValues(alpha: 0.8) 
+              color: _isFocused
+                  ? theme.inputDecorationTheme.fillColor?.withValues(alpha: 0.8)
                   : theme.inputDecorationTheme.fillColor,
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(
-                color: _isFocused 
-                    ? theme.colorScheme.primary 
-                    : (theme.inputDecorationTheme.enabledBorder?.borderSide.color ?? theme.dividerColor),
+                color: _isFocused
+                    ? theme.colorScheme.primary
+                    : (theme
+                              .inputDecorationTheme
+                              .enabledBorder
+                              ?.borderSide
+                              .color ??
+                          theme.dividerColor),
                 width: _isFocused ? 1.5 : 1,
               ),
               boxShadow: _isFocused
                   ? [
                       BoxShadow(
-                        color: theme.colorScheme.primary.withValues(alpha: 0.08),
+                        color: theme.colorScheme.primary.withValues(
+                          alpha: 0.08,
+                        ),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -199,5 +213,3 @@ class _RegistrationDatePickerState extends State<RegistrationDatePicker> {
     _focusNode.unfocus();
   }
 }
-
-

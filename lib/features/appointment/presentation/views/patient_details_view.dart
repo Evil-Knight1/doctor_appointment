@@ -114,10 +114,7 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Gender',
-          style: context.styleMedium14.copyWith(fontSize: 13.sp),
-        ),
+        Text('Gender', style: context.styleMedium14.copyWith(fontSize: 13.sp)),
         SizedBox(height: 6.h),
         Container(
           height: 46.h,
@@ -177,10 +174,7 @@ class _PatientDetailsViewState extends State<PatientDetailsView> {
             minimumSize: Size(double.infinity, 52.h),
             elevation: 0,
           ),
-          child: Text(
-            'Continue to Payment',
-            style: context.styleSemiBold16,
-          ),
+          child: Text('Continue to Payment', style: context.styleSemiBold16),
         ),
       ),
     );

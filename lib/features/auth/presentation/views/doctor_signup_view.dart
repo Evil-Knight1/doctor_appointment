@@ -31,7 +31,9 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
   // --- Controllers ---
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
-  final _phoneController = PhoneController();
+  final _phoneController = PhoneController(
+    initialValue: PhoneNumber.parse('+20'),
+  );
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _yearsController = TextEditingController();

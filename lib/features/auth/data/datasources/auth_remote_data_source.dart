@@ -47,9 +47,9 @@ abstract class AuthRemoteDataSource {
   Future<bool> updateFcmToken({required String fcmToken});
 
   Future<void> forgotPassword({required String email});
-  
+
   Future<String> verifyOtp({required String email, required String otp});
-  
+
   Future<void> resetPassword({
     required String email,
     required String token,
@@ -95,7 +95,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       'email': email,
       'phone': phone,
       'password': password,
-      'dateOfBirth': dateOfBirth?.toIso8601String(),
+      'dateOfBirth': dateOfBirth?.toUtc().toIso8601String(),
       'gender': gender,
       'address': address,
     };
@@ -154,7 +154,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       'licenseNumber': licenseId,
       'clinicAddress': clinicAddress.isEmpty ? null : clinicAddress,
       'hospital': hospitalName.isEmpty ? null : hospitalName,
-      'dateOfBirth': dateOfBirth?.toIso8601String(),
+      'dateOfBirth': dateOfBirth?.toUtc().toIso8601String(),
       'gender': gender,
       'bio': bio?.isEmpty == true ? null : bio,
     };
@@ -169,10 +169,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     if (clinicImagesPaths != null && clinicImagesPaths.isNotEmpty) {
       data['clinicImages'] = await Future.wait(
         clinicImagesPaths.map(
-          (path) => MultipartFile.fromFile(
-            path,
-            filename: path.split('/').last,
-          ),
+          (path) =>
+              MultipartFile.fromFile(path, filename: path.split('/').last),
         ),
       );
     }
@@ -253,7 +251,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       queryParameters: queryParams,
     );
 
-    final success = response['success'] == true || response['isSuccess'] == true;
+    final success =
+        response['success'] == true || response['isSuccess'] == true;
     if (!success) {
       final fieldErrors = _extractFieldErrors(response);
       final message = _extractMessage(response, fieldErrors);

@@ -1,6 +1,5 @@
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phone_form_field/phone_form_field.dart';
@@ -65,8 +64,8 @@ class _RegistrationPhoneFieldState extends State<RegistrationPhoneField> {
           text: TextSpan(
             text: widget.label,
             style: context.styleMedium14.copyWith(
-              color: _isFocused 
-                  ? theme.colorScheme.primary 
+              color: _isFocused
+                  ? theme.colorScheme.primary
                   : theme.textTheme.headlineLarge?.color,
             ),
             children: [
@@ -101,9 +100,9 @@ class _RegistrationPhoneFieldState extends State<RegistrationPhoneField> {
             style: context.styleMedium14.copyWith(
               color: theme.textTheme.headlineLarge?.color,
             ),
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: '1234567890',
-              errorText: widget.serverError,
+              // errorText: widget.serverError,
             ),
           ),
         ),
@@ -111,4 +110,3 @@ class _RegistrationPhoneFieldState extends State<RegistrationPhoneField> {
     );
   }
 }
-

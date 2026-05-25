@@ -33,7 +33,9 @@ class _SignUpViewState extends State<SignUpView> {
   // --- Controllers ---
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
-  final _phoneController = PhoneController();
+  final _phoneController = PhoneController(
+    initialValue: PhoneNumber.parse('+20'),
+  );
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _addressController = TextEditingController();
@@ -54,6 +56,51 @@ class _SignUpViewState extends State<SignUpView> {
   Map<String, String> _fieldErrors = {};
 
   String? _getServerError(String key) => _fieldErrors[key.toLowerCase()];
+
+  Widget _buildPasswordStrengthChecklist() {
+    final password = _passwordController.text;
+    if (password.isEmpty) return const SizedBox.shrink();
+
+    bool hasUppercase = RegExp(r'[A-Z]').hasMatch(password);
+    bool hasLowercase = RegExp(r'[a-z]').hasMatch(password);
+    bool hasSpecial = RegExp(r'[\W_]').hasMatch(password);
+    bool hasMinLength = password.length >= 8;
+
+    return Padding(
+      padding: EdgeInsets.only(top: 8.h, left: 4.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildChecklistItem('Uppercase letter', hasUppercase),
+          SizedBox(height: 4.h),
+          _buildChecklistItem('Lowercase letter', hasLowercase),
+          SizedBox(height: 4.h),
+          _buildChecklistItem('Special character', hasSpecial),
+          SizedBox(height: 4.h),
+          _buildChecklistItem('8 characters', hasMinLength),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChecklistItem(String text, bool isMet) {
+    return Row(
+      children: [
+        Icon(
+          isMet ? Icons.check_circle_rounded : Icons.cancel_rounded,
+          color: isMet ? Colors.green : Colors.red,
+          size: 16.sp,
+        ),
+        SizedBox(width: 8.w),
+        Text(
+          text,
+          style: context.styleRegular14.copyWith(
+            color: Theme.of(context).textTheme.bodyMedium?.color,
+          ),
+        ),
+      ],
+    );
+  }
 
   int _currentPage = 0;
 
@@ -270,9 +317,7 @@ class _SignUpViewState extends State<SignUpView> {
                     ).createShader(bounds),
                     child: Text(
                       l10n.patientRegistration,
-                      style: context.styleBold16.copyWith(
-                        color: Colors.white,
-                      ),
+                      style: context.styleBold16.copyWith(color: Colors.white),
                     ),
                   ),
                   SizedBox(height: 2.h),
@@ -345,23 +390,37 @@ class _SignUpViewState extends State<SignUpView> {
           SizedBox(height: 16.h),
           RegistrationTextField(
             label: l10n.password,
-            hintText: 'Min. 6 characters',
+            hintText: 'Min. 8 characters',
             controller: _passwordController,
             isPassword: true,
             prefixIcon: Icons.lock_outline_rounded,
             focusNode: _passwordFocus,
             textInputAction: TextInputAction.next,
             serverError: _getServerError('password'),
+            onChanged: (_) {
+              setState(() {});
+              _formKey.currentState?.validate();
+            },
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
                 return l10n.passwordRequired;
               }
-              if (value.trim().length < 6) {
-                return l10n.passwordShort;
+
+              final passwordRegex = RegExp(
+                r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$',
+              );
+
+              if (!passwordRegex.hasMatch(value.trim())) {
+                return 'Please meet all password requirements';
               }
+
               return null;
             },
           ),
+          if (_passwordController.text.isNotEmpty) ...[
+            SizedBox(height: 8.h),
+            _buildPasswordStrengthChecklist(),
+          ],
           SizedBox(height: 16.h),
           RegistrationTextField(
             label: l10n.confirmPassword,

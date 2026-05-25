@@ -5,6 +5,7 @@ import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/core/services/service_locator.dart';
 import 'package:doctor_appointment/features/auth/presentation/widgets/registration_date_picker.dart';
 import 'package:doctor_appointment/features/auth/presentation/widgets/registration_dropdown.dart';
+import 'package:doctor_appointment/features/auth/presentation/widgets/registration_phone_field.dart';
 import 'package:doctor_appointment/features/auth/presentation/widgets/registration_text_field.dart';
 import 'package:doctor_appointment/features/profile/domain/entities/patient_profile.dart';
 import 'package:doctor_appointment/features/profile/logic/profile_cubit.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:doctor_appointment/core/utils/image_url_helper.dart';
+import 'package:phone_form_field/phone_form_field.dart';
 
 class EditProfileView extends StatefulWidget {
   final PatientProfile profile;
@@ -28,7 +30,7 @@ class EditProfileView extends StatefulWidget {
 class _EditProfileViewState extends State<EditProfileView> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
-  late final TextEditingController _phoneController;
+  late final PhoneController _phoneController;
   late final TextEditingController _addressController;
   DateTime? _dateOfBirth;
   String? _selectedGender;
@@ -40,7 +42,9 @@ class _EditProfileViewState extends State<EditProfileView> {
     super.initState();
     _profileCubit = getIt<ProfileCubit>();
     _nameController = TextEditingController(text: widget.profile.fullName);
-    _phoneController = TextEditingController(text: widget.profile.phone);
+    _phoneController = PhoneController(
+      initialValue: PhoneNumber.parse(widget.profile.phone),
+    );
     _addressController = TextEditingController(
       text: widget.profile.address ?? '',
     );
@@ -83,7 +87,9 @@ class _EditProfileViewState extends State<EditProfileView> {
           ),
           title: Text(
             'Edit Profile',
-            style: context.styleSemiBold18.copyWith(color: Theme.of(context).colorScheme.onSurface),
+            style: context.styleSemiBold18.copyWith(
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
         ),
         body: BlocConsumer<ProfileCubit, ProfileState>(
@@ -211,15 +217,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                           : null,
                     ),
                     SizedBox(height: 20.h),
-                    RegistrationTextField(
+                    RegistrationPhoneField(
                       controller: _phoneController,
                       label: 'Phone Number',
-                      hintText: 'Enter your phone number',
-                      prefixIcon: Icons.phone_outlined,
-                      keyboardType: TextInputType.phone,
-                      validator: (value) => value == null || value.isEmpty
-                          ? 'Phone is required'
-                          : null,
                     ),
                     SizedBox(height: 20.h),
                     RegistrationDropdown<String>(
@@ -278,12 +278,11 @@ class _EditProfileViewState extends State<EditProfileView> {
                               )
                             : Text(
                                 'Save Changes',
-                                style: context.styleSemiBold16
-                                    .copyWith(
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onPrimary,
-                                    ),
+                                style: context.styleSemiBold16.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
+                                ),
                               ),
                       ),
                     ),
@@ -304,7 +303,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     }
     _profileCubit.updateProfile(
       fullName: _nameController.text.trim(),
-      phone: _phoneController.text.trim(),
+      phone: _phoneController.value!.international,
       gender: _selectedGender,
       address: _addressController.text.trim().isEmpty
           ? null
