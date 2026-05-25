@@ -22,7 +22,9 @@ class DoctorStatsRepositoryImpl implements DoctorStatsRepository {
     } on ApiException catch (e) {
       return Result.failure(ServerFailure(e.message));
     } catch (e) {
-      return Result.failure(const ServerFailure('Unexpected error fetching statistics'));
+      return Result.failure(
+        const ServerFailure('Unexpected error fetching statistics'),
+      );
     }
   }
 
@@ -34,7 +36,9 @@ class DoctorStatsRepositoryImpl implements DoctorStatsRepository {
     } on ApiException catch (e) {
       return Result.failure(ServerFailure(e.message));
     } catch (e) {
-      return Result.failure(const ServerFailure('Unexpected error fetching profile'));
+      return Result.failure(
+        const ServerFailure('Unexpected error fetching profile'),
+      );
     }
   }
 
@@ -46,7 +50,9 @@ class DoctorStatsRepositoryImpl implements DoctorStatsRepository {
     } on ApiException catch (e) {
       return Result.failure(ServerFailure(e.message));
     } catch (e) {
-      return Result.failure(const ServerFailure('Unexpected error fetching appointments'));
+      return Result.failure(
+        const ServerFailure('Unexpected error fetching appointments'),
+      );
     }
   }
 
@@ -58,19 +64,31 @@ class DoctorStatsRepositoryImpl implements DoctorStatsRepository {
     } on ApiException catch (e) {
       return Result.failure(ServerFailure(e.message));
     } catch (e) {
-      return Result.failure(const ServerFailure('Unexpected error updating profile'));
+      return Result.failure(
+        const ServerFailure('Unexpected error updating profile'),
+      );
     }
   }
 
   @override
-  Future<Result<Appointment>> updateAppointmentStatus(int appointmentId, int status, {String? notes}) async {
+  Future<Result<Appointment>> updateAppointmentStatus(
+    int appointmentId,
+    int status, {
+    String? notes,
+  }) async {
     try {
-      final appointment = await remoteDataSource.updateAppointmentStatus(appointmentId, status, notes: notes);
+      final appointment = await remoteDataSource.updateAppointmentStatus(
+        appointmentId,
+        status,
+        notes: notes,
+      );
       return Result.success(appointment);
     } on ApiException catch (e) {
       return Result.failure(ServerFailure(e.message));
     } catch (e) {
-      return Result.failure(const ServerFailure('Unexpected error updating appointment status'));
+      return Result.failure(
+        const ServerFailure('Unexpected error updating appointment status'),
+      );
     }
   }
 
@@ -82,55 +100,78 @@ class DoctorStatsRepositoryImpl implements DoctorStatsRepository {
     } on ApiException catch (e) {
       return Result.failure(ServerFailure(e.message));
     } catch (e) {
-      return Result.failure(const ServerFailure('Unexpected error fetching monthly revenue'));
+      return Result.failure(
+        const ServerFailure('Unexpected error fetching monthly revenue'),
+      );
     }
   }
 
   @override
-  Future<Result<List<DoctorDailyRevenue>>> getDailyRevenue(int year, int month) async {
+  Future<Result<List<DoctorDailyRevenue>>> getDailyRevenue(
+    int year,
+    int month,
+  ) async {
     try {
       final revenue = await remoteDataSource.getDailyRevenue(year, month);
       return Result.success(revenue);
     } on ApiException catch (e) {
       return Result.failure(ServerFailure(e.message));
     } catch (e) {
-      return Result.failure(const ServerFailure('Unexpected error fetching daily revenue'));
+      return Result.failure(
+        const ServerFailure('Unexpected error fetching daily revenue'),
+      );
     }
   }
 
   @override
-  Future<Result<AvailabilityModel>> addAvailability(Map<String, dynamic> data) async {
+  Future<Result<AvailabilityModel>> addAvailability(
+    Map<String, dynamic> data,
+  ) async {
     try {
       final res = await remoteDataSource.addAvailability(data);
       return Result.success(res);
     } on ApiException catch (e) {
       return Result.failure(ServerFailure(e.message));
     } catch (e) {
-      return Result.failure(const ServerFailure('Unexpected error adding availability'));
+      return Result.failure(
+        const ServerFailure('Unexpected error adding availability'),
+      );
     }
   }
 
   @override
-  Future<Result<AvailabilityModel>> updateAvailability(int availabilityId, Map<String, dynamic> data) async {
+  Future<Result<AvailabilityModel>> updateAvailability(
+    int availabilityId,
+    Map<String, dynamic> data,
+  ) async {
     try {
-      final res = await remoteDataSource.updateAvailability(availabilityId, data);
+      final res = await remoteDataSource.updateAvailability(
+        availabilityId,
+        data,
+      );
       return Result.success(res);
     } on ApiException catch (e) {
       return Result.failure(ServerFailure(e.message));
     } catch (e) {
-      return Result.failure(const ServerFailure('Unexpected error updating availability'));
+      return Result.failure(
+        const ServerFailure('Unexpected error updating availability'),
+      );
     }
   }
 
   @override
-  Future<Result<List<AvailabilityModel>>> getDoctorAvailability(int doctorId) async {
+  Future<Result<List<AvailabilityModel>>> getDoctorAvailability(
+    int doctorId,
+  ) async {
     try {
       final res = await remoteDataSource.getDoctorAvailability(doctorId);
       return Result.success(res);
     } on ApiException catch (e) {
       return Result.failure(ServerFailure(e.message));
     } catch (e) {
-      return Result.failure(const ServerFailure('Unexpected error fetching availability'));
+      return Result.failure(
+        const ServerFailure('Unexpected error fetching availability'),
+      );
     }
   }
 }

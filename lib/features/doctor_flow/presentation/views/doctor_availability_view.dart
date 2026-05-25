@@ -53,7 +53,9 @@ class _DoctorAvailabilityViewState extends State<DoctorAvailabilityView> {
       ),
     );
 
-    if (existing.id != -1 && existing.startTime.isNotEmpty && existing.endTime.isNotEmpty) {
+    if (existing.id != -1 &&
+        existing.startTime.isNotEmpty &&
+        existing.endTime.isNotEmpty) {
       _fromController.text = existing.startTime.substring(0, 5);
       _toController.text = existing.endTime.substring(0, 5);
     } else {
@@ -95,10 +97,14 @@ class _DoctorAvailabilityViewState extends State<DoctorAvailabilityView> {
     final consStr = _consultationController.text.trim();
     final apptStr = _appointmentController.text.trim();
 
-    if (from.isEmpty || to.isEmpty || durationStr.isEmpty || consStr.isEmpty || apptStr.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
+    if (from.isEmpty ||
+        to.isEmpty ||
+        durationStr.isEmpty ||
+        consStr.isEmpty ||
+        apptStr.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please fill all fields')));
       return;
     }
 
@@ -146,7 +152,15 @@ class _DoctorAvailabilityViewState extends State<DoctorAvailabilityView> {
 
     if (mounted && success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Availability generated successfully!'), backgroundColor: Colors.green),
+        const SnackBar(
+          content: Text('Availability generated successfully!'),
+          backgroundColor: Colors.green,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+          margin: EdgeInsets.all(16),
+        ),
       );
     }
   }
@@ -162,7 +176,11 @@ class _DoctorAvailabilityViewState extends State<DoctorAvailabilityView> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: colorScheme.onSurface, size: 18.sp),
+          icon: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: colorScheme.onSurface,
+            size: 18.sp,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -177,7 +195,10 @@ class _DoctorAvailabilityViewState extends State<DoctorAvailabilityView> {
             _populateFields();
           } else if (state is DoctorAvailabilityFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message), backgroundColor: colorScheme.error),
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: colorScheme.error,
+              ),
             );
           }
         },
@@ -193,12 +214,18 @@ class _DoctorAvailabilityViewState extends State<DoctorAvailabilityView> {
               children: [
                 Text(
                   'Select Date',
-                  style: context.styleSemiBold16.copyWith(color: colorScheme.onSurface),
+                  style: context.styleSemiBold16.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
                 ),
                 SizedBox(height: 16.h),
                 Row(
                   children: [
-                    Icon(Icons.arrow_back_ios_rounded, size: 16.sp, color: colorScheme.onSurfaceVariant),
+                    Icon(
+                      Icons.arrow_back_ios_rounded,
+                      size: 16.sp,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -216,9 +243,14 @@ class _DoctorAvailabilityViewState extends State<DoctorAvailabilityView> {
                               },
                               child: Container(
                                 margin: EdgeInsets.symmetric(horizontal: 6.w),
-                                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16.w,
+                                  vertical: 12.h,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: isSelected ? colorScheme.primary : colorScheme.surfaceContainerLow,
+                                  color: isSelected
+                                      ? colorScheme.primary
+                                      : colorScheme.surfaceContainerLow,
                                   borderRadius: BorderRadius.circular(16.r),
                                 ),
                                 child: Column(
@@ -226,14 +258,19 @@ class _DoctorAvailabilityViewState extends State<DoctorAvailabilityView> {
                                     Text(
                                       DateFormat('EEE').format(date),
                                       style: context.styleMedium14.copyWith(
-                                        color: isSelected ? colorScheme.onPrimary : colorScheme.onSurfaceVariant.withOpacity(0.5),
+                                        color: isSelected
+                                            ? colorScheme.onPrimary
+                                            : colorScheme.onSurfaceVariant
+                                                  .withValues(alpha: .5),
                                       ),
                                     ),
                                     SizedBox(height: 4.h),
                                     Text(
                                       DateFormat('dd').format(date),
                                       style: context.styleSemiBold16.copyWith(
-                                        color: isSelected ? colorScheme.onPrimary : colorScheme.onSurfaceVariant,
+                                        color: isSelected
+                                            ? colorScheme.onPrimary
+                                            : colorScheme.onSurfaceVariant,
                                       ),
                                     ),
                                   ],
@@ -244,13 +281,19 @@ class _DoctorAvailabilityViewState extends State<DoctorAvailabilityView> {
                         ),
                       ),
                     ),
-                    Icon(Icons.arrow_forward_ios_rounded, size: 16.sp, color: colorScheme.onSurfaceVariant),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 16.sp,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                   ],
                 ),
                 SizedBox(height: 32.h),
                 Text(
                   'Available time',
-                  style: context.styleSemiBold16.copyWith(color: colorScheme.onSurface),
+                  style: context.styleSemiBold16.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
                 ),
                 SizedBox(height: 16.h),
                 Row(
@@ -275,29 +318,66 @@ class _DoctorAvailabilityViewState extends State<DoctorAvailabilityView> {
                   ],
                 ),
                 SizedBox(height: 16.h),
+                Text(
+                  'Duration',
+                  style: context.styleSemiBold16.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+                SizedBox(height: 16.h),
                 _CustomInputField(
-                  hintText: 'Duration',
+                  hintText: '15 min',
                   controller: _durationController,
                 ),
                 SizedBox(height: 32.h),
                 Text(
                   'Fees',
-                  style: context.styleSemiBold16.copyWith(color: colorScheme.onSurface),
+                  style: context.styleSemiBold16.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
                 ),
                 SizedBox(height: 16.h),
                 Row(
                   children: [
                     Expanded(
-                      child: _CustomInputField(
-                        hintText: 'Consulation',
-                        controller: _consultationController,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Consultation',
+                            style: context.styleMedium14.copyWith(
+                              color: colorScheme.onSurface.withValues(
+                                alpha: .5,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 16.h),
+                          _CustomInputField(
+                            hintText: '100 EGP',
+                            controller: _consultationController,
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(width: 16.w),
                     Expanded(
-                      child: _CustomInputField(
-                        hintText: 'Appointment',
-                        controller: _appointmentController,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Appointment',
+                            style: context.styleMedium14.copyWith(
+                              color: colorScheme.onSurface.withValues(
+                                alpha: .5,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 16.h),
+                          _CustomInputField(
+                            hintText: '50 EGP',
+                            controller: _appointmentController,
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -318,7 +398,9 @@ class _DoctorAvailabilityViewState extends State<DoctorAvailabilityView> {
                     ),
                     child: Text(
                       'Generate',
-                      style: context.styleBold16.copyWith(color: colorScheme.onPrimary),
+                      style: context.styleBold16.copyWith(
+                        color: colorScheme.onPrimary,
+                      ),
                     ),
                   ),
                 ),
@@ -332,7 +414,7 @@ class _DoctorAvailabilityViewState extends State<DoctorAvailabilityView> {
   }
 }
 
-class _CustomInputField extends StatelessWidget {
+class _CustomInputField extends StatefulWidget {
   final String hintText;
   final TextEditingController? controller;
   final VoidCallback? onTap;
@@ -346,49 +428,98 @@ class _CustomInputField extends StatelessWidget {
   });
 
   @override
+  State<_CustomInputField> createState() => _CustomInputFieldState();
+}
+
+class _CustomInputFieldState extends State<_CustomInputField> {
+  final FocusNode _focusNode = FocusNode();
+  bool _isFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      setState(() {
+        _isFocused = _focusNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: widget.onTap,
       borderRadius: BorderRadius.circular(12.r),
       child: Container(
         height: 52.h,
+        clipBehavior: Clip.antiAlias,
         alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(12.r),
+          boxShadow: [
+            if (_isFocused)
+              BoxShadow(
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.15),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+          ],
         ),
-        child: isReadOnly
+        child: widget.isReadOnly
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    controller?.text.isNotEmpty == true ? controller!.text : hintText,
+                    widget.controller?.text.isNotEmpty == true
+                        ? widget.controller!.text
+                        : widget.hintText,
                     style: context.styleMedium14.copyWith(
-                      color: controller?.text.isNotEmpty == true
+                      color: widget.controller?.text.isNotEmpty == true
                           ? Theme.of(context).colorScheme.onSurface
-                          : Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
+                          : Theme.of(context).colorScheme.onSurfaceVariant
+                                .withValues(alpha: 0.5),
                     ),
                   ),
                 ],
               )
-            : TextField(
-                controller: controller,
-                textAlign: TextAlign.center,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                decoration: InputDecoration(
-                  hintText: hintText,
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  contentPadding: EdgeInsets.zero,
-                  isDense: true,
-                  hintStyle: context.styleMedium14.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
+            : SizedBox(
+                width: double.infinity,
+                child: TextField(
+                  focusNode: _focusNode,
+                  expands: true,
+                  maxLines: null,
+                  minLines: null,
+                  textAlignVertical: TextAlignVertical.center,
+                  controller: widget.controller,
+                  textAlign: TextAlign.center,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
                   ),
-                ),
-                style: context.styleMedium14.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
+                  decoration: InputDecoration(
+                    hintText: widget.hintText,
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.zero,
+                    isDense: true,
+                    hintStyle: context.styleMedium14.copyWith(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurfaceVariant.withValues(alpha: .5),
+                    ),
+                  ),
+                  style: context.styleMedium14.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
               ),
       ),

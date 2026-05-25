@@ -1,5 +1,5 @@
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
-
+import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/features/auth/logic/auth_cubit.dart';
 import 'package:doctor_appointment/features/auth/logic/auth_state.dart';
 import 'package:doctor_appointment/core/utils/app_images.dart';
@@ -194,7 +194,7 @@ class _SignUpViewState extends State<SignUpView> {
           );
         }
         if (state is AuthSuccess) {
-          context.go(state.targetRoute);
+          context.go(AppRouter.kLoginView);
         }
         if (state is AvailabilityChecked) {
           final result = state.result;

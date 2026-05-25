@@ -27,10 +27,7 @@ class AuthCubit extends Cubit<AuthState> {
     required this.checkAvailabilityUseCase,
   }) : super(const AuthInitial());
 
-  Future<void> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> login({required String email, required String password}) async {
     emit(const AuthLoading());
     final result = await loginUseCase(
       LoginParams(email: email, password: password),
@@ -42,12 +39,14 @@ class AuthCubit extends Cubit<AuthState> {
         await _updateFcmToken();
         emit(AuthSuccess(result.data, role: _normalizeRole(result.data.role)));
       case FailureResult():
-        emit(AuthFailure(
-          result.failure.message,
-          fieldErrors: result.failure is ServerFailure
-              ? (result.failure as ServerFailure).fieldErrors
-              : {},
-        ));
+        emit(
+          AuthFailure(
+            result.failure.message,
+            fieldErrors: result.failure is ServerFailure
+                ? (result.failure as ServerFailure).fieldErrors
+                : {},
+          ),
+        );
     }
   }
 
@@ -77,16 +76,18 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (result) {
       case Success():
-        await _saveUserData(result.data);
+        // await _saveUserData(result.data); token, refresh token => ''
         await _updateFcmToken();
         emit(AuthSuccess(result.data, role: _normalizeRole(result.data.role)));
       case FailureResult():
-        emit(AuthFailure(
-          result.failure.message,
-          fieldErrors: result.failure is ServerFailure
-              ? (result.failure as ServerFailure).fieldErrors
-              : {},
-        ));
+        emit(
+          AuthFailure(
+            result.failure.message,
+            fieldErrors: result.failure is ServerFailure
+                ? (result.failure as ServerFailure).fieldErrors
+                : {},
+          ),
+        );
     }
   }
 
@@ -134,12 +135,14 @@ class AuthCubit extends Cubit<AuthState> {
         await _updateFcmToken();
         emit(AuthSuccess(result.data, role: _normalizeRole(result.data.role)));
       case FailureResult():
-        emit(AuthFailure(
-          result.failure.message,
-          fieldErrors: result.failure is ServerFailure
-              ? (result.failure as ServerFailure).fieldErrors
-              : {},
-        ));
+        emit(
+          AuthFailure(
+            result.failure.message,
+            fieldErrors: result.failure is ServerFailure
+                ? (result.failure as ServerFailure).fieldErrors
+                : {},
+          ),
+        );
     }
   }
 
