@@ -62,9 +62,9 @@ workflows:
       flutter: stable
       xcode: latest
 
-      ios_signing:
-        distribution_type: development
-        bundle_identifier: com.example.medlink
+      # ios_signing:
+      #   distribution_type: development
+      #   bundle_identifier: com.example.medlink
 
       groups:
         - firebase
