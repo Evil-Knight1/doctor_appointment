@@ -114,8 +114,14 @@ workflows:
         script: |
           flutter build ipa --release --no-codesign
 
+      - name: Package IPA
+        script: |
+          mkdir Payload
+          cp -r build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app Payload
+          zip -r Runner.ipa Payload
+
     artifacts:
-      - build/ios/ipa/*.ipa
+      - Runner.ipa
 
     # publishing:
     #   email:
