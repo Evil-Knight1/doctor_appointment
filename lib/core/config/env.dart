@@ -10,4 +10,5 @@ abstract class Env {
   static String get paymobIntegrationId =>
       dotenv.env["PAYMOB_INTEGRATION_ID"] ?? "";
   static String get paymobIframeId => dotenv.env["PAYMOB_IFRAME_ID"] ?? "";
+  static String get googleMapsApiKey => dotenv.env["GOOGLE_MAPS_API"] ?? "";
 }

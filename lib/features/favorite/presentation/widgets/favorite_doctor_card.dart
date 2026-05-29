@@ -79,12 +79,17 @@ class FavoriteDoctorCard extends StatelessWidget {
                 children: [
                   Text(
                     doctor.name,
-                    style: context.styleMedium14.copyWith(fontSize: 14.sp, color: colorScheme.onSurface),
+                    style: context.styleMedium14.copyWith(
+                      fontSize: 14.sp,
+                      color: colorScheme.onSurface,
+                    ),
                   ),
                   SizedBox(height: 2.h),
                   Text(
                     doctor.doctor.specialization.name,
-                    style: context.styleRegular12.copyWith(color: colorScheme.onSurfaceVariant),
+                    style: context.styleRegular12.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                   ),
                   SizedBox(height: 6.h),
                   Row(
@@ -120,8 +125,11 @@ class FavoriteDoctorCard extends StatelessWidget {
                 ),
                 SizedBox(height: 10.h),
                 Text(
-                  '\$${doctor.doctor.consultationFee ?? 100}',
-                  style: context.styleMedium14.copyWith(color: colorScheme.primary, fontSize: 13.sp),
+                  '\$${doctor.doctor.consultationPrice ?? 100}',
+                  style: context.styleMedium14.copyWith(
+                    color: colorScheme.primary,
+                    fontSize: 13.sp,
+                  ),
                 ),
               ],
             ),

@@ -18,7 +18,7 @@ class Doctor {
   final String? profilePictureUrl;
   final List<String>? clinicImagesUrls;
   final bool isAvailable;
-  final double? consultationFee;
+  final double? consultationPrice;
   final double? latitude;
   final double? longitude;
 
@@ -40,7 +40,7 @@ class Doctor {
     this.profilePictureUrl,
     this.clinicImagesUrls,
     required this.isAvailable,
-    this.consultationFee,
+    this.consultationPrice,
     this.latitude,
     this.longitude,
   });

@@ -18,7 +18,7 @@ class HomeDoctorModel {
   Map<String, dynamic> toJson() {
     return {
       'name': doctor.fullName,
-      'price': doctor.consultationFee,
+      'price': doctor.consultationPrice,
       'specialty': doctor.specialization,
       'averageRating': doctor.averageRating,
       'totalReviews': doctor.totalReviews,
@@ -35,12 +35,12 @@ class HomeDoctorModel {
   String get specialty => doctor.specialization.name;
   String get speciality => specialty; // Alias for UI consistency
   String get hospital => doctor.hospital ?? 'Clinic';
-  String get price => doctor.consultationFee?.toString() ?? '0';
+  String get price => doctor.consultationPrice?.toString() ?? '0';
   double get rating => doctor.averageRating ?? 0.0;
   int get reviewCount => doctor.totalReviews;
   String get reviews => reviewCount.toString(); // For favorite_doctor_card.dart
-  String get fee => doctor.consultationFee != null
-      ? 'EGP ${doctor.consultationFee!.toInt()}'
+  String get fee => doctor.consultationPrice != null
+      ? 'EGP ${doctor.consultationPrice!.toInt()}'
       : 'EGP 0';
   String get imageAsset =>
       (doctor.profilePictureUrl != null && doctor.profilePictureUrl!.isNotEmpty)

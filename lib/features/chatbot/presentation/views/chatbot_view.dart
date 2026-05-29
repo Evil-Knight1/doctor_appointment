@@ -460,47 +460,150 @@ class _ChatbotViewState extends State<ChatbotView> {
     bool isSending,
   ) {
     final theme = Theme.of(context);
+
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        border: Border(top: BorderSide(color: theme.dividerColor)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+        border: Border.all(
+          color: theme.colorScheme.outline.withValues(alpha: .12),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: .04),
+            blurRadius: 20,
+            offset: const Offset(0, -4),
+          ),
+        ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Wrap(
-            spacing: 8.w,
-            runSpacing: 8.h,
-            children: [
-              ...options.map(
-                (option) => ChoiceChip(
-                  label: Text(option),
-                  selected: _selectedRadio == option,
-                  onSelected: isSending
-                      ? null
-                      : (selected) {
-                          setState(
-                            () => _selectedRadio = selected ? option : null,
-                          );
-                          if (selected) {
-                            _sendMessage(option);
-                          }
-                        },
+          Text(
+            "Choose one option",
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+
+          SizedBox(height: 16.h),
+
+          ...options.map((option) {
+            final isSelected = _selectedRadio == option;
+
+            return Padding(
+              padding: EdgeInsets.only(bottom: 12.h),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(18.r),
+                onTap: isSending
+                    ? null
+                    : () {
+                        setState(() {
+                          _selectedRadio = option;
+                        });
+
+                        _sendMessage(option);
+                      },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 18.w,
+                    vertical: 16.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? theme.colorScheme.primary.withValues(alpha: .08)
+                        : theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(18.r),
+                    border: Border.all(
+                      color: isSelected
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.outline.withValues(alpha: .15),
+                      width: 1.4,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          option,
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: 22.w,
+                        height: 22.w,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: isSelected
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.outline,
+                            width: 2,
+                          ),
+                        ),
+                        child: Center(
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            width: isSelected ? 10.w : 0,
+                            height: isSelected ? 10.w : 0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              if (allowOther)
-                ChoiceChip(
-                  label: const Text("Other..."),
-                  selected: false,
-                  onSelected: isSending
-                      ? null
-                      : (_) {
-                          setState(() => _showTextInputFallback = true);
-                        },
+            );
+          }),
+
+          if (allowOther)
+            InkWell(
+              borderRadius: BorderRadius.circular(18.r),
+              onTap: isSending
+                  ? null
+                  : () {
+                      setState(() => _showTextInputFallback = true);
+                    },
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 16.h),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary.withValues(alpha: .06),
+                  borderRadius: BorderRadius.circular(18.r),
+                  border: Border.all(
+                    color: theme.colorScheme.primary.withValues(alpha: .18),
+                  ),
                 ),
-            ],
-          ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        "Other",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                    ),
+
+                    Icon(
+                      Icons.edit_rounded,
+                      color: theme.colorScheme.primary,
+                      size: 20.sp,
+                    ),
+                  ],
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -513,55 +616,182 @@ class _ChatbotViewState extends State<ChatbotView> {
     bool isSending,
   ) {
     final theme = Theme.of(context);
+
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        border: Border(top: BorderSide(color: theme.dividerColor)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+        border: Border.all(
+          color: theme.colorScheme.outline.withValues(alpha: 0.12),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 20,
+            offset: const Offset(0, -4),
+          ),
+        ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Wrap(
-            spacing: 8.w,
-            runSpacing: 8.h,
-            children: [
-              ...options.map(
-                (option) => FilterChip(
-                  label: Text(option),
-                  selected: _selectedCheckboxes.contains(option),
-                  onSelected: isSending
-                      ? null
-                      : (selected) {
-                          setState(() {
-                            if (selected) {
-                              _selectedCheckboxes.add(option);
-                            } else {
-                              _selectedCheckboxes.remove(option);
-                            }
-                          });
-                        },
+          Text(
+            "Select one or more",
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+
+          SizedBox(height: 16.h),
+
+          ...options.map((option) {
+            final isSelected = _selectedCheckboxes.contains(option);
+
+            return Padding(
+              padding: EdgeInsets.only(bottom: 12.h),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(18.r),
+                onTap: isSending
+                    ? null
+                    : () {
+                        setState(() {
+                          if (isSelected) {
+                            _selectedCheckboxes.remove(option);
+                          } else {
+                            _selectedCheckboxes.add(option);
+                          }
+                        });
+                      },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 18.w,
+                    vertical: 16.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? theme.colorScheme.primary.withValues(alpha: .08)
+                        : theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(18.r),
+                    border: Border.all(
+                      color: isSelected
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.outline.withValues(alpha: .15),
+                      width: 1.4,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          option,
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: 22.w,
+                        height: 22.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6.r),
+                          border: Border.all(
+                            color: isSelected
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.outline,
+                            width: 2,
+                          ),
+                          color: isSelected
+                              ? theme.colorScheme.primary
+                              : Colors.transparent,
+                        ),
+                        child: isSelected
+                            ? Icon(
+                                Icons.check_rounded,
+                                size: 16.sp,
+                                color: theme.colorScheme.onPrimary,
+                              )
+                            : null,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              if (allowOther)
-                ActionChip(
-                  label: const Text("Other..."),
-                  onPressed: isSending
-                      ? null
-                      : () {
-                          setState(() => _showTextInputFallback = true);
-                        },
+            );
+          }),
+
+          if (allowOther)
+            Padding(
+              padding: EdgeInsets.only(top: 4.h),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(18.r),
+                onTap: isSending
+                    ? null
+                    : () {
+                        setState(() => _showTextInputFallback = true);
+                      },
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 18.w,
+                    vertical: 16.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary.withValues(alpha: .06),
+                    borderRadius: BorderRadius.circular(18.r),
+                    border: Border.all(
+                      color: theme.colorScheme.primary.withValues(alpha: .18),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Other",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                      ),
+
+                      Icon(
+                        Icons.edit_rounded,
+                        color: theme.colorScheme.primary,
+                        size: 20.sp,
+                      ),
+                    ],
+                  ),
                 ),
-            ],
-          ),
-          SizedBox(height: 16.h),
-          ElevatedButton(
-            onPressed: (isSending || _selectedCheckboxes.isEmpty)
-                ? null
-                : () {
-                    _sendMessage(_selectedCheckboxes.join(', '));
-                  },
-            child: const Text("Submit"),
+              ),
+            ),
+
+          SizedBox(height: 20.h),
+
+          SizedBox(
+            width: double.infinity,
+            height: 54.h,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                backgroundColor: theme.colorScheme.primary,
+                foregroundColor: theme.colorScheme.onPrimary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.r),
+                ),
+              ),
+              onPressed: isSending || _selectedCheckboxes.isEmpty
+                  ? null
+                  : () {
+                      _sendMessage(_selectedCheckboxes.join(', '));
+                    },
+              child: Text(
+                "Submit Selection",
+                style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700),
+              ),
+            ),
           ),
         ],
       ),
@@ -595,7 +825,6 @@ class _ChatbotViewState extends State<ChatbotView> {
                 enabled: !isDisabled,
                 minLines: 1,
                 maxLines: 4,
-                expands: true, // TODO: [UI-FIX] Test it
                 onSubmitted: (_) => _sendMessage(),
                 decoration: InputDecoration(
                   hintText: hintText,

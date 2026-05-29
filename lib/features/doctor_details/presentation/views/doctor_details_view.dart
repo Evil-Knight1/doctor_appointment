@@ -1,4 +1,5 @@
 import 'package:doctor_appointment/core/utils/routes.dart';
+import 'package:doctor_appointment/features/doctor_details/presentation/widgets/clinic_location_card.dart';
 import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
 import 'package:doctor_appointment/features/doctor_details/presentation/widgets/doctor_info_widget.dart';
 import 'package:doctor_appointment/features/doctor_details/presentation/widgets/doctor_stats_widget.dart';
@@ -10,23 +11,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:map_launcher/map_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doctor_appointment/core/widgets/full_screen_image_viewer.dart';
 import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
-import 'package:geocoding/geocoding.dart' as geo;
 
 class DoctorDetailsView extends StatefulWidget {
   final HomeDoctorModel doctor;
   final String? heroTag;
 
-  const DoctorDetailsView({
-    super.key,
-    required this.doctor,
-    this.heroTag,
-  });
+  const DoctorDetailsView({super.key, required this.doctor, this.heroTag});
 
   @override
   State<DoctorDetailsView> createState() => _DoctorDetailsViewState();
@@ -193,7 +188,13 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView>
                     pathParameters: {
                       'userId': widget.doctor.doctor.id.toString(),
                     },
-                    extra: widget.doctor.name,
+                    // TODO: add doctor profile
+                    // image when navigating to chat
+                    // load the chat from histroy.
+                    extra: {
+                      'name': widget.doctor.name,
+                      'image': widget.doctor.doctor.profilePictureUrl,
+                    },
                   );
                 },
               ),
@@ -470,69 +471,78 @@ class _AddressTab extends StatelessWidget {
           'Clinic Location',
           style: context.styleSemiBold22.copyWith(fontSize: 16.sp),
         ),
-        SizedBox(height: 12.h),
-        GestureDetector(
-          onTap: () async {
-            final availableMaps = await MapLauncher.installedMaps;
-            if (availableMaps.isNotEmpty) {
-              double? lat = doctor.doctor.latitude;
-              double? lng = doctor.doctor.longitude;
-
-              // If coordinates are missing, try geocoding the address
-              if (lat == null && doctor.doctor.clinicAddress != null) {
-                try {
-                  final locations = await geo.locationFromAddress(
-                    doctor.doctor.clinicAddress!,
-                  );
-                  if (locations.isNotEmpty) {
-                    lat = locations.first.latitude;
-                    lng = locations.first.longitude;
-                  }
-                } catch (e) {
-                  debugPrint('Geocoding error: $e');
-                }
-              }
-
-              lat ??= 30.0444;
-              lng ??= 31.2357;
-
-              await availableMaps.first.showMarker(
-                coords: Coords(lat, lng),
-                title: doctor.doctor.clinicAddress ?? "Clinic Location",
-              );
-            }
-          },
-          child: Container(
-            height: 160.h,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.r),
-              image: const DecorationImage(
-                image: AssetImage('assets/images/map_placeholder.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Center(
-              child: Container(
-                padding: EdgeInsets.all(12.w),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(context).shadowColor.withValues(alpha: 0.1),
-                      blurRadius: 10.r,
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  Icons.location_on_rounded,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 28.sp,
-                ),
-              ),
-            ),
-          ),
+        SizedBox(height: 10.h),
+        ClinicLocationCard(
+          address: doctor.doctor.clinicAddress ?? "",
+          latitude: doctor.doctor.latitude ?? 30.1,
+          longitude: doctor.doctor.longitude ?? 31.1,
         ),
+
+        // SizedBox(height: 12.h),
+        // GestureDetector(
+        //   onTap: () async {
+        //     final availableMaps = await MapLauncher.installedMaps;
+        //     if (availableMaps.isNotEmpty) {
+        //       double? lat = doctor.doctor.latitude;
+        //       double? lng = doctor.doctor.longitude;
+
+        //       // If coordinates are missing, try geocoding the address
+        //       if (lat == null && doctor.doctor.clinicAddress != null) {
+        //         try {
+        //           final locations = await geo.locationFromAddress(
+        //             doctor.doctor.clinicAddress!,
+        //           );
+        //           if (locations.isNotEmpty) {
+        //             lat = locations.first.latitude;
+        //             lng = locations.first.longitude;
+        //           }
+        //         } catch (e) {
+        //           debugPrint('Geocoding error: $e');
+        //         }
+        //       }
+
+        //       lat ??= 30.0444;
+        //       lng ??= 31.2357;
+
+        //       await availableMaps.first.showMarker(
+        //         coords: Coords(lat, lng),
+        //         title: doctor.doctor.clinicAddress ?? "Clinic Location",
+        //       );
+        //     }
+        //   },
+        //   child: Container(
+        //     height: 160.h,
+        //     decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(16.r),
+        //       image: const DecorationImage(
+        //         image: AssetImage('assets/images/map_placeholder.png'),
+        //         fit: BoxFit.cover,
+        //       ),
+        //     ),
+        //     child: Center(
+        //       child: Container(
+        //         padding: EdgeInsets.all(12.w),
+        //         decoration: BoxDecoration(
+        //           color: Theme.of(context).colorScheme.surface,
+        //           shape: BoxShape.circle,
+        //           boxShadow: [
+        //             BoxShadow(
+        //               color: Theme.of(
+        //                 context,
+        //               ).shadowColor.withValues(alpha: 0.1),
+        //               blurRadius: 10.r,
+        //             ),
+        //           ],
+        //         ),
+        //         child: Icon(
+        //           Icons.location_on_rounded,
+        //           color: Theme.of(context).colorScheme.primary,
+        //           size: 28.sp,
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // )
         SizedBox(height: 100.h),
       ],
     );

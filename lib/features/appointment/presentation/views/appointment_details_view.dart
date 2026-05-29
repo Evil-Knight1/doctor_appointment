@@ -20,7 +20,7 @@ class AppointmentDetailsView extends StatelessWidget {
   final bool isDoctorFlow;
 
   const AppointmentDetailsView({
-    super.key, 
+    super.key,
     required this.appointment,
     this.isDoctorFlow = false,
   });
@@ -71,7 +71,9 @@ class AppointmentDetailsView extends StatelessWidget {
   Widget _buildHeader(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context)!;
-    final name = isDoctorFlow ? appointment.patientName : appointment.doctorName;
+    final name = isDoctorFlow
+        ? appointment.patientName
+        : appointment.doctorName;
     final subtitle = isDoctorFlow ? 'Patient' : l10n.doctor;
 
     return Column(
@@ -100,10 +102,7 @@ class AppointmentDetailsView extends StatelessWidget {
           ),
         ),
         SizedBox(height: 20.h),
-        Text(
-          name,
-          style: context.styleSemiBold22.copyWith(fontSize: 20.sp),
-        ),
+        Text(name, style: context.styleSemiBold22.copyWith(fontSize: 20.sp)),
         SizedBox(height: 4.h),
         Text(
           subtitle,
@@ -116,7 +115,9 @@ class AppointmentDetailsView extends StatelessWidget {
   }
 
   Widget _buildAvatar(BuildContext context) {
-    final profilePicture = isDoctorFlow ? appointment.patientProfilePicture : appointment.doctorProfilePicture;
+    final profilePicture = isDoctorFlow
+        ? appointment.patientProfilePicture
+        : appointment.doctorProfilePicture;
     if (profilePicture != null && profilePicture.trim().isNotEmpty) {
       return CachedNetworkImage(
         imageUrl: ImageUrlHelper.getFullUrl(profilePicture),
@@ -124,21 +125,25 @@ class AppointmentDetailsView extends StatelessWidget {
         fit: BoxFit.cover,
         width: 120.r,
         height: 120.r,
-        errorWidget: (_, _, _) => isDoctorFlow ? Icon(Icons.person, size: 60.r) : Image.asset(
-          _getImageAsset(),
-          fit: BoxFit.cover,
-          width: 120.r,
-          height: 120.r,
-        ),
+        errorWidget: (_, _, _) => isDoctorFlow
+            ? Icon(Icons.person, size: 60.r)
+            : Image.asset(
+                _getImageAsset(),
+                fit: BoxFit.cover,
+                width: 120.r,
+                height: 120.r,
+              ),
       );
     }
 
-    return isDoctorFlow ? Icon(Icons.person, size: 60.r) : Image.asset(
-      _getImageAsset(),
-      fit: BoxFit.cover,
-      width: 120.r,
-      height: 120.r,
-    );
+    return isDoctorFlow
+        ? Icon(Icons.person, size: 60.r)
+        : Image.asset(
+            _getImageAsset(),
+            fit: BoxFit.cover,
+            width: 120.r,
+            height: 120.r,
+          );
   }
 
   Widget _buildInfoCard(
@@ -230,7 +235,7 @@ class AppointmentDetailsView extends StatelessWidget {
       createdAt: DateTime.now(),
       profilePictureUrl: appointment.doctorProfilePicture,
       isAvailable: true,
-      consultationFee: appointment.amount,
+      consultationPrice: appointment.amount,
     );
   }
 

@@ -117,6 +117,7 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<AppConfig>(() {
     final config = AppConfig(
       apiUrl: Env.apiUrl,
+      googleMapsApiKey: Env.googleMapsApiKey,
       paymobApiKey: Env.paymobApiKey,
       paymobIntegrationId: Env.paymobIntegrationId,
       paymobIframeId: Env.paymobIframeId,
@@ -469,5 +470,7 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<NotificationRepository>(
     () => NotificationRepositoryImpl(getIt<NotificationRemoteDataSource>()),
   );
-  getIt.registerFactory(() => NotificationCubit(getIt<NotificationRepository>()));
+  getIt.registerFactory(
+    () => NotificationCubit(getIt<NotificationRepository>()),
+  );
 }

@@ -17,7 +17,11 @@ import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class BookingDateView extends StatefulWidget {
-  const BookingDateView({super.key, required this.doctor, this.rescheduleAppointmentId});
+  const BookingDateView({
+    super.key,
+    required this.doctor,
+    this.rescheduleAppointmentId,
+  });
   final Doctor doctor;
   final int? rescheduleAppointmentId;
 
@@ -81,8 +85,10 @@ class _BookingDateViewState extends State<BookingDateView> {
                 SizedBox(height: AppSpacing.md),
                 BlocBuilder<DoctorSlotsCubit, DoctorSlotsState>(
                   builder: (context, state) {
-                    final List<SlotModel> allSlots = state is DoctorSlotsLoaded ? state.slots : [];
-                    
+                    final List<SlotModel> allSlots = state is DoctorSlotsLoaded
+                        ? state.slots
+                        : [];
+
                     return _CalendarPicker(
                       selectedDate: _selectedDate,
                       slots: allSlots,
@@ -113,9 +119,11 @@ class _BookingDateViewState extends State<BookingDateView> {
                       if (state.slots.isEmpty) {
                         return _buildGlobalNoSlotsAvailable();
                       }
-                      
+
                       final categorized = _groupSlots(state.slots);
-                      final hasAnySlots = categorized.values.any((list) => list.isNotEmpty);
+                      final hasAnySlots = categorized.values.any(
+                        (list) => list.isNotEmpty,
+                      );
 
                       if (!hasAnySlots) {
                         return _buildNoSlotsAvailable();
@@ -134,37 +142,63 @@ class _BookingDateViewState extends State<BookingDateView> {
                               children: [
                                 Text(
                                   category,
-                                  style: context.labelLarge.copyWith(color: colorScheme.onSurfaceVariant),
+                                  style: context.labelLarge.copyWith(
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
                                 ),
                                 SizedBox(height: AppSpacing.sm),
                                 Wrap(
                                   spacing: AppSpacing.md,
                                   runSpacing: AppSpacing.md,
                                   children: slots.map((slot) {
-                                    final isSelected = _selectedSlot?.id == slot.id;
-                                    final timeStr = DateFormat('hh:mm a').format(slot.startTime);
-                                    final isSlotAvailable = slot.isAvailable && !slot.isBooked;
+                                    final isSelected =
+                                        _selectedSlot?.id == slot.id;
+                                    final timeStr = DateFormat(
+                                      'hh:mm a',
+                                    ).format(slot.startTime);
+                                    final isSlotAvailable =
+                                        slot.isAvailable && !slot.isBooked;
 
                                     return GestureDetector(
                                       onTap: isSlotAvailable
-                                          ? () => setState(() => _selectedSlot = slot)
+                                          ? () => setState(
+                                              () => _selectedSlot = slot,
+                                            )
                                           : null,
                                       child: Container(
-                                        width: (1.sw - AppSpacing.lg * 2 - AppSpacing.md * 2) / 3,
-                                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                                        width:
+                                            (1.sw -
+                                                AppSpacing.lg * 2 -
+                                                AppSpacing.md * 2) /
+                                            3,
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 12.h,
+                                        ),
                                         decoration: BoxDecoration(
                                           color: isSelected
                                               ? colorScheme.primary
                                               : (isSlotAvailable
-                                                  ? colorScheme.surfaceContainerLow
-                                                  : colorScheme.surfaceContainerLow.withValues(alpha: 0.4)),
-                                          borderRadius: BorderRadius.circular(AppRadius.lg),
+                                                    ? colorScheme
+                                                          .surfaceContainerLow
+                                                    : colorScheme
+                                                          .surfaceContainerLow
+                                                          .withValues(
+                                                            alpha: 0.4,
+                                                          )),
+                                          borderRadius: BorderRadius.circular(
+                                            AppRadius.lg,
+                                          ),
                                           border: Border.all(
                                             color: isSelected
                                                 ? colorScheme.primary
                                                 : (isSlotAvailable
-                                                    ? colorScheme.outlineVariant
-                                                    : colorScheme.outlineVariant.withValues(alpha: 0.4)),
+                                                      ? colorScheme
+                                                            .outlineVariant
+                                                      : colorScheme
+                                                            .outlineVariant
+                                                            .withValues(
+                                                              alpha: 0.4,
+                                                            )),
                                           ),
                                         ),
                                         child: Center(
@@ -174,10 +208,18 @@ class _BookingDateViewState extends State<BookingDateView> {
                                               color: isSelected
                                                   ? colorScheme.onPrimary
                                                   : (isSlotAvailable
-                                                      ? colorScheme.onSurface
-                                                      : colorScheme.onSurfaceVariant.withValues(alpha: 0.4)),
-                                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                                              decoration: isSlotAvailable ? null : TextDecoration.lineThrough,
+                                                        ? colorScheme.onSurface
+                                                        : colorScheme
+                                                              .onSurfaceVariant
+                                                              .withValues(
+                                                                alpha: 0.4,
+                                                              )),
+                                              fontWeight: isSelected
+                                                  ? FontWeight.w600
+                                                  : FontWeight.w400,
+                                              decoration: isSlotAvailable
+                                                  ? null
+                                                  : TextDecoration.lineThrough,
                                             ),
                                           ),
                                         ),
@@ -205,22 +247,25 @@ class _BookingDateViewState extends State<BookingDateView> {
             onNext: _selectedSlot == null
                 ? null
                 : () {
-                      final args = {
-                        'doctor': widget.doctor,
-                        'date': _selectedDate,
-                        'time': DateFormat('hh:mm a').format(_selectedSlot!.startTime),
-                        'slotId': _selectedSlot!.id,
-                        'amount': widget.doctor.consultationFee ?? 100.0,
-                        'type': _selectedType,
-                      };
-                      
-                      if (widget.rescheduleAppointmentId != null) {
-                        args['rescheduleAppointmentId'] = widget.rescheduleAppointmentId!;
-                        context.pushNamed(Routes.bookingSummaryView, extra: args);
-                      } else {
-                        context.pushNamed(Routes.bookingPaymentView, extra: args);
-                      }
-                    },
+                    final args = {
+                      'doctor': widget.doctor,
+                      'date': _selectedDate,
+                      'time': DateFormat(
+                        'hh:mm a',
+                      ).format(_selectedSlot!.startTime),
+                      'slotId': _selectedSlot!.id,
+                      'amount': widget.doctor.consultationPrice ?? 100.0,
+                      'type': _selectedType,
+                    };
+
+                    if (widget.rescheduleAppointmentId != null) {
+                      args['rescheduleAppointmentId'] =
+                          widget.rescheduleAppointmentId!;
+                      context.pushNamed(Routes.bookingSummaryView, extra: args);
+                    } else {
+                      context.pushNamed(Routes.bookingPaymentView, extra: args);
+                    }
+                  },
           ),
         ],
       ),
@@ -259,11 +304,16 @@ class _BookingDateViewState extends State<BookingDateView> {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: AppSpacing.xxl, horizontal: AppSpacing.xl),
+      padding: EdgeInsets.symmetric(
+        vertical: AppSpacing.xxl,
+        horizontal: AppSpacing.xl,
+      ),
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.5)),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+        ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -289,7 +339,9 @@ class _BookingDateViewState extends State<BookingDateView> {
           SizedBox(height: AppSpacing.xs),
           Text(
             'This doctor hasn\'t set any slots yet.\nPlease check back later or choose another doctor.',
-            style: context.bodySmall.copyWith(color: colorScheme.onSurfaceVariant),
+            style: context.bodySmall.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -305,7 +357,9 @@ class _BookingDateViewState extends State<BookingDateView> {
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.5)),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.5),
+        ),
       ),
       child: Column(
         children: [
@@ -322,7 +376,9 @@ class _BookingDateViewState extends State<BookingDateView> {
           SizedBox(height: 4.h),
           Text(
             'Try selecting a date marked with a dot',
-            style: context.bodySmall.copyWith(color: colorScheme.onSurfaceVariant),
+            style: context.bodySmall.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -339,9 +395,10 @@ class _BookingDateViewState extends State<BookingDateView> {
           SizedBox(height: AppSpacing.sm),
           Text(message, style: context.bodyMedium),
           TextButton(
-            onPressed: () => context
-                .read<DoctorSlotsCubit>()
-                .fetchSlots(widget.doctor.id, _selectedDate),
+            onPressed: () => context.read<DoctorSlotsCubit>().fetchSlots(
+              widget.doctor.id,
+              _selectedDate,
+            ),
             child: const Text('Retry'),
           ),
         ],
@@ -407,7 +464,9 @@ class _TypeSelectionCard extends StatelessWidget {
               : colorScheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(AppRadius.xl),
           border: Border.all(
-            color: isSelected ? colorScheme.primary : colorScheme.outlineVariant,
+            color: isSelected
+                ? colorScheme.primary
+                : colorScheme.outlineVariant,
             width: isSelected ? 2 : 1,
           ),
           boxShadow: isSelected
@@ -428,7 +487,9 @@ class _TypeSelectionCard extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant,
+                  color: isSelected
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
                   size: 24.sp,
                 ),
                 if (isSelected)
@@ -478,7 +539,11 @@ class _CalendarPicker extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     // Get unique days that have slots
-    final availableDays = slots.map((s) => DateTime(s.startTime.year, s.startTime.month, s.startTime.day)).toSet();
+    final availableDays = slots
+        .map(
+          (s) => DateTime(s.startTime.year, s.startTime.month, s.startTime.day),
+        )
+        .toSet();
 
     return Container(
       decoration: BoxDecoration(
@@ -513,7 +578,10 @@ class _CalendarPicker extends StatelessWidget {
           titleCentered: true,
           titleTextStyle: context.headingSmall,
           leftChevronIcon: Icon(Icons.chevron_left, color: colorScheme.primary),
-          rightChevronIcon: Icon(Icons.chevron_right, color: colorScheme.primary),
+          rightChevronIcon: Icon(
+            Icons.chevron_right,
+            color: colorScheme.primary,
+          ),
         ),
         calendarStyle: CalendarStyle(
           todayDecoration: BoxDecoration(
@@ -527,8 +595,12 @@ class _CalendarPicker extends StatelessWidget {
           ),
           selectedTextStyle: TextStyle(color: colorScheme.onPrimary),
           outsideDaysVisible: false,
-          defaultTextStyle: context.bodyMedium.copyWith(color: colorScheme.onSurface),
-          weekendTextStyle: context.bodyMedium.copyWith(color: colorScheme.error),
+          defaultTextStyle: context.bodyMedium.copyWith(
+            color: colorScheme.onSurface,
+          ),
+          weekendTextStyle: context.bodyMedium.copyWith(
+            color: colorScheme.error,
+          ),
           // Custom marker for available slots
           markersMaxCount: 1,
           markerDecoration: BoxDecoration(
@@ -573,7 +645,12 @@ class _BottomAction extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      padding: EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.md, AppSpacing.lg, AppSpacing.xl),
+      padding: EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.md,
+        AppSpacing.lg,
+        AppSpacing.xl,
+      ),
       decoration: BoxDecoration(
         color: colorScheme.surface,
         boxShadow: [
@@ -592,12 +669,18 @@ class _BottomAction extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: colorScheme.primary,
             disabledBackgroundColor: colorScheme.outlineVariant,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+            ),
             elevation: 0,
           ),
           child: Text(
             'Next',
-            style: TextStyle(color: colorScheme.onPrimary, fontWeight: FontWeight.w600, fontSize: 15.sp),
+            style: TextStyle(
+              color: colorScheme.onPrimary,
+              fontWeight: FontWeight.w600,
+              fontSize: 15.sp,
+            ),
           ),
         ),
       ),

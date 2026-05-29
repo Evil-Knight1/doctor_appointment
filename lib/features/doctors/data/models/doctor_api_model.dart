@@ -20,7 +20,7 @@ class DoctorApiModel extends Doctor {
     required super.isAvailable,
     required super.profilePictureUrl,
     required super.clinicImagesUrls,
-    super.consultationFee,
+    super.consultationPrice,
     super.latitude,
     super.longitude,
   });
@@ -59,7 +59,7 @@ class DoctorApiModel extends Doctor {
                   (json['clinicImagesUrls'] as List<dynamic>?))
               ?.map((e) => e as String)
               .toList(),
-      consultationFee: (json['consultationFee'] as num?)?.toDouble(),
+      consultationPrice: (json['consultationPrice'] as num?)?.toDouble(),
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
     );

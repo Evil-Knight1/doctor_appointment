@@ -251,7 +251,7 @@ class AppointmentCard extends StatelessWidget {
       createdAt: DateTime.now(),
       profilePictureUrl: appointment.doctorProfilePicture,
       isAvailable: true,
-      consultationFee: appointment.amount,
+      consultationPrice: appointment.amount,
     );
   }
 

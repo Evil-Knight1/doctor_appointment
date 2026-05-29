@@ -41,10 +41,11 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
     final int slotId = widget.args['slotId'] as int? ?? 0;
     final String reason = widget.args['reason'] as String? ?? '';
     final double amount =
-        widget.args['amount'] as double? ?? doctor.consultationFee ?? 0.0;
+        widget.args['amount'] as double? ?? doctor.consultationPrice ?? 0.0;
     final int appointmentType = widget.args['type'] as int? ?? 0;
-    
-    final int? rescheduleAppointmentId = widget.args['rescheduleAppointmentId'] as int?;
+
+    final int? rescheduleAppointmentId =
+        widget.args['rescheduleAppointmentId'] as int?;
     final bool isReschedule = rescheduleAppointmentId != null;
 
     return BlocConsumer<PaymentCubit, PaymentState>(
@@ -183,7 +184,9 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                           _DetailRow(
                             icon: Icons.medical_services_outlined,
                             label: 'Appointment Type',
-                            value: appointmentType == 1 ? 'Consultation' : 'Regular Visit',
+                            value: appointmentType == 1
+                                ? 'Consultation'
+                                : 'Regular Visit',
                           ),
                           if (reason.isNotEmpty) ...[
                             Divider(
@@ -258,7 +261,8 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                     ] else ...[
                       SizedBox(height: AppSpacing.lg),
                       _InfoBanner(
-                        message: 'You are rescheduling your appointment. No additional payment is required.',
+                        message:
+                            'You are rescheduling your appointment. No additional payment is required.',
                       ),
                     ],
                   ],
@@ -270,18 +274,22 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                 onConfirm: () async {
                   if (isReschedule) {
                     setState(() => _isRescheduling = true);
-                    final result = await context.read<AppointmentsCubit>().selectRescheduleSlot(
-                          rescheduleAppointmentId!,
-                          slotId,
-                        );
+                    final result = await context
+                        .read<AppointmentsCubit>()
+                        .selectRescheduleSlot(rescheduleAppointmentId!, slotId);
                     if (mounted) {
                       setState(() => _isRescheduling = false);
                       if (result is Success) {
-                        context.goNamed(Routes.bookingConfirmedView, extra: widget.args);
+                        context.goNamed(
+                          Routes.bookingConfirmedView,
+                          extra: widget.args,
+                        );
                       } else if (result is FailureResult) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text((result as FailureResult).failure.message),
+                            content: Text(
+                              (result as FailureResult).failure.message,
+                            ),
                             backgroundColor: colorScheme.error,
                             behavior: SnackBarBehavior.floating,
                           ),

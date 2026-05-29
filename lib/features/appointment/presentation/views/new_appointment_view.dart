@@ -127,12 +127,18 @@ class _NewAppointmentViewState extends State<NewAppointmentView> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.error_outline_rounded, size: 64.sp, color: colorScheme.error),
+                      Icon(
+                        Icons.error_outline_rounded,
+                        size: 64.sp,
+                        color: colorScheme.error,
+                      ),
                       SizedBox(height: 16.h),
                       Text(
                         state.message,
                         textAlign: TextAlign.center,
-                        style: context.styleMedium14.copyWith(color: colorScheme.error),
+                        style: context.styleMedium14.copyWith(
+                          color: colorScheme.error,
+                        ),
                       ),
                       SizedBox(height: 24.h),
                       ElevatedButton(
@@ -170,7 +176,9 @@ class _NewAppointmentViewState extends State<NewAppointmentView> {
                       SizedBox(height: 24.h),
                       Text(
                         'No Availability Found',
-                        style: context.styleSemiBold22.copyWith(fontSize: 20.sp),
+                        style: context.styleSemiBold22.copyWith(
+                          fontSize: 20.sp,
+                        ),
                       ),
                       SizedBox(height: 12.h),
                       Text(
@@ -218,7 +226,11 @@ class _NewAppointmentViewState extends State<NewAppointmentView> {
                         },
                       ),
                       SizedBox(height: 24.h),
-                      _sectionTitle('Consultation Type', colorScheme, Icons.medical_services_outlined),
+                      _sectionTitle(
+                        'Consultation Type',
+                        colorScheme,
+                        Icons.medical_services_outlined,
+                      ),
                       SizedBox(height: 16.h),
                       ConsultationTypeWidget(
                         selected: _selectedConsultation,
@@ -226,7 +238,11 @@ class _NewAppointmentViewState extends State<NewAppointmentView> {
                             setState(() => _selectedConsultation = t),
                       ),
                       SizedBox(height: 32.h),
-                      _sectionTitle('Available Slots', colorScheme, Icons.access_time_rounded),
+                      _sectionTitle(
+                        'Available Slots',
+                        colorScheme,
+                        Icons.access_time_rounded,
+                      ),
                       SizedBox(height: 16.h),
                       AvailableTimeWidget(
                         slots: _slotsForSelectedDate,
@@ -235,10 +251,14 @@ class _NewAppointmentViewState extends State<NewAppointmentView> {
                             setState(() => _selectedSlot = s),
                       ),
                       SizedBox(height: 32.h),
-                      _sectionTitle('Consultation Fees', colorScheme, Icons.payments_outlined),
+                      _sectionTitle(
+                        'Consultation Fees',
+                        colorScheme,
+                        Icons.payments_outlined,
+                      ),
                       SizedBox(height: 16.h),
                       ConsultationFeesWidget(
-                        fee: widget.doctor.doctor.consultationFee ?? 0.0,
+                        fee: widget.doctor.doctor.consultationPrice ?? 0.0,
                         selectedType: _selectedConsultation,
                       ),
                       SizedBox(height: 140.h),
@@ -254,19 +274,20 @@ class _NewAppointmentViewState extends State<NewAppointmentView> {
     );
   }
 
-  Widget _sectionTitle(String title, ColorScheme colorScheme, IconData icon) => Row(
-    children: [
-      Icon(icon, size: 20.sp, color: colorScheme.primary),
-      SizedBox(width: 8.w),
-      Text(
-        title,
-        style: context.styleSemiBold22.copyWith(
-          fontSize: 16.sp,
-          color: colorScheme.onSurface,
-        ),
-      ),
-    ],
-  );
+  Widget _sectionTitle(String title, ColorScheme colorScheme, IconData icon) =>
+      Row(
+        children: [
+          Icon(icon, size: 20.sp, color: colorScheme.primary),
+          SizedBox(width: 8.w),
+          Text(
+            title,
+            style: context.styleSemiBold22.copyWith(
+              fontSize: 16.sp,
+              color: colorScheme.onSurface,
+            ),
+          ),
+        ],
+      );
 
   Widget _buildBottomButton(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -291,9 +312,11 @@ class _NewAppointmentViewState extends State<NewAppointmentView> {
           onPressed: _selectedSlot == null
               ? null
               : () {
-                  final baseFee = widget.doctor.doctor.consultationFee ?? 0.0;
-                  final amount = _selectedConsultation == 'Home visit' ? baseFee * 1.5 : baseFee;
-                  
+                  final baseFee = widget.doctor.doctor.consultationPrice ?? 0.0;
+                  final amount = _selectedConsultation == 'Home visit'
+                      ? baseFee * 1.5
+                      : baseFee;
+
                   final draft = AppointmentDraft(
                     doctor: widget.doctor,
                     date: _selectedDate,

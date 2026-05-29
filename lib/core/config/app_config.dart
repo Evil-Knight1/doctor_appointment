@@ -3,13 +3,14 @@ class AppConfig {
   final String paymobApiKey;
   final String paymobIntegrationId;
   final String paymobIframeId;
+  final String googleMapsApiKey;
 
   AppConfig({
-    required this.apiUrl, 
+    required this.apiUrl,
     required this.paymobApiKey,
     required this.paymobIntegrationId,
     required this.paymobIframeId,
-
+    required this.googleMapsApiKey,
   });
 
   void validate() {
