@@ -138,9 +138,16 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
 
   void _submitForm() {
     setState(() => _fieldErrors = {});
-
+    /* TODO:
+    1- use In-line error to show error in Select Specialization TextFormField.
+    2- make the submit button disabled until all required fields are filled.
+    3- also clear the error when the user selects a specialization.
+    4- clear all the fields after successful registration.
+    */
     if (_selectedSpecialization == null) {
-      _showErrorSnackBar('Please select a specialization');
+      setState(() {
+        _fieldErrors['specialization'] = 'Please select a specialization';
+      });
       return;
     }
 

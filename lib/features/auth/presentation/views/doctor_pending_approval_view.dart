@@ -30,12 +30,17 @@ class DoctorPendingApprovalView extends StatelessWidget {
               Text(
                 'Application Received',
                 textAlign: TextAlign.center,
-                style: context.styleSemiBold16.copyWith(color: theme.textTheme.headlineLarge?.color),
+                style: context.styleSemiBold16.copyWith(
+                  color: theme.textTheme.headlineLarge?.color,
+                ),
               ),
               SizedBox(height: 16.h),
               Text(
                 'Your registration as a Doctor has been successfully submitted. Our administration team is reviewing your details to verify your medical credentials. You will receive an email once approved.',
-                style: context.styleRegular14.copyWith(color: theme.hintColor, height: 1.5),
+                style: context.styleRegular14.copyWith(
+                  color: theme.hintColor,
+                  height: 1.5,
+                ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 40.h),

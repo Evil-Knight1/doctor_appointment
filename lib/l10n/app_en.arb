@@ -150,5 +150,49 @@
   "typing": "typing...",
   "online": "online",
   "waitingForAi": "waiting for AI...",
-  "typeYourMessage": "type your message..."
+  "typeYourMessage": "type your message...",
+  "registerHelp": "Registration Help",
+  "auth": {
+    "steps": {
+      "credentials": {
+        "title": "Step 1: Credentials",
+        "subtitle": "Provide your professional email and a secure password. You'll also need a valid phone number for verification.",
+        "header": "Account Credentails",
+        "email": "Enter your email, password and phone to get started.",
+        "phone": "Phone",
+        "password": "Password",
+        "confirmPassword": "Confirm Password"
+      },
+      "personalInfo": {
+        "title": "Step 2: Personal Information",
+        "subtitle": "Share some basic details about yourself for your profile."
+      },
+      "clinicDetails": {
+        "title": "Step 3: Clinic Details",
+        "subtitle": "Tell us about your clinic and where you practice."
+      },
+      "note": "Note: All registrations are reviewed by our administration team before approval.",
+      "gotIt": "Got it"
+    },
+    "errors": {
+      "emailInUse": "This email is already in use",
+      "phoneInUse": "This phone number is already in use",
+      "invalidEmail": "Please enter a valid email address",
+      "invalidPhone": "Please enter a valid phone number",
+      "passwordMismatch": "Passwords do not match"
+    },
+    "terms": {
+      "termsAndConditions": "Terms & Conditions",
+      "acceptedTerms": "I accept the terms and conditions"
+    },
+    "doctorAuth": {
+      "doctorRegistration": "Doctor Registration",
+      "registerPending": "Your registration as a Doctor has been successfully submitted. Our administration team is reviewing your details to verify your medical credentials. You will receive an email once approved.",
+      "applicationRecieved": "Application Recieved",
+      "selectSpecialization": "Please select a specialization",
+      "selectClinicLocation": "Select Clinic Location",
+      "selectHospitalLocation": "Select Hospital Location"
+    },
+    "backToLogin": "Back to Login"
+  }
 }
