@@ -107,6 +107,8 @@ class AuthCubit extends Cubit<AuthState> {
     String? bio,
     String? profilePicturePath,
     List<String>? clinicImagesPaths,
+    double? latitude,
+    double? longitude,
   }) async {
     emit(const AuthLoading());
     final result = await registerDoctorUseCase(
@@ -126,6 +128,8 @@ class AuthCubit extends Cubit<AuthState> {
         bio: bio,
         profilePicturePath: profilePicturePath,
         clinicImagesPaths: clinicImagesPaths,
+        latitude: latitude,
+        longitude: longitude,
       ),
     );
 

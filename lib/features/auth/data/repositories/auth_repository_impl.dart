@@ -134,6 +134,8 @@ class AuthRepositoryImpl implements AuthRepository {
     String? bio,
     String? profilePicturePath,
     List<String>? clinicImagesPaths,
+    double? latitude,
+    double? longitude,
   }) async {
     try {
       final response = await remoteDataSource.registerDoctor(
@@ -152,6 +154,8 @@ class AuthRepositoryImpl implements AuthRepository {
         bio: bio,
         profilePicturePath: profilePicturePath,
         clinicImagesPaths: clinicImagesPaths,
+        latitude: latitude,
+        longitude: longitude,
       );
       await localDataSource.cacheAuthSession(response);
       return Result.success(response);

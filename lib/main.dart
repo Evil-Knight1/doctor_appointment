@@ -89,136 +89,147 @@ class DoctorAppointment extends StatelessWidget {
         builder: (context, themeMode) {
           return BlocBuilder<LocaleCubit, Locale>(
             builder: (context, locale) {
-              return ScreenUtilInit(
-                designSize: const Size(375, 812),
-                minTextAdapt: true,
-                splitScreenMode: true,
-                builder: (context, child) {
-                  return AnnotatedRegion<SystemUiOverlayStyle>(
-                    value: SystemUiOverlayStyle(
-                      statusBarColor: Colors.transparent,
-                      statusBarIconBrightness:
-                          Theme.of(context).brightness == Brightness.dark
-                          ? Brightness.light
-                          : Brightness.dark,
-                      systemNavigationBarColor: Theme.of(
-                        context,
-                      ).colorScheme.surface,
-                      systemNavigationBarIconBrightness:
-                          Theme.of(context).brightness == Brightness.dark
-                          ? Brightness.light
-                          : Brightness.dark,
-                    ),
-                    child: MaterialApp.router(
-                      theme: AppTheme.theme,
-                      darkTheme: AppTheme.darkTheme,
-                      themeMode: themeMode,
-                      locale: locale,
-                      localizationsDelegates:
-                          AppLocalizations.localizationsDelegates,
-                      supportedLocales: AppLocalizations.supportedLocales,
-                      builder: (context, child) {
-                        final appChild = DevicePreview.appBuilder(
-                          context,
-                          child,
-                        );
-                        final responsiveChild = ResponsiveBreakpoints.builder(
-                          child: Builder(
-                            builder: (context) {
-                              return MaxWidthBox(
-                                maxWidth: 1200,
-                                backgroundColor: Theme.of(
-                                  context,
-                                ).colorScheme.surface,
-                                child: ResponsiveScaledBox(
-                                  // Only scale down on very small screens, 
-                                  // but let Tablet and Desktop flow naturally (width = null).
-                                  width: ResponsiveValue<double?>(
-                                    context,
-                                    defaultValue: null,
-                                    conditionalValues: [
-                                      const Condition.equals(
-                                        name: MOBILE,
-                                        value: 450, // Scale small mobile devices
-                                      ),
-                                    ],
-                                  ).value,
-                                  child: appChild!,
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  final isDesktop = constraints.maxWidth > 600;
+                  // If desktop, set design size to actual window size so scale factor is 1.0 (disables scaling).
+                  // If mobile, set to 375x812 design size for scaling.
+                  final designSize = isDesktop
+                      ? Size(constraints.maxWidth, constraints.maxHeight)
+                      : const Size(375, 812);
+
+                  return ScreenUtilInit(
+                    designSize: designSize,
+                    minTextAdapt: true,
+                    splitScreenMode: true,
+                    builder: (context, child) {
+                      return AnnotatedRegion<SystemUiOverlayStyle>(
+                        value: SystemUiOverlayStyle(
+                          statusBarColor: Colors.transparent,
+                          statusBarIconBrightness:
+                              Theme.of(context).brightness == Brightness.dark
+                              ? Brightness.light
+                              : Brightness.dark,
+                          systemNavigationBarColor: Theme.of(
+                            context,
+                          ).colorScheme.surface,
+                          systemNavigationBarIconBrightness:
+                              Theme.of(context).brightness == Brightness.dark
+                              ? Brightness.light
+                              : Brightness.dark,
+                        ),
+                        child: MaterialApp.router(
+                          theme: AppTheme.theme,
+                          darkTheme: AppTheme.darkTheme,
+                          themeMode: themeMode,
+                          locale: locale,
+                          localizationsDelegates:
+                              AppLocalizations.localizationsDelegates,
+                          supportedLocales: AppLocalizations.supportedLocales,
+                          builder: (context, child) {
+                            final appChild = DevicePreview.appBuilder(
+                              context,
+                              child,
+                            );
+                            final responsiveChild = ResponsiveBreakpoints.builder(
+                              child: Builder(
+                                builder: (context) {
+                                  return ResponsiveScaledBox(
+                                    // Only scale down on very small screens,
+                                    // but let Tablet and Desktop flow naturally (width = null).
+                                    width: ResponsiveValue<double?>(
+                                      context,
+                                      defaultValue: null,
+                                      conditionalValues: [
+                                        const Condition.equals(
+                                          name: MOBILE,
+                                          value:
+                                              450, // Scale small mobile devices
+                                        ),
+                                      ],
+                                    ).value,
+                                    child: appChild,
+                                  );
+                                },
+                              ),
+                              breakpoints: [
+                                const Breakpoint(
+                                  start: 0,
+                                  end: 450,
+                                  name: MOBILE,
                                 ),
-                              );
-                            },
-                          ),
-                          breakpoints: [
-                            const Breakpoint(start: 0, end: 450, name: MOBILE),
-                            const Breakpoint(
-                              start: 451,
-                              end: 800,
-                              name: TABLET,
-                            ),
-                            const Breakpoint(
-                              start: 801,
-                              end: 1920,
-                              name: DESKTOP,
-                            ),
-                            const Breakpoint(
-                              start: 1921,
-                              end: double.infinity,
-                              name: '4K',
-                            ),
-                          ],
-                        );
-                        return OfflineBuilder(
-                          connectivityBuilder:
-                              (
-                                BuildContext context,
-                                List<ConnectivityResult> connectivity,
-                                Widget child,
-                              ) {
-                                final bool connected = !connectivity.contains(
-                                  ConnectivityResult.none,
-                                );
-                                return Stack(
-                                  fit: StackFit.expand,
-                                  children: [
-                                    child,
-                                    if (!connected)
-                                      Positioned(
-                                        top: MediaQuery.of(context).padding.top,
-                                        left: 0,
-                                        right: 0,
-                                        child: Material(
-                                          color: Colors.red,
-                                          child: const Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              vertical: 8.0,
-                                            ),
-                                            child: Text(
-                                              'No Internet Connection',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
+                                const Breakpoint(
+                                  start: 451,
+                                  end: 800,
+                                  name: TABLET,
+                                ),
+                                const Breakpoint(
+                                  start: 801,
+                                  end: 1920,
+                                  name: DESKTOP,
+                                ),
+                                const Breakpoint(
+                                  start: 1921,
+                                  end: double.infinity,
+                                  name: '4K',
+                                ),
+                              ],
+                            );
+                            return OfflineBuilder(
+                              connectivityBuilder:
+                                  (
+                                    BuildContext context,
+                                    List<ConnectivityResult> connectivity,
+                                    Widget child,
+                                  ) {
+                                    final bool connected = !connectivity
+                                        .contains(ConnectivityResult.none);
+                                    return Stack(
+                                      fit: StackFit.expand,
+                                      children: [
+                                        child,
+                                        if (!connected)
+                                          Positioned(
+                                            top: MediaQuery.of(
+                                              context,
+                                            ).padding.top,
+                                            left: 0,
+                                            right: 0,
+                                            child: Material(
+                                              color: Colors.red,
+                                              child: const Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 8.0,
+                                                ),
+                                                child: Text(
+                                                  'No Internet Connection',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                  ],
-                                );
-                              },
-                          child: responsiveChild,
-                        );
-                      },
-                      routerConfig: AppRouter.router,
-                      debugShowCheckedModeBanner: false,
-                    ),
-                  );
-                },
-              );
-            },
-          );
-        },
-      ),
-    );
+                                      ],
+                                    );
+                                  },
+                              child: responsiveChild,
+                            );
+                          },
+                          routerConfig: AppRouter.router,
+                          debugShowCheckedModeBanner: false,
+                        ),
+                      );
+                    }, // ScreenUtilInit builder
+                  ); // ScreenUtilInit
+                }, // LayoutBuilder builder
+              ); // LayoutBuilder
+            }, // LocaleCubit builder
+          ); // LocaleCubit
+        }, // ThemeCubit builder
+      ), // ThemeCubit BlocBuilder (child)
+    ); // MultiBlocProvider
   }
 }

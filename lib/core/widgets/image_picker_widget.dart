@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:doctor_appointment/core/utils/image_picker_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -26,9 +27,7 @@ class ProfileImagePicker extends StatelessWidget {
       children: [
         Text(
           label,
-          style: context.styleMedium14.copyWith(
-            color: colorScheme.onSurface,
-          ),
+          style: context.styleMedium14.copyWith(color: colorScheme.onSurface),
         ),
         SizedBox(height: 12.h),
         Center(
@@ -42,7 +41,9 @@ class ProfileImagePicker extends StatelessWidget {
                   shape: BoxShape.circle,
                   image: imagePath != null
                       ? DecorationImage(
-                          image: FileImage(File(imagePath!)),
+                          image: kIsWeb
+                              ? NetworkImage(imagePath!) as ImageProvider
+                              : FileImage(File(imagePath!)),
                           fit: BoxFit.cover,
                         )
                       : null,
@@ -96,19 +97,29 @@ class ProfileImagePicker extends StatelessWidget {
         child: Wrap(
           children: [
             ListTile(
-              leading: Icon(Icons.photo_library_outlined, color: colorScheme.primary),
+              leading: Icon(
+                Icons.photo_library_outlined,
+                color: colorScheme.primary,
+              ),
               title: const Text('Gallery'),
               onTap: () async {
-                final path = await ImagePickerHelper.pickImage(source: ImageSource.gallery);
+                final path = await ImagePickerHelper.pickImage(
+                  source: ImageSource.gallery,
+                );
                 onImageSelected(path);
                 if (context.mounted) Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.camera_alt_outlined, color: colorScheme.primary),
+              leading: Icon(
+                Icons.camera_alt_outlined,
+                color: colorScheme.primary,
+              ),
               title: const Text('Camera'),
               onTap: () async {
-                final path = await ImagePickerHelper.pickImage(source: ImageSource.camera);
+                final path = await ImagePickerHelper.pickImage(
+                  source: ImageSource.camera,
+                );
                 onImageSelected(path);
                 if (context.mounted) Navigator.pop(context);
               },
@@ -152,9 +163,7 @@ class MultiImagePicker extends StatelessWidget {
       children: [
         Text(
           label,
-          style: context.styleMedium14.copyWith(
-            color: colorScheme.onSurface,
-          ),
+          style: context.styleMedium14.copyWith(color: colorScheme.onSurface),
         ),
         SizedBox(height: 12.h),
         SizedBox(
@@ -198,7 +207,9 @@ class MultiImagePicker extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.r),
                       image: DecorationImage(
-                        image: FileImage(File(imagePaths[index])),
+                        image: kIsWeb
+                            ? NetworkImage(imagePaths[index]) as ImageProvider
+                            : FileImage(File(imagePaths[index])),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -208,13 +219,16 @@ class MultiImagePicker extends StatelessWidget {
                     right: 16,
                     child: GestureDetector(
                       onTap: () {
-                        final updated = List<String>.from(imagePaths)..removeAt(index);
+                        final updated = List<String>.from(imagePaths)
+                          ..removeAt(index);
                         onImagesSelected(updated);
                       },
                       child: Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          color: colorScheme.errorContainer.withValues(alpha: 0.8),
+                          color: colorScheme.errorContainer.withValues(
+                            alpha: 0.8,
+                          ),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(

@@ -82,20 +82,15 @@ class _BookingDateViewState extends State<BookingDateView> {
         children: [
           const BookingStepper(currentStep: 0),
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.all(AppSpacing.lg),
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.selectDate,
-                  style: context.headingMedium,
-                ),
-                SizedBox(height: AppSpacing.md),
-                BlocBuilder<DoctorSlotsCubit, DoctorSlotsState>(
-                  builder: (context, state) {
-                    final List<SlotModel> allSlots = state is DoctorSlotsLoaded
-                        ? state.slots
-                        : [];
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isWide = constraints.maxWidth > 700;
 
+                // Shared widgets built as lambdas so we can place them in either layout
+                Widget calendarSection = BlocBuilder<DoctorSlotsCubit, DoctorSlotsState>(
+                  builder: (context, state) {
+                    final List<SlotModel> allSlots =
+                        state is DoctorSlotsLoaded ? state.slots : [];
                     return _CalendarPicker(
                       selectedDate: _selectedDate,
                       slots: allSlots,
@@ -104,7 +99,6 @@ class _BookingDateViewState extends State<BookingDateView> {
                           _selectedDate = d;
                           _selectedSlot = null;
                         });
-                        // Re-fetch slots for the newly selected date
                         context.read<DoctorSlotsCubit>().fetchSlots(
                           widget.doctor.id,
                           d,
@@ -112,148 +106,209 @@ class _BookingDateViewState extends State<BookingDateView> {
                       },
                     );
                   },
-                ),
-                SizedBox(height: AppSpacing.xl),
-                Text(
-                  AppLocalizations.of(context)!.selectTime,
-                  style: context.headingMedium,
-                ),
-                SizedBox(height: AppSpacing.md),
-                BlocBuilder<DoctorSlotsCubit, DoctorSlotsState>(
-                  builder: (context, state) {
-                    if (state is DoctorSlotsLoading) {
-                      return _buildLoadingSlots();
-                    } else if (state is DoctorSlotsError) {
-                      return _buildErrorState(state.message);
-                    } else if (state is DoctorSlotsLoaded) {
-                      if (state.slots.isEmpty) {
-                        return _buildGlobalNoSlotsAvailable();
-                      }
+                );
 
-                      final categorized = _groupSlots(state.slots);
-                      final hasAnySlots = categorized.values.any(
-                        (list) => list.isNotEmpty,
-                      );
+                Widget slotsAndTypeSection = Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.selectTime,
+                      style: context.headingMedium,
+                    ),
+                    SizedBox(height: AppSpacing.md),
+                    BlocBuilder<DoctorSlotsCubit, DoctorSlotsState>(
+                      builder: (context, state) {
+                        if (state is DoctorSlotsLoading) {
+                          return _buildLoadingSlots();
+                        } else if (state is DoctorSlotsError) {
+                          return _buildErrorState(state.message);
+                        } else if (state is DoctorSlotsLoaded) {
+                          if (state.slots.isEmpty) {
+                            return _buildGlobalNoSlotsAvailable();
+                          }
+                          final categorized = _groupSlots(state.slots);
+                          final hasAnySlots = categorized.values.any(
+                            (list) => list.isNotEmpty,
+                          );
+                          if (!hasAnySlots) return _buildNoSlotsAvailable();
 
-                      if (!hasAnySlots) {
-                        return _buildNoSlotsAvailable();
-                      }
-
-                      return Column(
-                        children: categorized.entries.map((entry) {
-                          final category = entry.key;
-                          final slots = entry.value;
-                          if (slots.isEmpty) return const SizedBox.shrink();
-
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: AppSpacing.lg),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  category,
-                                  style: context.labelLarge.copyWith(
-                                    color: colorScheme.onSurfaceVariant,
-                                  ),
-                                ),
-                                SizedBox(height: AppSpacing.sm),
-                                Wrap(
-                                  spacing: AppSpacing.md,
-                                  runSpacing: AppSpacing.md,
-                                  children: slots.map((slot) {
-                                    final isSelected =
-                                        _selectedSlot?.id == slot.id;
-                                    final timeStr = DateFormat(
-                                      'hh:mm a',
-                                    ).format(slot.startTime);
-                                    final isSlotAvailable =
-                                        slot.isAvailable && !slot.isBooked;
-
-                                    return GestureDetector(
-                                      onTap: isSlotAvailable
-                                          ? () => setState(
-                                              () => _selectedSlot = slot,
-                                            )
-                                          : null,
-                                      child: Container(
-                                        width:
-                                            (1.sw -
-                                                AppSpacing.lg * 2 -
-                                                AppSpacing.md * 2) /
-                                            3,
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 12.h,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: isSelected
-                                              ? colorScheme.primary
-                                              : (isSlotAvailable
-                                                    ? colorScheme
-                                                          .surfaceContainerLow
-                                                    : colorScheme
-                                                          .surfaceContainerLow
-                                                          .withValues(
-                                                            alpha: 0.4,
-                                                          )),
-                                          borderRadius: BorderRadius.circular(
-                                            AppRadius.lg,
-                                          ),
-                                          border: Border.all(
-                                            color: isSelected
-                                                ? colorScheme.primary
-                                                : (isSlotAvailable
-                                                      ? colorScheme
-                                                            .outlineVariant
-                                                      : colorScheme
-                                                            .outlineVariant
-                                                            .withValues(
-                                                              alpha: 0.4,
-                                                            )),
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            timeStr,
-                                            style: context.bodySmall.copyWith(
+                          return Column(
+                            children: categorized.entries.map((entry) {
+                              final category = entry.key;
+                              final slots = entry.value;
+                              if (slots.isEmpty) return const SizedBox.shrink();
+                              return Padding(
+                                padding:
+                                    EdgeInsets.only(bottom: AppSpacing.lg),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      category,
+                                      style: context.labelLarge.copyWith(
+                                        color: colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                    SizedBox(height: AppSpacing.sm),
+                                    Wrap(
+                                      spacing: AppSpacing.md,
+                                      runSpacing: AppSpacing.md,
+                                      children: slots.map((slot) {
+                                        final isSelected =
+                                            _selectedSlot?.id == slot.id;
+                                        final timeStr = DateFormat(
+                                          'hh:mm a',
+                                        ).format(slot.startTime);
+                                        final isSlotAvailable =
+                                            slot.isAvailable &&
+                                            !slot.isBooked;
+                                        return GestureDetector(
+                                          onTap: isSlotAvailable
+                                              ? () => setState(
+                                                    () =>
+                                                        _selectedSlot = slot,
+                                                  )
+                                              : null,
+                                          child: Container(
+                                            width: 100,
+                                            padding:
+                                                EdgeInsets.symmetric(
+                                              vertical: 12.h,
+                                            ),
+                                            decoration: BoxDecoration(
                                               color: isSelected
-                                                  ? colorScheme.onPrimary
+                                                  ? colorScheme.primary
                                                   : (isSlotAvailable
-                                                        ? colorScheme.onSurface
+                                                        ? colorScheme
+                                                              .surfaceContainerLow
                                                         : colorScheme
-                                                              .onSurfaceVariant
+                                                              .surfaceContainerLow
                                                               .withValues(
                                                                 alpha: 0.4,
                                                               )),
-                                              fontWeight: isSelected
-                                                  ? FontWeight.w600
-                                                  : FontWeight.w400,
-                                              decoration: isSlotAvailable
-                                                  ? null
-                                                  : TextDecoration.lineThrough,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                AppRadius.lg,
+                                              ),
+                                              border: Border.all(
+                                                color: isSelected
+                                                    ? colorScheme.primary
+                                                    : (isSlotAvailable
+                                                          ? colorScheme
+                                                                .outlineVariant
+                                                          : colorScheme
+                                                                .outlineVariant
+                                                                .withValues(
+                                                                  alpha: 0.4,
+                                                                )),
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                timeStr,
+                                                style:
+                                                    context.bodySmall
+                                                        .copyWith(
+                                                  color: isSelected
+                                                      ? colorScheme
+                                                            .onPrimary
+                                                      : (isSlotAvailable
+                                                            ? colorScheme
+                                                                  .onSurface
+                                                            : colorScheme
+                                                                  .onSurfaceVariant
+                                                                  .withValues(
+                                                                    alpha:
+                                                                        0.4,
+                                                                  )),
+                                                  fontWeight: isSelected
+                                                      ? FontWeight.w600
+                                                      : FontWeight.w400,
+                                                  decoration: isSlotAvailable
+                                                      ? null
+                                                      : TextDecoration
+                                                            .lineThrough,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              );
+                            }).toList(),
                           );
-                        }).toList(),
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ),
-                SizedBox(height: AppSpacing.xl),
-                Text(
-                  AppLocalizations.of(context)!.appointmentType,
-                  style: context.headingMedium,
-                ),
-                SizedBox(height: AppSpacing.md),
-                _buildAppointmentTypeSelector(),
-              ],
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                    SizedBox(height: AppSpacing.xl),
+                    Text(
+                      AppLocalizations.of(context)!.appointmentType,
+                      style: context.headingMedium,
+                    ),
+                    SizedBox(height: AppSpacing.md),
+                    _buildAppointmentTypeSelector(),
+                  ],
+                );
+
+                if (isWide) {
+                  // Desktop: two-column layout
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Left: Calendar
+                      SizedBox(
+                        width: 380,
+                        child: SingleChildScrollView(
+                          padding: EdgeInsets.all(AppSpacing.xl),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.selectDate,
+                                style: context.headingMedium,
+                              ),
+                              SizedBox(height: AppSpacing.md),
+                              calendarSection,
+                            ],
+                          ),
+                        ),
+                      ),
+                      // Divider
+                      VerticalDivider(
+                        width: 1,
+                        color: colorScheme.outlineVariant,
+                      ),
+                      // Right: Time slots + Type
+                      Expanded(
+                        child: SingleChildScrollView(
+                          padding: EdgeInsets.all(AppSpacing.xl),
+                          child: slotsAndTypeSection,
+                        ),
+                      ),
+                    ],
+                  );
+                }
+
+                // Mobile: single column
+                return ListView(
+                  padding: EdgeInsets.all(AppSpacing.lg),
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.selectDate,
+                      style: context.headingMedium,
+                    ),
+                    SizedBox(height: AppSpacing.md),
+                    calendarSection,
+                    SizedBox(height: AppSpacing.xl),
+                    slotsAndTypeSection,
+                  ],
+                );
+              },
             ),
           ),
           _BottomAction(
@@ -299,7 +354,7 @@ class _BookingDateViewState extends State<BookingDateView> {
             children: List.generate(
               6,
               (index) => Container(
-                width: (1.sw - AppSpacing.lg * 2 - AppSpacing.md * 2) / 3,
+                width: 100,
                 height: 45.h,
                 decoration: BoxDecoration(
                   color: Colors.white,

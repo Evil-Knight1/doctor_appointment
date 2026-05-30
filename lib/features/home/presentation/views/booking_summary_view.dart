@@ -101,169 +101,174 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
             children: [
               const BookingStepper(currentStep: 2),
               Expanded(
-                child: ListView(
-                  padding: EdgeInsets.all(AppSpacing.lg),
-                  children: [
-                    _SectionCard(
-                      title: AppLocalizations.of(context)!.doctorInformation,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 60.w,
-                            height: 60.h,
-                            decoration: BoxDecoration(
-                              color: colorScheme.primaryContainer,
-                              borderRadius: BorderRadius.circular(AppRadius.lg),
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child:
-                                doctor.profilePictureUrl != null &&
-                                    doctor.profilePictureUrl!.isNotEmpty
-                                ? CachedNetworkImage(
-                                    imageUrl: ImageUrlHelper.getFullUrl(
-                                      doctor.profilePictureUrl,
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 720),
+                    child: ListView(
+                      padding: EdgeInsets.all(AppSpacing.lg),
+                      children: [
+                        _SectionCard(
+                          title: AppLocalizations.of(context)!.doctorInformation,
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 60.w,
+                                height: 60.h,
+                                decoration: BoxDecoration(
+                                  color: colorScheme.primaryContainer,
+                                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                                ),
+                                clipBehavior: Clip.antiAlias,
+                                child:
+                                    doctor.profilePictureUrl != null &&
+                                        doctor.profilePictureUrl!.isNotEmpty
+                                    ? CachedNetworkImage(
+                                        imageUrl: ImageUrlHelper.getFullUrl(
+                                          doctor.profilePictureUrl,
+                                        ),
+                                        httpHeaders:
+                                            ImageUrlHelper.getImageHeaders(),
+                                        fit: BoxFit.cover,
+                                        placeholder: (context, url) => Skeletonizer(
+                                          enabled: true,
+                                          child: Container(
+                                            width: 60.w,
+                                            height: 60.h,
+                                            color:
+                                                colorScheme.surfaceContainerHighest,
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) => Icon(
+                                          Icons.person_rounded,
+                                          color: colorScheme.primary,
+                                          size: 30.sp,
+                                        ),
+                                      )
+                                    : Icon(
+                                        Icons.person_rounded,
+                                        color: colorScheme.primary,
+                                        size: 30.sp,
+                                      ),
+                              ),
+                              SizedBox(width: AppSpacing.md),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      doctor.fullName,
+                                      style: context.headingSmall,
                                     ),
-                                    httpHeaders:
-                                        ImageUrlHelper.getImageHeaders(),
-                                    fit: BoxFit.cover,
-                                    placeholder: (context, url) => Skeletonizer(
-                                      enabled: true,
-                                      child: Container(
-                                        width: 60.w,
-                                        height: 60.h,
-                                        color:
-                                            colorScheme.surfaceContainerHighest,
+                                    Text(
+                                      '${doctor.specialization.name} | ${doctor.hospital ?? AppLocalizations.of(context)!.clinic}',
+                                      style: context.bodySmall.copyWith(
+                                        color: colorScheme.onSurfaceVariant,
                                       ),
                                     ),
-                                    errorWidget: (context, url, error) => Icon(
-                                      Icons.person_rounded,
-                                      color: colorScheme.primary,
-                                      size: 30.sp,
-                                    ),
-                                  )
-                                : Icon(
-                                    Icons.person_rounded,
-                                    color: colorScheme.primary,
-                                    size: 30.sp,
-                                  ),
-                          ),
-                          SizedBox(width: AppSpacing.md),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  doctor.fullName,
-                                  style: context.headingSmall,
+                                  ],
                                 ),
-                                Text(
-                                  '${doctor.specialization.name} | ${doctor.hospital ?? AppLocalizations.of(context)!.clinic}',
-                                  style: context.bodySmall.copyWith(
-                                    color: colorScheme.onSurfaceVariant,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: AppSpacing.lg),
+                        _SectionCard(
+                          title: AppLocalizations.of(context)!.appointmentDetails,
+                          child: Column(
+                            children: [
+                              _DetailRow(
+                                icon: Icons.access_time,
+                                label: AppLocalizations.of(context)!.timeSlot,
+                                value: time,
+                              ),
+                              Divider(
+                                height: 24.h,
+                                color: colorScheme.outlineVariant,
+                              ),
+                              _DetailRow(
+                                icon: Icons.medical_services_outlined,
+                                label: AppLocalizations.of(context)!.appointmentType,
+                                value: appointmentType == 1
+                                    ? AppLocalizations.of(context)!.consultation
+                                    : AppLocalizations.of(context)!.regularVisit,
+                              ),
+                              if (reason.isNotEmpty) ...[
+                                Divider(
+                                  height: 24.h,
+                                  color: colorScheme.outlineVariant,
+                                ),
+                                _DetailRow(
+                                  icon: Icons.description_outlined,
+                                  label: AppLocalizations.of(context)!.reason,
+                                  value: reason,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        if (!isReschedule) ...[
+                          SizedBox(height: AppSpacing.lg),
+                          _SectionCard(
+                            title: AppLocalizations.of(context)!.paymentMethod,
+                            child: _DetailRow(
+                              icon: _iconForMethod(paymentMethodId),
+                              label: AppLocalizations.of(context)!.method,
+                              value: paymentLabel,
+                              trailing: GestureDetector(
+                                onTap: () => context.pop(),
+                                child: Text(
+                                  AppLocalizations.of(context)!.change,
+                                  style: TextStyle(
+                                    color: colorScheme.primary,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w600,
                                   ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: AppSpacing.lg),
+                          _SectionCard(
+                            title: AppLocalizations.of(context)!.costSummary,
+                            child: Column(
+                              children: [
+                                _CostRow(
+                                  label: AppLocalizations.of(context)!.consultation,
+                                  value: '${amount.toStringAsFixed(2)} ${AppLocalizations.of(context)!.egpSuffix}',
+                                ),
+                                Divider(
+                                  height: 24.h,
+                                  color: colorScheme.outlineVariant,
+                                ),
+                                _CostRow(
+                                  label: AppLocalizations.of(context)!.total,
+                                  value: '${amount.toStringAsFixed(2)} ${AppLocalizations.of(context)!.egpSuffix}',
+                                  isTotal: true,
                                 ),
                               ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: AppSpacing.lg),
-                    _SectionCard(
-                      title: AppLocalizations.of(context)!.appointmentDetails,
-                      child: Column(
-                        children: [
-                          _DetailRow(
-                            icon: Icons.access_time,
-                            label: AppLocalizations.of(context)!.timeSlot,
-                            value: time,
-                          ),
-                          Divider(
-                            height: 24.h,
-                            color: colorScheme.outlineVariant,
-                          ),
-                          _DetailRow(
-                            icon: Icons.medical_services_outlined,
-                            label: AppLocalizations.of(context)!.appointmentType,
-                            value: appointmentType == 1
-                                ? AppLocalizations.of(context)!.consultation
-                                : AppLocalizations.of(context)!.regularVisit,
-                          ),
-                          if (reason.isNotEmpty) ...[
-                            Divider(
-                              height: 24.h,
-                              color: colorScheme.outlineVariant,
+                          if (paymentMethodId == 3) ...[
+                            SizedBox(height: AppSpacing.md),
+                            _InfoBanner(
+                              message: AppLocalizations.of(context)!.cashAtClinicInfo,
                             ),
-                            _DetailRow(
-                              icon: Icons.description_outlined,
-                              label: AppLocalizations.of(context)!.reason,
-                              value: reason,
+                          ] else ...[
+                            SizedBox(height: AppSpacing.md),
+                            _InfoBanner(
+                              message: AppLocalizations.of(context)!.paymobPaymentInfo,
+                              isPaymob: true,
                             ),
                           ],
-                        ],
-                      ),
-                    ),
-                    if (!isReschedule) ...[
-                      SizedBox(height: AppSpacing.lg),
-                      _SectionCard(
-                        title: AppLocalizations.of(context)!.paymentMethod,
-                        child: _DetailRow(
-                          icon: _iconForMethod(paymentMethodId),
-                          label: AppLocalizations.of(context)!.method,
-                          value: paymentLabel,
-                          trailing: GestureDetector(
-                            onTap: () => context.pop(),
-                            child: Text(
-                              AppLocalizations.of(context)!.change,
-                              style: TextStyle(
-                                color: colorScheme.primary,
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                        ] else ...[
+                          SizedBox(height: AppSpacing.lg),
+                          _InfoBanner(
+                            message: AppLocalizations.of(context)!.rescheduleNoPayment,
                           ),
-                        ),
-                      ),
-                      SizedBox(height: AppSpacing.lg),
-                      _SectionCard(
-                        title: AppLocalizations.of(context)!.costSummary,
-                        child: Column(
-                          children: [
-                            _CostRow(
-                              label: AppLocalizations.of(context)!.consultation,
-                              value: '${amount.toStringAsFixed(2)} ${AppLocalizations.of(context)!.egpSuffix}',
-                            ),
-                            Divider(
-                              height: 24.h,
-                              color: colorScheme.outlineVariant,
-                            ),
-                            _CostRow(
-                              label: AppLocalizations.of(context)!.total,
-                              value: '${amount.toStringAsFixed(2)} ${AppLocalizations.of(context)!.egpSuffix}',
-                              isTotal: true,
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (paymentMethodId == 3) ...[
-                        SizedBox(height: AppSpacing.md),
-                        _InfoBanner(
-                          message: AppLocalizations.of(context)!.cashAtClinicInfo,
-                        ),
-                      ] else ...[
-                        SizedBox(height: AppSpacing.md),
-                        _InfoBanner(
-                          message: AppLocalizations.of(context)!.paymobPaymentInfo,
-                          isPaymob: true,
-                        ),
+                        ],
                       ],
-                    ] else ...[
-                      SizedBox(height: AppSpacing.lg),
-                      _InfoBanner(
-                        message: AppLocalizations.of(context)!.rescheduleNoPayment,
-                      ),
-                    ],
-                  ],
+                    ),
+                  ),
                 ),
               ),
               _BottomAction(

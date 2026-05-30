@@ -2,6 +2,7 @@ import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -98,23 +99,163 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView>
             ),
           ],
         ),
-        body: Column(
-          children: [
-            DoctorHeaderCard(doctor: widget.doctor),
-            DoctorTabBar(controller: _tabController),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            final isWide = constraints.maxWidth > 700;
+            if (isWide) {
+              // Desktop: side tab rail layout
+              return Column(
                 children: [
-                  _AboutTab(doctor: widget.doctor),
-                  _AddressTab(doctor: widget.doctor),
-                  const _ReviewsTab(),
+                  DoctorHeaderCard(doctor: widget.doctor),
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Side tab rail
+                        _SideTabRail(
+                          controller: _tabController,
+                          labels: [
+                            AppLocalizations.of(context)!.aboutTab,
+                            AppLocalizations.of(context)!.locationTab,
+                            AppLocalizations.of(context)!.reviewsTab,
+                          ],
+                          icons: [
+                            Icons.info_outline_rounded,
+                            Icons.location_on_outlined,
+                            Icons.star_outline_rounded,
+                          ],
+                        ),
+                        // Content panel
+                        Expanded(
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: [
+                              _AboutTab(doctor: widget.doctor),
+                              _AddressTab(doctor: widget.doctor),
+                              const _ReviewsTab(),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  _AppointmentButton(doctor: widget.doctor),
+                ],
+              );
+            }
+            // Mobile: top tab bar layout
+            return Column(
+              children: [
+                DoctorHeaderCard(doctor: widget.doctor),
+                DoctorTabBar(controller: _tabController),
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      _AboutTab(doctor: widget.doctor),
+                      _AddressTab(doctor: widget.doctor),
+                      const _ReviewsTab(),
+                    ],
+                  ),
+                ),
+                _AppointmentButton(doctor: widget.doctor),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+/// Vertical tab rail for desktop/web layout
+class _SideTabRail extends StatefulWidget {
+  const _SideTabRail({
+    required this.controller,
+    required this.labels,
+    required this.icons,
+  });
+  final TabController controller;
+  final List<String> labels;
+  final List<IconData> icons;
+
+  @override
+  State<_SideTabRail> createState() => _SideTabRailState();
+}
+
+class _SideTabRailState extends State<_SideTabRail> {
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_onTabChanged);
+  }
+
+  void _onTabChanged() => setState(() {});
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onTabChanged);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      width: 160,
+      decoration: BoxDecoration(
+        border: Border(
+          right: BorderSide(color: colorScheme.outlineVariant, width: 1),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: List.generate(widget.labels.length, (index) {
+          final isSelected = widget.controller.index == index;
+          return InkWell(
+            onTap: () => widget.controller.animateTo(index),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? colorScheme.primary.withValues(alpha: 0.1)
+                    : Colors.transparent,
+                border: Border(
+                  left: BorderSide(
+                    color: isSelected ? colorScheme.primary : Colors.transparent,
+                    width: 3,
+                  ),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    widget.icons[index],
+                    size: 18,
+                    color: isSelected
+                        ? colorScheme.primary
+                        : colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      widget.labels[index],
+                      style: TextStyle(
+                        color: isSelected
+                            ? colorScheme.primary
+                            : colorScheme.onSurfaceVariant,
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.normal,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-            _AppointmentButton(doctor: widget.doctor),
-          ],
-        ),
+          );
+        }),
       ),
     );
   }

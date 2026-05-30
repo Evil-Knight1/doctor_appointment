@@ -87,26 +87,36 @@ class RecommendedDoctorsList extends StatelessWidget {
                   ), // Or add a specific "No doctors" key
                 );
               }
-              return ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: doctors.length + (isLoadingMore ? 1 : 0),
-                separatorBuilder: (_, _) => SizedBox(height: AppSpacing.sm),
-                itemBuilder: (_, index) {
-                  if (index == doctors.length) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    );
-                  }
-                  final doctor = doctors[index];
-                  return DoctorCard(
-                    doctor: doctor.toHomeModel(),
-                    heroTag: 'recommended-${doctor.id}-$index',
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  final crossAxisCount = constraints.maxWidth > 600 ? 2 : 1;
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      mainAxisExtent: 120,
+                      crossAxisSpacing: AppSpacing.sm,
+                      mainAxisSpacing: AppSpacing.sm,
+                    ),
+                    itemCount: doctors.length + (isLoadingMore ? 1 : 0),
+                    itemBuilder: (_, index) {
+                      if (index == doctors.length) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        );
+                      }
+                      final doctor = doctors[index];
+                      return DoctorCard(
+                        doctor: doctor.toHomeModel(),
+                        heroTag: 'recommended-${doctor.id}-$index',
+                      );
+                    },
                   );
                 },
               );

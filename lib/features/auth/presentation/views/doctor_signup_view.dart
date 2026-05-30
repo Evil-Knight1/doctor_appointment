@@ -45,6 +45,10 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
   final _consultationFeeController = TextEditingController();
   DateTime? _dateOfBirth;
   String? _selectedGender;
+  double? _clinicLat;
+  double? _clinicLng;
+  double? _hospitalLat;
+  double? _hospitalLng;
 
   Specialization? _selectedSpecialization;
   String? _profilePicturePath;
@@ -126,12 +130,16 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
         title: forClinic
             ? 'Select Clinic Location'
             : 'Select Hospital Location',
-        onLocationSelected: (address) {
+        onLocationSelected: (address, lat, lng) {
           setState(() {
             if (forClinic) {
               _clinicAddressController.text = address;
+              _clinicLat = lat;
+              _clinicLng = lng;
             } else {
               _hospitalController.text = address;
+              _hospitalLat = lat;
+              _hospitalLng = lng;
             }
           });
         },
@@ -172,6 +180,8 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
       clinicImagesPaths: _clinicImagesPaths,
       gender: _selectedGender,
       dateOfBirth: _dateOfBirth,
+      latitude: _clinicLat,
+      longitude: _clinicLng,
     );
   }
 

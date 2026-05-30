@@ -26,55 +26,60 @@ class BookingConfirmedView extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.all(AppSpacing.lg),
-              children: [
-                const ConfirmedBadge(),
-                SizedBox(height: AppSpacing.xxl),
-                ConfirmedInfoSection(
-                  title: AppLocalizations.of(context)!.bookingInformation,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 640),
+                child: ListView(
+                  padding: EdgeInsets.all(AppSpacing.lg),
                   children: [
-                    BookingInfoRow(
-                      icon: Icons.calendar_today_outlined,
-                      label: AppLocalizations.of(context)!.dateAndTime,
-                      value: time.isNotEmpty ? time : AppLocalizations.of(context)!.appointmentBooked,
-                      trailing: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10.w,
-                          vertical: 4.h,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: colorScheme.primary),
-                          borderRadius: BorderRadius.circular(AppRadius.full),
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.getLocation,
-                          style: TextStyle(
-                            fontSize: 11.sp,
-                            color: colorScheme.primary,
-                            fontWeight: FontWeight.w600,
+                    const ConfirmedBadge(),
+                    SizedBox(height: AppSpacing.xxl),
+                    ConfirmedInfoSection(
+                      title: AppLocalizations.of(context)!.bookingInformation,
+                      children: [
+                        BookingInfoRow(
+                          icon: Icons.calendar_today_outlined,
+                          label: AppLocalizations.of(context)!.dateAndTime,
+                          value: time.isNotEmpty ? time : AppLocalizations.of(context)!.appointmentBooked,
+                          trailing: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 10.w,
+                              vertical: 4.h,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: colorScheme.primary),
+                              borderRadius: BorderRadius.circular(AppRadius.full),
+                            ),
+                            child: Text(
+                              AppLocalizations.of(context)!.getLocation,
+                              style: TextStyle(
+                                fontSize: 11.sp,
+                                color: colorScheme.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ),
+                        Divider(height: 20.h, color: colorScheme.outlineVariant),
+                        BookingInfoRow(
+                          icon: Icons.payment_outlined,
+                          label: AppLocalizations.of(context)!.paymentLabel,
+                          value: paymentLabel,
+                        ),
+                      ],
+                    ),
+                    if (doctor != null) ...[
+                      SizedBox(height: AppSpacing.xl),
+                      ConfirmedInfoSection(
+                        title: AppLocalizations.of(context)!.doctorInformation,
+                        children: [
+                          DoctorInfoRow(doctor: doctor),
+                        ],
                       ),
-                    ),
-                    Divider(height: 20.h, color: colorScheme.outlineVariant),
-                    BookingInfoRow(
-                      icon: Icons.payment_outlined,
-                      label: AppLocalizations.of(context)!.paymentLabel,
-                      value: paymentLabel,
-                    ),
+                    ],
                   ],
                 ),
-                if (doctor != null) ...[
-                  SizedBox(height: AppSpacing.xl),
-                  ConfirmedInfoSection(
-                    title: AppLocalizations.of(context)!.doctorInformation,
-                    children: [
-                      DoctorInfoRow(doctor: doctor),
-                    ],
-                  ),
-                ],
-              ],
+              ),
             ),
           ),
           BookingConfirmedActions(

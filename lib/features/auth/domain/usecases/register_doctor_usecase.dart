@@ -24,6 +24,8 @@ class RegisterDoctorUseCase {
       bio: params.bio,
       profilePicturePath: params.profilePicturePath,
       clinicImagesPaths: params.clinicImagesPaths,
+      latitude: params.latitude,
+      longitude: params.longitude,
     );
   }
 }
@@ -44,6 +46,8 @@ class RegisterDoctorParams {
   final String? bio;
   final String? profilePicturePath;
   final List<String>? clinicImagesPaths;
+  final double? latitude;
+  final double? longitude;
 
   RegisterDoctorParams({
     required this.fullName,
@@ -61,5 +65,7 @@ class RegisterDoctorParams {
     this.bio,
     this.profilePicturePath,
     this.clinicImagesPaths,
+    this.latitude,
+    this.longitude,
   });
 }

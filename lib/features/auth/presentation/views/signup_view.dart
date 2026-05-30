@@ -537,8 +537,10 @@ class _SignUpViewState extends State<SignUpView> {
       backgroundColor: Colors.transparent,
       builder: (context) => LocationPickerSheet(
         title: 'Select Your Location',
-        onLocationSelected: (address) {
-          setState(() => _addressController.text = address);
+        onLocationSelected: (address, lat, lng) {
+          setState(() {
+            _addressController.text = address;
+          });
         },
       ),
     );

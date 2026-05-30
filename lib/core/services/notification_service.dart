@@ -15,6 +15,7 @@ import 'package:doctor_appointment/features/home/data/datasource/notification_re
 import 'package:doctor_appointment/features/home/domain/entities/app_notification_type.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -52,6 +53,18 @@ class NotificationService {
     if (_initialized) return;
 
     tz.initializeTimeZones();
+
+    // On web: only request permission + listen to messages.
+    // flutter_local_notifications is NOT supported on web, so we skip that part.
+    if (kIsWeb) {
+      await _fcm.requestPermission(alert: true, badge: true, sound: true);
+      FirebaseMessaging.onMessage.listen((message) {
+        // On web, the browser handles background messages via the service worker.
+        // Foreground messages can be handled here if needed.
+      });
+      _initialized = true;
+      return;
+    }
 
     await _fcm.requestPermission(alert: true, badge: true, sound: true);
     await _ensureLocalNotificationsInitialized();

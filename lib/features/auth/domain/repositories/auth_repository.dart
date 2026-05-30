@@ -42,6 +42,8 @@ abstract class AuthRepository {
     String? bio,
     String? profilePicturePath,
     List<String>? clinicImagesPaths,
+    double? latitude,
+    double? longitude,
   });
 
   Future<Result<bool>> updateFcmToken({required String fcmToken});

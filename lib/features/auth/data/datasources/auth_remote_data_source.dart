@@ -42,6 +42,8 @@ abstract class AuthRemoteDataSource {
     String? bio,
     String? profilePicturePath,
     List<String>? clinicImagesPaths,
+    double? latitude,
+    double? longitude,
   });
 
   Future<bool> updateFcmToken({required String fcmToken});
@@ -143,6 +145,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     String? bio,
     String? profilePicturePath,
     List<String>? clinicImagesPaths,
+    double? latitude,
+    double? longitude,
   }) async {
     final Map<String, dynamic> data = {
       'fullName': fullName,
@@ -157,6 +161,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       'dateOfBirth': dateOfBirth?.toUtc().toIso8601String(),
       'gender': gender,
       'bio': bio?.isEmpty == true ? null : bio,
+      'latitude': latitude,
+      'longitude': longitude,
     };
 
     if (profilePicturePath != null) {

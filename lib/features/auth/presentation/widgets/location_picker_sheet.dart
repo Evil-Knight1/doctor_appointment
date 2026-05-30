@@ -8,7 +8,7 @@ import 'package:geocoding/geocoding.dart' as geo;
 
 class LocationPickerSheet extends StatefulWidget {
   final String title;
-  final Function(String) onLocationSelected;
+  final Function(String, double, double) onLocationSelected;
   const LocationPickerSheet({
     super.key,
     required this.title,
@@ -23,6 +23,8 @@ class _LocationPickerSheetState extends State<LocationPickerSheet> {
   late MapController _controller;
   final _searchController = TextEditingController();
   String _address = 'Loading...';
+  double _latitude = 0.0;
+  double _longitude = 0.0;
   bool _isSearching = false;
 
   @override
@@ -78,6 +80,8 @@ class _LocationPickerSheetState extends State<LocationPickerSheet> {
 
   Future<void> _updateAddress(GeoPoint position) async {
     try {
+      _latitude = position.latitude;
+      _longitude = position.longitude;
       List<geo.Placemark> placemarks = await geo.placemarkFromCoordinates(
         position.latitude,
         position.longitude,
@@ -347,7 +351,7 @@ class _LocationPickerSheetState extends State<LocationPickerSheet> {
                   isLoading: _isLoading,
                   label: 'Confirm Location',
                   onPressed: () {
-                    widget.onLocationSelected(_address);
+                    widget.onLocationSelected(_address, _latitude, _longitude);
                     Navigator.pop(context);
                   },
                 ),

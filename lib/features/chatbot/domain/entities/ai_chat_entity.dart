@@ -51,6 +51,7 @@ class AIChatMessage extends Equatable {
   final String userMessage;
   final String aiMessage;
   final DateTime createdAt;
+  final bool showMapLink;
 
   const AIChatMessage({
     this.id,
@@ -58,10 +59,11 @@ class AIChatMessage extends Equatable {
     required this.userMessage,
     required this.aiMessage,
     required this.createdAt,
+    this.showMapLink = false,
   });
 
   @override
-  List<Object?> get props => [id, sessionId, userMessage, aiMessage, createdAt];
+  List<Object?> get props => [id, sessionId, userMessage, aiMessage, createdAt, showMapLink];
 }
 
 class AIChatResponse extends Equatable {

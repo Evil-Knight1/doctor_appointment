@@ -100,7 +100,7 @@ class ChatCubit extends Cubit<ChatState> {
     await _handleSendResponse(result);
   }
 
-  Future<void> _handleSendResponse(Result<AIChatResponse> result) async {
+  Future<void> _handleSendResponse(Result<AIChatResponse> result, {bool showMapLink = false}) async {
     if (result is Success<AIChatResponse>) {
       final response = result.data;
 
@@ -167,7 +167,7 @@ class ChatCubit extends Cubit<ChatState> {
           toolResult: {"tool": "get_doctors", "doctors": doctorList},
         );
 
-        await _handleSendResponse(turn2Result);
+        await _handleSendResponse(turn2Result, showMapLink: doctorList.isNotEmpty);
       } else {
         // Normal chat response
         final newMessage = AIChatMessage(
@@ -175,6 +175,7 @@ class ChatCubit extends Cubit<ChatState> {
           userMessage: response.userMessage,
           aiMessage: response.aiMessage,
           createdAt: response.createdAt,
+          showMapLink: showMapLink,
         );
         final updatedMessages = List<AIChatMessage>.from(state.messages)
           ..add(newMessage);

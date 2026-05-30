@@ -1,3 +1,4 @@
+import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/core/widgets/glass_alert_error.dart';
 import 'package:doctor_appointment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -238,6 +239,7 @@ class _ChatbotViewState extends State<ChatbotView> {
                                     context,
                                     message.aiMessage,
                                     riskColor,
+                                    message.showMapLink,
                                   ),
                               ],
                             );
@@ -357,7 +359,12 @@ class _ChatbotViewState extends State<ChatbotView> {
     );
   }
 
-  Widget _buildBotMessage(BuildContext context, String text, Color riskColor) {
+  Widget _buildBotMessage(
+    BuildContext context,
+    String text,
+    Color riskColor, [
+    bool showMapLink = false,
+  ]) {
     final theme = Theme.of(context);
 
     return Align(
@@ -383,7 +390,46 @@ class _ChatbotViewState extends State<ChatbotView> {
             width: riskColor != Colors.transparent ? 2 : 1,
           ),
         ),
-        child: Text(text, style: context.styleRegular14.copyWith(height: 1.5)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(text, style: context.styleRegular14.copyWith(height: 1.5)),
+            if (showMapLink) ...[
+              SizedBox(height: 12.h),
+              GestureDetector(
+                onTap: () => context.push(AppRouter.kFindNearbyView),
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 8.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8.r),
+                    border: Border.all(color: theme.colorScheme.primary),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.map_rounded,
+                        color: theme.colorScheme.primary,
+                        size: 16.sp,
+                      ),
+                      SizedBox(width: 8.w),
+                      Text(
+                        AppLocalizations.of(context)!.locationMap,
+                        style: context.styleSemiBold14.copyWith(
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
