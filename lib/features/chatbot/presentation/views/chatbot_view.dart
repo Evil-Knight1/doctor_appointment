@@ -244,16 +244,34 @@ class _ChatbotViewState extends State<ChatbotView> {
                               ],
                             );
                           }
-                          return Align(
-                            alignment: Alignment.centerLeft,
-                            child: Container(
-                              padding: EdgeInsets.all(12.w),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.surface,
-                                borderRadius: BorderRadius.circular(16.r),
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (state.pendingUserMessage != null &&
+                                  state.pendingUserMessage!.isNotEmpty) ...[
+                                _buildUserMessage(
+                                  context,
+                                  state.pendingUserMessage!,
+                                ),
+                                SizedBox(height: 16.h),
+                              ],
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Container(
+                                  padding: EdgeInsets.all(12.w),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surface,
+                                    borderRadius: BorderRadius.circular(16.r),
+                                  ),
+                                  child: Text(
+                                    "...",
+                                    style: context.styleRegular14,
+                                  ),
+                                ),
                               ),
-                              child: Text("...", style: context.styleRegular14),
-                            ),
+                            ],
                           );
                         },
                       ),

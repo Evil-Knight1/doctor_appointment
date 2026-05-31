@@ -28,10 +28,12 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
 
     final result = await getPatientProfileUseCase();
+    if (isClosed) return;
 
     switch (result) {
       case Success():
         await appCacheService.cacheProfile(result.data as PatientProfileModel);
+        if (isClosed) return;
         emit(ProfileSuccess(result.data));
       case FailureResult():
         if (cachedProfile == null) {
@@ -60,12 +62,15 @@ class ProfileCubit extends Cubit<ProfileState> {
       ),
     );
 
+    if (isClosed) return;
+
     switch (result) {
       case Success():
         if (result.data.profilePicture != null) {
           await CachedNetworkImage.evictFromCache(ImageUrlHelper.getFullUrl(result.data.profilePicture));
         }
         await appCacheService.cacheProfile(result.data as PatientProfileModel);
+        if (isClosed) return;
         emit(ProfileSuccess(result.data));
       case FailureResult():
         emit(ProfileFailure(result.failure.message));
