@@ -1,3 +1,4 @@
+import 'package:api_cache_manager/api_cache_manager.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -353,17 +354,29 @@ class _ProfileViewState extends State<ProfileView> {
             _LanguageOption(
               label: l10n.english,
               isSelected: currentLocale.languageCode == 'en',
-              onTap: () {
+              onTap: () async {
                 context.read<LocaleCubit>().changeLocale('en');
-                Navigator.pop(context);
+                // Clear any non-language-aware cache to ensure fresh data
+                await getIt<AppCacheService>().clearAll();
+                await APICacheManager().emptyCache();
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  context.go('/'); // restarts the app route stack
+                }
               },
             ),
             _LanguageOption(
               label: l10n.arabic,
               isSelected: currentLocale.languageCode == 'ar',
-              onTap: () {
+              onTap: () async {
                 context.read<LocaleCubit>().changeLocale('ar');
-                Navigator.pop(context);
+                // Clear any non-language-aware cache to ensure fresh data
+                await getIt<AppCacheService>().clearAll();
+                await APICacheManager().emptyCache();
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  context.go('/'); // restarts the app route stack
+                }
               },
             ),
             SizedBox(height: 8.h),

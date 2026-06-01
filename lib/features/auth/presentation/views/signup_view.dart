@@ -19,6 +19,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:doctor_appointment/core/widgets/image_picker_widget.dart';
+import 'package:doctor_appointment/core/services/service_locator.dart';
+import 'package:doctor_appointment/features/auth/domain/usecases/check_availability_usecase.dart';
+import 'package:doctor_appointment/features/auth/data/models/availability_check_model.dart';
+import 'package:doctor_appointment/core/utils/result.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -103,6 +107,63 @@ class _SignUpViewState extends State<SignUpView> {
   }
 
   int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailFocus.addListener(_onEmailFocusChange);
+    _phoneFocus.addListener(_onPhoneFocusChange);
+  }
+
+  void _onEmailFocusChange() {
+    if (!_emailFocus.hasFocus && _emailController.text.isNotEmpty) {
+      _checkAvailabilitySilent(email: _emailController.text.trim());
+    }
+  }
+
+  void _onPhoneFocusChange() {
+    if (!_phoneFocus.hasFocus && _phoneController.value.international.isNotEmpty) {
+      _checkAvailabilitySilent(phone: _phoneController.value.international);
+    }
+  }
+
+  Future<void> _checkAvailabilitySilent({String? email, String? phone}) async {
+    final useCase = getIt<CheckAvailabilityUseCase>();
+    final result = await useCase(email: email, phone: phone);
+    if (!mounted) return;
+    
+    if (result is Success<AvailabilityCheckModel>) {
+      final errors = Map<String, String>.from(_fieldErrors);
+      final l10n = AppLocalizations.of(context)!;
+      bool changed = false;
+      
+      if (email != null) {
+        if (!result.data.isEmailAvailable) {
+          errors['email'] = l10n.authErrorsEmailInUse;
+          changed = true;
+        } else if (errors.containsKey('email')) {
+          errors.remove('email');
+          changed = true;
+        }
+      }
+      
+      if (phone != null) {
+        if (!result.data.isPhoneAvailable) {
+          errors['phone'] = l10n.authErrorsPhoneInUse;
+          changed = true;
+        } else if (errors.containsKey('phone')) {
+          errors.remove('phone');
+          changed = true;
+        }
+      }
+      
+      if (changed) {
+        setState(() {
+          _fieldErrors = errors;
+        });
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -250,6 +311,7 @@ class _SignUpViewState extends State<SignUpView> {
                 Expanded(
                   child: Form(
                     key: _formKey,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 400),
                       transitionBuilder:

@@ -1,4 +1,5 @@
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+import 'package:doctor_appointment/core/widgets/glass_alert_error.dart';
 
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment/l10n/app_localizations.dart';
@@ -69,8 +70,12 @@ class _LocationPickerSheetState extends State<LocationPickerSheet> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.locationNotFound)),
+        GlassAlert.show(
+          context,
+          title: 'Error',
+          message: '${AppLocalizations.of(context)!.locationNotFound}: $e',
+          icon: Icons.error_outline_rounded,
+          iconColor: Colors.red,
         );
       }
     } finally {
@@ -286,11 +291,12 @@ class _LocationPickerSheetState extends State<LocationPickerSheet> {
                       } catch (e) {
                         debugPrint('Error getting current location: $e');
                         if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(AppLocalizations.of(context)!
-                                  .couldNotGetCurrentLocation),
-                            ),
+                          GlassAlert.show(
+                            context,
+                            title: 'Error',
+                            message: '${AppLocalizations.of(context)!.couldNotGetCurrentLocation}: $e',
+                            icon: Icons.error_outline_rounded,
+                            iconColor: Colors.red,
                           );
                         }
                       }
@@ -350,10 +356,20 @@ class _LocationPickerSheetState extends State<LocationPickerSheet> {
                 _SubmitButton(
                   isLoading: _isLoading,
                   label: 'Confirm Location',
-                  onPressed: () {
-                    widget.onLocationSelected(_address, _latitude, _longitude);
-                    Navigator.pop(context);
-                  },
+                  onPressed: (_address == 'Loading...' || _address == 'Unknown Location')
+                      ? () {
+                          GlassAlert.show(
+                            context,
+                            title: 'Error',
+                            message: 'Please wait until the location is loaded or select a valid location.',
+                            icon: Icons.error_outline_rounded,
+                            iconColor: Colors.red,
+                          );
+                        }
+                      : () {
+                          widget.onLocationSelected(_address, _latitude, _longitude);
+                          Navigator.pop(context);
+                        },
                 ),
               ],
             ),

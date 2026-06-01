@@ -15,6 +15,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phone_form_field/phone_form_field.dart';
+import 'package:doctor_appointment/core/services/service_locator.dart';
+import 'package:doctor_appointment/features/auth/domain/usecases/check_availability_usecase.dart';
+import 'package:doctor_appointment/features/auth/data/models/availability_check_model.dart';
+import 'package:doctor_appointment/core/utils/result.dart';
 
 class DoctorSignUpView extends StatefulWidget {
   const DoctorSignUpView({super.key});
@@ -145,6 +149,44 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
         },
       ),
     );
+  }
+
+  Future<void> _checkAvailabilitySilent({String? email, String? phone}) async {
+    final useCase = getIt<CheckAvailabilityUseCase>();
+    final result = await useCase(email: email, phone: phone);
+    if (!mounted) return;
+    
+    if (result is Success<AvailabilityCheckModel>) {
+      final errors = Map<String, String>.from(_fieldErrors);
+      final l10n = AppLocalizations.of(context)!;
+      bool changed = false;
+      
+      if (email != null) {
+        if (!result.data.isEmailAvailable) {
+          errors['email'] = l10n.authErrorsEmailInUse;
+          changed = true;
+        } else if (errors.containsKey('email')) {
+          errors.remove('email');
+          changed = true;
+        }
+      }
+      
+      if (phone != null) {
+        if (!result.data.isPhoneAvailable) {
+          errors['phone'] = l10n.authErrorsPhoneInUse;
+          changed = true;
+        } else if (errors.containsKey('phone')) {
+          errors.remove('phone');
+          changed = true;
+        }
+      }
+      
+      if (changed) {
+        setState(() {
+          _fieldErrors = errors;
+        });
+      }
+    }
   }
 
   void _submitForm() {
@@ -402,6 +444,7 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
               Expanded(
                 child: Form(
                   key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 400),
                     transitionBuilder:
@@ -506,6 +549,8 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
             selectedGender: _selectedGender,
             onGenderChanged: (gender) =>
                 setState(() => _selectedGender = gender),
+            onEmailUnfocused: (email) => _checkAvailabilitySilent(email: email),
+            onPhoneUnfocused: (phone) => _checkAvailabilitySilent(phone: phone),
           ),
           SizedBox(height: 24.h),
         ],
@@ -567,6 +612,8 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
             clinicImagesPaths: _clinicImagesPaths,
             onClinicImagesChanged: (paths) =>
                 setState(() => _clinicImagesPaths = paths),
+            onEmailUnfocused: (email) => _checkAvailabilitySilent(email: email),
+            onPhoneUnfocused: (phone) => _checkAvailabilitySilent(phone: phone),
           ),
           SizedBox(height: 24.h),
         ],
@@ -628,6 +675,8 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
             selectedGender: _selectedGender,
             onGenderChanged: (gender) =>
                 setState(() => _selectedGender = gender),
+            onEmailUnfocused: (email) => _checkAvailabilitySilent(email: email),
+            onPhoneUnfocused: (phone) => _checkAvailabilitySilent(phone: phone),
           ),
           SizedBox(height: 24.h),
         ],

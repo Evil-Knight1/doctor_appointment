@@ -33,6 +33,8 @@ class DoctorSignUpForm extends StatefulWidget {
   final ValueChanged<DateTime?> onDateOfBirthChanged;
   final String? selectedGender;
   final ValueChanged<String?> onGenderChanged;
+  final ValueChanged<String>? onEmailUnfocused;
+  final ValueChanged<String>? onPhoneUnfocused;
 
   /// Per-field server validation errors keyed by lowercase field name
   final Map<String, String> fieldErrors;
@@ -64,6 +66,8 @@ class DoctorSignUpForm extends StatefulWidget {
     required this.onDateOfBirthChanged,
     required this.selectedGender,
     required this.onGenderChanged,
+    this.onEmailUnfocused,
+    this.onPhoneUnfocused,
     this.fieldErrors = const {},
   });
 
@@ -90,6 +94,25 @@ class _DoctorSignUpFormState extends State<DoctorSignUpForm> {
   final FocusNode _hospitalFocus = FocusNode();
   final FocusNode _clinicFocus = FocusNode();
   final FocusNode _feeFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _emailFocus.addListener(_onEmailFocusChange);
+    _phoneFocus.addListener(_onPhoneFocusChange);
+  }
+
+  void _onEmailFocusChange() {
+    if (!_emailFocus.hasFocus && widget.emailController.text.isNotEmpty) {
+      widget.onEmailUnfocused?.call(widget.emailController.text.trim());
+    }
+  }
+
+  void _onPhoneFocusChange() {
+    if (!_phoneFocus.hasFocus && widget.phoneController.value.international.isNotEmpty) {
+      widget.onPhoneUnfocused?.call(widget.phoneController.value.international);
+    }
+  }
 
   @override
   void dispose() {
