@@ -89,7 +89,7 @@ class _ChatbotViewState extends State<ChatbotView> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations _appLocalizations = AppLocalizations.of(context)!;
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
@@ -124,7 +124,7 @@ class _ChatbotViewState extends State<ChatbotView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _appLocalizations.aiAssistant,
+                  appLocalizations.aiAssistant,
                   style: context.styleSemiBold16,
                 ),
 
@@ -132,7 +132,7 @@ class _ChatbotViewState extends State<ChatbotView> {
                   builder: (context, state) {
                     if (state.status == ChatStatus.loading) {
                       return Text(
-                        _appLocalizations.connecting,
+                        appLocalizations.connecting,
                         style: context.styleRegular12.copyWith(
                           color: Colors.orange,
                         ),
@@ -141,7 +141,7 @@ class _ChatbotViewState extends State<ChatbotView> {
 
                     if (state.status == ChatStatus.sending) {
                       return Text(
-                        _appLocalizations.typing,
+                        appLocalizations.typing,
                         style: context.styleRegular12.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                         ),
@@ -149,7 +149,7 @@ class _ChatbotViewState extends State<ChatbotView> {
                     }
 
                     return Text(
-                      _appLocalizations.online,
+                      appLocalizations.online,
                       style: context.styleRegular12.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -175,8 +175,8 @@ class _ChatbotViewState extends State<ChatbotView> {
           if (state.status == ChatStatus.limitReached) {
             GlassAlert.show(
               context,
-              title: _appLocalizations.limitReached,
-              message: _appLocalizations.limitReachedMessage,
+              title: appLocalizations.limitReached,
+              message: appLocalizations.limitReachedMessage,
               icon: Icons.warning_rounded,
               iconColor: Colors.orange,
               duration: const Duration(seconds: 4),
@@ -279,7 +279,7 @@ class _ChatbotViewState extends State<ChatbotView> {
 
               _buildInputArea(
                 context,
-                _appLocalizations,
+                appLocalizations,
                 state.currentUi,
                 isSending,
                 isLimitReached,

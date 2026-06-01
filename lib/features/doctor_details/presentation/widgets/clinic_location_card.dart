@@ -141,7 +141,7 @@ class AnimatedMapPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: animation,
-      builder: (_, __) {
+      builder: (_, _) {
         return Transform(
           alignment: Alignment.center,
           transform: Matrix4.identity()

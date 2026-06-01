@@ -2,7 +2,6 @@ import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/core/utils/go_router.dart';
 import 'package:doctor_appointment/features/auth/logic/forgot_password_cubit.dart';
 import 'package:doctor_appointment/features/auth/logic/forgot_password_state.dart';
-import 'package:doctor_appointment/features/auth/presentation/widgets/custom_text_field.dart';
 import 'package:doctor_appointment/features/on_boarding_view/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,20 +33,21 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
     return BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
       listener: (context, state) {
         if (state is ForgotPasswordFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
         }
         if (state is OtpVerifiedSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context)!.otpVerifiedSuccessfully)),
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)!.otpVerifiedSuccessfully,
+              ),
+            ),
           );
           context.pushReplacement(
             AppRouter.kResetPasswordView,
-            extra: {
-              'email': widget.email,
-              'token': state.token,
-            },
+            extra: {'email': widget.email, 'token': state.token},
           );
         }
       },
@@ -81,7 +81,9 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      AppLocalizations.of(context)!.verifyOtpSubtitle(widget.email),
+                      AppLocalizations.of(
+                        context,
+                      )!.verifyOtpSubtitle(widget.email),
                       style: context.styleRegular14,
                     ),
                     SizedBox(height: 36.h),
@@ -120,9 +122,9 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
                         onCompleted: (pin) {
                           if (_formKey.currentState?.validate() != true) return;
                           context.read<ForgotPasswordCubit>().verifyOtp(
-                                widget.email,
-                                pin,
-                              );
+                            widget.email,
+                            pin,
+                          );
                         },
                       ),
                     ),
@@ -132,7 +134,9 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
                       child: CustomButton(
                         height: 52.h,
                         width: double.infinity,
-                        text: isLoading ? AppLocalizations.of(context)!.verifying : AppLocalizations.of(context)!.verify,
+                        text: isLoading
+                            ? AppLocalizations.of(context)!.verifying
+                            : AppLocalizations.of(context)!.verify,
                         onPressed: isLoading
                             ? () {}
                             : () {
@@ -140,9 +144,9 @@ class _VerifyOtpViewState extends State<VerifyOtpView> {
                                   return;
                                 }
                                 context.read<ForgotPasswordCubit>().verifyOtp(
-                                      widget.email,
-                                      _otpController.text.trim(),
-                                    );
+                                  widget.email,
+                                  _otpController.text.trim(),
+                                );
                               },
                         buttonColor: Theme.of(context).colorScheme.primary,
                         textStyle: context.bodyMedium.copyWith(

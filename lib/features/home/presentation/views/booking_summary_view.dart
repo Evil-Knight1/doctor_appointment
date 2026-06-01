@@ -96,7 +96,9 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
 
         return Scaffold(
           backgroundColor: colorScheme.surface,
-          appBar: SharedAppBar(title: AppLocalizations.of(context)!.reviewSummary),
+          appBar: SharedAppBar(
+            title: AppLocalizations.of(context)!.reviewSummary,
+          ),
           body: Column(
             children: [
               const BookingStepper(currentStep: 2),
@@ -108,7 +110,9 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                       padding: EdgeInsets.all(AppSpacing.lg),
                       children: [
                         _SectionCard(
-                          title: AppLocalizations.of(context)!.doctorInformation,
+                          title: AppLocalizations.of(
+                            context,
+                          )!.doctorInformation,
                           child: Row(
                             children: [
                               Container(
@@ -116,7 +120,9 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                                 height: 60.h,
                                 decoration: BoxDecoration(
                                   color: colorScheme.primaryContainer,
-                                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                                  borderRadius: BorderRadius.circular(
+                                    AppRadius.lg,
+                                  ),
                                 ),
                                 clipBehavior: Clip.antiAlias,
                                 child:
@@ -129,20 +135,22 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                                         httpHeaders:
                                             ImageUrlHelper.getImageHeaders(),
                                         fit: BoxFit.cover,
-                                        placeholder: (context, url) => Skeletonizer(
-                                          enabled: true,
-                                          child: Container(
-                                            width: 60.w,
-                                            height: 60.h,
-                                            color:
-                                                colorScheme.surfaceContainerHighest,
-                                          ),
-                                        ),
-                                        errorWidget: (context, url, error) => Icon(
-                                          Icons.person_rounded,
-                                          color: colorScheme.primary,
-                                          size: 30.sp,
-                                        ),
+                                        placeholder: (context, url) =>
+                                            Skeletonizer(
+                                              enabled: true,
+                                              child: Container(
+                                                width: 60.w,
+                                                height: 60.h,
+                                                color: colorScheme
+                                                    .surfaceContainerHighest,
+                                              ),
+                                            ),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(
+                                              Icons.person_rounded,
+                                              color: colorScheme.primary,
+                                              size: 30.sp,
+                                            ),
                                       )
                                     : Icon(
                                         Icons.person_rounded,
@@ -173,7 +181,9 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                         ),
                         SizedBox(height: AppSpacing.lg),
                         _SectionCard(
-                          title: AppLocalizations.of(context)!.appointmentDetails,
+                          title: AppLocalizations.of(
+                            context,
+                          )!.appointmentDetails,
                           child: Column(
                             children: [
                               _DetailRow(
@@ -187,10 +197,14 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                               ),
                               _DetailRow(
                                 icon: Icons.medical_services_outlined,
-                                label: AppLocalizations.of(context)!.appointmentType,
+                                label: AppLocalizations.of(
+                                  context,
+                                )!.appointmentType,
                                 value: appointmentType == 1
                                     ? AppLocalizations.of(context)!.consultation
-                                    : AppLocalizations.of(context)!.regularVisit,
+                                    : AppLocalizations.of(
+                                        context,
+                                      )!.regularVisit,
                               ),
                               if (reason.isNotEmpty) ...[
                                 Divider(
@@ -233,8 +247,11 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                             child: Column(
                               children: [
                                 _CostRow(
-                                  label: AppLocalizations.of(context)!.consultation,
-                                  value: '${amount.toStringAsFixed(2)} ${AppLocalizations.of(context)!.egpSuffix}',
+                                  label: AppLocalizations.of(
+                                    context,
+                                  )!.consultation,
+                                  value:
+                                      '${amount.toStringAsFixed(2)} ${AppLocalizations.of(context)!.egpSuffix}',
                                 ),
                                 Divider(
                                   height: 24.h,
@@ -242,7 +259,8 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                                 ),
                                 _CostRow(
                                   label: AppLocalizations.of(context)!.total,
-                                  value: '${amount.toStringAsFixed(2)} ${AppLocalizations.of(context)!.egpSuffix}',
+                                  value:
+                                      '${amount.toStringAsFixed(2)} ${AppLocalizations.of(context)!.egpSuffix}',
                                   isTotal: true,
                                 ),
                               ],
@@ -251,19 +269,25 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                           if (paymentMethodId == 3) ...[
                             SizedBox(height: AppSpacing.md),
                             _InfoBanner(
-                              message: AppLocalizations.of(context)!.cashAtClinicInfo,
+                              message: AppLocalizations.of(
+                                context,
+                              )!.cashAtClinicInfo,
                             ),
                           ] else ...[
                             SizedBox(height: AppSpacing.md),
                             _InfoBanner(
-                              message: AppLocalizations.of(context)!.paymobPaymentInfo,
+                              message: AppLocalizations.of(
+                                context,
+                              )!.paymobPaymentInfo,
                               isPaymob: true,
                             ),
                           ],
                         ] else ...[
                           SizedBox(height: AppSpacing.lg),
                           _InfoBanner(
-                            message: AppLocalizations.of(context)!.rescheduleNoPayment,
+                            message: AppLocalizations.of(
+                              context,
+                            )!.rescheduleNoPayment,
                           ),
                         ],
                       ],
@@ -279,7 +303,7 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                     setState(() => _isRescheduling = true);
                     final result = await context
                         .read<AppointmentsCubit>()
-                        .selectRescheduleSlot(rescheduleAppointmentId!, slotId);
+                        .selectRescheduleSlot(rescheduleAppointmentId, slotId);
                     if (mounted) {
                       setState(() => _isRescheduling = false);
                       if (result is Success) {
@@ -290,9 +314,7 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                       } else if (result is FailureResult) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text(
-                              (result as FailureResult).failure.message,
-                            ),
+                            content: Text((result).failure.message),
                             backgroundColor: colorScheme.error,
                             behavior: SnackBarBehavior.floating,
                           ),
@@ -305,7 +327,9 @@ class _BookingSummaryViewState extends State<BookingSummaryView> {
                       context: context,
                       doctorId: doctorId,
                       slotId: slotId,
-                      reason: reason.isEmpty ? AppLocalizations.of(context)!.generalConsultation : reason,
+                      reason: reason.isEmpty
+                          ? AppLocalizations.of(context)!.generalConsultation
+                          : reason,
                       paymentMethod: paymentMethodId,
                       amount: amount,
                       type: appointmentType,
@@ -563,7 +587,9 @@ class _BottomAction extends StatelessWidget {
                   ),
                 )
               : Text(
-                  isCash ? AppLocalizations.of(context)!.bookAppointment : AppLocalizations.of(context)!.confirmAndPay,
+                  isCash
+                      ? AppLocalizations.of(context)!.bookAppointment
+                      : AppLocalizations.of(context)!.confirmAndPay,
                   style: TextStyle(
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.w600,

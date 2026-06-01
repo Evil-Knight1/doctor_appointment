@@ -230,10 +230,15 @@ class _EditProfileViewState extends State<EditProfileView> {
                       prefixIcon: Icons.person_search_outlined,
                       hintText: AppLocalizations.of(context)!.selectGender,
                       items: [
-                        DropdownMenuItem(value: 'Male', child: Text(AppLocalizations.of(context)!.maleLabel)),
+                        DropdownMenuItem(
+                          value: 'Male',
+                          child: Text(AppLocalizations.of(context)!.maleLabel),
+                        ),
                         DropdownMenuItem(
                           value: 'Female',
-                          child: Text(AppLocalizations.of(context)!.femaleLabel),
+                          child: Text(
+                            AppLocalizations.of(context)!.femaleLabel,
+                          ),
                         ),
                       ],
                     ),
@@ -304,7 +309,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     }
     _profileCubit.updateProfile(
       fullName: _nameController.text.trim(),
-      phone: _phoneController.value!.international,
+      phone: _phoneController.value.international,
       gender: _selectedGender,
       address: _addressController.text.trim().isEmpty
           ? null

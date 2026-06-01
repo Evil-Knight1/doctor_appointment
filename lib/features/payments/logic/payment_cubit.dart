@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:doctor_appointment/core/config/env.dart';
 import 'package:doctor_appointment/core/utils/result.dart';
 import 'package:doctor_appointment/features/appointment/domain/usecases/create_appointment_usecase.dart';
 import 'package:doctor_appointment/features/payments/domain/entities/payment_status.dart';

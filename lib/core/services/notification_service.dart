@@ -510,7 +510,7 @@ class NotificationService {
         _log.i(
           '[Notification] Marked chat messages as read for userId=$resolvedUserId.',
         );
-      } catch (error, stackTrace) {
+      } catch (error) {
         _log.w(
           '[Notification] Failed to mark chat as read for userId=$resolvedUserId: $error',
         );

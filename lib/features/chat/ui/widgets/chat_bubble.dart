@@ -7,6 +7,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doctor_appointment/core/utils/image_url_helper.dart';
 import 'package:doctor_appointment/features/chat/data/models/chat_message_model.dart';
 import 'package:doctor_appointment/features/chat/logic/user_chat_cubit.dart';
+
 class ChatBubble extends StatelessWidget {
   final ChatMessageModel message;
   final bool isMe;
@@ -31,7 +32,9 @@ class ChatBubble extends StatelessWidget {
         right: isMe ? 0 : 60.w,
       ),
       child: Column(
-        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: isMe
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
           Align(
             alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
@@ -44,23 +47,28 @@ class ChatBubble extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  if (!isMe) ...[
-                    _senderDot(context),
-                    SizedBox(width: 6.w),
-                  ],
+                  if (!isMe) ...[_senderDot(context), SizedBox(width: 6.w)],
                   Flexible(
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 12.h,
+                        horizontal: 16.w,
+                      ),
                       decoration: BoxDecoration(
                         gradient: isMe
                             ? LinearGradient(
-                                colors: message.isFailed 
-                                  ? [colorScheme.error.withValues(alpha: 0.8), colorScheme.error]
-                                  : [
-                                      customColors.chatBubbleMineGradientStart!,
-                                      customColors.chatBubbleMineGradientEnd!,
-                                    ],
+                                colors: message.isFailed
+                                    ? [
+                                        colorScheme.error.withValues(
+                                          alpha: 0.8,
+                                        ),
+                                        colorScheme.error,
+                                      ]
+                                    : [
+                                        customColors
+                                            .chatBubbleMineGradientStart!,
+                                        customColors.chatBubbleMineGradientEnd!,
+                                      ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                               )
@@ -75,7 +83,10 @@ class ChatBubble extends StatelessWidget {
                         boxShadow: [
                           BoxShadow(
                             color: isMe
-                                ? (message.isFailed ? colorScheme.error : colorScheme.primary).withValues(alpha: 0.25)
+                                ? (message.isFailed
+                                          ? colorScheme.error
+                                          : colorScheme.primary)
+                                      .withValues(alpha: 0.25)
                                 : colorScheme.shadow.withValues(alpha: 0.06),
                             blurRadius: 8,
                             offset: const Offset(0, 3),
@@ -91,8 +102,9 @@ class ChatBubble extends StatelessWidget {
                           Text(
                             message.message,
                             style: context.bodyMedium.copyWith(
-                              color:
-                                  isMe ? Colors.white : colorScheme.onSurface,
+                              color: isMe
+                                  ? Colors.white
+                                  : colorScheme.onSurface,
                               height: 1.4,
                               fontSize: 15.sp,
                             ),
@@ -113,13 +125,17 @@ class ChatBubble extends StatelessWidget {
                               if (isMe) ...[
                                 SizedBox(width: 4.w),
                                 Icon(
-                                  message.isFailed 
-                                      ? Icons.error_outline_rounded 
-                                      : (message.isRead ? Icons.done_all_rounded : Icons.done_rounded),
+                                  message.isFailed
+                                      ? Icons.error_outline_rounded
+                                      : (message.isRead
+                                            ? Icons.done_all_rounded
+                                            : Icons.done_rounded),
                                   size: 15.r,
                                   color: message.isFailed
                                       ? Colors.white
-                                      : Colors.white.withValues(alpha: message.isRead ? 0.95 : 0.6),
+                                      : Colors.white.withValues(
+                                          alpha: message.isRead ? 0.95 : 0.6,
+                                        ),
                                 ),
                               ],
                             ],
@@ -136,10 +152,11 @@ class ChatBubble extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: 4.h, right: 8.w),
               child: GestureDetector(
-                onTap: () => context.read<UserChatCubit>().retryMessage(message),
+                onTap: () =>
+                    context.read<UserChatCubit>().retryMessage(message),
                 child: Text(
                   'Failed to send. Tap to retry',
-                  style: context.labelSmall?.copyWith(
+                  style: context.labelSmall.copyWith(
                     color: colorScheme.error,
                     fontWeight: FontWeight.w600,
                   ),
@@ -153,14 +170,17 @@ class ChatBubble extends StatelessWidget {
 
   Widget _senderDot(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    if (otherUserProfilePicture != null && otherUserProfilePicture!.isNotEmpty) {
+    if (otherUserProfilePicture != null &&
+        otherUserProfilePicture!.isNotEmpty) {
       return Container(
         width: 28.r,
         height: 28.r,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-              color: colorScheme.primary.withValues(alpha: 0.2), width: 1.5),
+            color: colorScheme.primary.withValues(alpha: 0.2),
+            width: 1.5,
+          ),
         ),
         child: ClipOval(
           child: CachedNetworkImage(
@@ -184,10 +204,15 @@ class ChatBubble extends StatelessWidget {
         shape: BoxShape.circle,
         color: colorScheme.primaryContainer,
         border: Border.all(
-            color: colorScheme.primary.withValues(alpha: 0.2), width: 1.5),
+          color: colorScheme.primary.withValues(alpha: 0.2),
+          width: 1.5,
+        ),
       ),
-      child: Icon(Icons.person_rounded,
-          color: colorScheme.onPrimaryContainer.withValues(alpha: 0.7), size: 16.r),
+      child: Icon(
+        Icons.person_rounded,
+        color: colorScheme.onPrimaryContainer.withValues(alpha: 0.7),
+        size: 16.r,
+      ),
     );
   }
 
@@ -199,11 +224,15 @@ class ChatBubble extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (bottomSheetContext) => _buildReportMenu(context, bottomSheetContext),
+      builder: (bottomSheetContext) =>
+          _buildReportMenu(context, bottomSheetContext),
     );
   }
 
-  Widget _buildReportMenu(BuildContext context, BuildContext bottomSheetContext) {
+  Widget _buildReportMenu(
+    BuildContext context,
+    BuildContext bottomSheetContext,
+  ) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       decoration: BoxDecoration(
@@ -225,10 +254,16 @@ class ChatBubble extends StatelessWidget {
             ),
             SizedBox(height: 16.h),
             ListTile(
-              leading: Icon(Icons.report_problem_outlined, color: colorScheme.error),
+              leading: Icon(
+                Icons.report_problem_outlined,
+                color: colorScheme.error,
+              ),
               title: Text(
                 'Report Message',
-                style: TextStyle(color: colorScheme.error, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  color: colorScheme.error,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               onTap: () {
                 Navigator.pop(bottomSheetContext);
@@ -254,13 +289,17 @@ class ChatBubble extends StatelessWidget {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.r),
+              ),
               title: const Text('Report Message'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Please provide a reason for reporting this message:'),
+                  const Text(
+                    'Please provide a reason for reporting this message:',
+                  ),
                   SizedBox(height: 16.h),
                   TextField(
                     controller: reasonController,
@@ -273,7 +312,10 @@ class ChatBubble extends StatelessWidget {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.r),
-                        borderSide: BorderSide(color: colorScheme.primary, width: 2),
+                        borderSide: BorderSide(
+                          color: colorScheme.primary,
+                          width: 2,
+                        ),
                       ),
                     ),
                   ),
@@ -281,8 +323,13 @@ class ChatBubble extends StatelessWidget {
               ),
               actions: [
                 TextButton(
-                  onPressed: isSubmitting ? null : () => Navigator.pop(dialogContext),
-                  child: Text('Cancel', style: TextStyle(color: colorScheme.onSurfaceVariant)),
+                  onPressed: isSubmitting
+                      ? null
+                      : () => Navigator.pop(dialogContext),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: colorScheme.onSurfaceVariant),
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: isSubmitting
@@ -292,7 +339,10 @@ class ChatBubble extends StatelessWidget {
                           if (reason.length < 5) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Reason must be at least 5 characters.', style: TextStyle(color: colorScheme.onError)),
+                                content: Text(
+                                  'Reason must be at least 5 characters.',
+                                  style: TextStyle(color: colorScheme.onError),
+                                ),
                                 backgroundColor: colorScheme.error,
                               ),
                             );
@@ -302,18 +352,27 @@ class ChatBubble extends StatelessWidget {
                           setState(() => isSubmitting = true);
 
                           try {
-                            await parentContext.read<UserChatCubit>().reportMessage(message.id, reason);
+                            await parentContext
+                                .read<UserChatCubit>()
+                                .reportMessage(message.id, reason);
                             if (dialogContext.mounted) {
                               Navigator.pop(dialogContext);
                               ScaffoldMessenger.of(parentContext).showSnackBar(
-                                const SnackBar(content: Text('Message reported successfully.')),
+                                const SnackBar(
+                                  content: Text(
+                                    'Message reported successfully.',
+                                  ),
+                                ),
                               );
                             }
                           } catch (e) {
                             setState(() => isSubmitting = false);
                             if (dialogContext.mounted) {
                               ScaffoldMessenger.of(parentContext).showSnackBar(
-                                SnackBar(content: Text('Failed to report: $e'), backgroundColor: colorScheme.error),
+                                SnackBar(
+                                  content: Text('Failed to report: $e'),
+                                  backgroundColor: colorScheme.error,
+                                ),
                               );
                             }
                           }
@@ -323,7 +382,14 @@ class ChatBubble extends StatelessWidget {
                     foregroundColor: colorScheme.onError,
                   ),
                   child: isSubmitting
-                      ? SizedBox(width: 16.w, height: 16.h, child: const CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                      ? SizedBox(
+                          width: 16.w,
+                          height: 16.h,
+                          child: const CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
                       : const Text('Report'),
                 ),
               ],
@@ -334,4 +400,3 @@ class ChatBubble extends StatelessWidget {
     );
   }
 }
-
