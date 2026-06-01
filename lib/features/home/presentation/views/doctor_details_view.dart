@@ -70,7 +70,8 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView>
                         pathParameters: {'userId': widget.doctor.id.toString()},
                         extra: {
                           'otherUserName': widget.doctor.name,
-                          'otherUserProfilePicture': widget.doctor.doctor.profilePictureUrl,
+                          'otherUserProfilePicture':
+                              widget.doctor.doctor.profilePictureUrl,
                         },
                       );
                     },
@@ -223,7 +224,9 @@ class _SideTabRailState extends State<_SideTabRail> {
                     : Colors.transparent,
                 border: Border(
                   left: BorderSide(
-                    color: isSelected ? colorScheme.primary : Colors.transparent,
+                    color: isSelected
+                        ? colorScheme.primary
+                        : Colors.transparent,
                     width: 3,
                   ),
                 ),
@@ -245,8 +248,9 @@ class _SideTabRailState extends State<_SideTabRail> {
                         color: isSelected
                             ? colorScheme.primary
                             : colorScheme.onSurfaceVariant,
-                        fontWeight:
-                            isSelected ? FontWeight.w600 : FontWeight.normal,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.normal,
                         fontSize: 14,
                       ),
                     ),
@@ -272,7 +276,8 @@ class _AboutTab extends StatelessWidget {
       children: [
         InfoSection(
           title: AppLocalizations.of(context)!.aboutMe,
-          content: doctor.doctor.bio ??
+          content:
+              doctor.doctor.bio ??
               'Dr. ${doctor.name} is a top specialist${doctor.doctor.hospital != null ? ' at ${doctor.doctor.hospital}' : ''}. They have received several awards for their outstanding contribution in the medical field and are available for private consultation.',
         ),
         SizedBox(height: AppSpacing.xl),
@@ -284,10 +289,16 @@ class _AboutTab extends StatelessWidget {
           SizedBox(height: AppSpacing.lg),
         ],
         if (doctor.doctor.hospital != null) ...[
-          LabelValue(label: AppLocalizations.of(context)!.hospital, value: doctor.doctor.hospital!),
+          LabelValue(
+            label: AppLocalizations.of(context)!.hospital,
+            value: doctor.doctor.hospital!,
+          ),
           SizedBox(height: AppSpacing.lg),
         ],
-        LabelValue(label: AppLocalizations.of(context)!.contact, value: doctor.doctor.phone),
+        LabelValue(
+          label: AppLocalizations.of(context)!.contact,
+          value: doctor.doctor.phone,
+        ),
         SizedBox(height: AppSpacing.lg),
       ],
     );
@@ -307,12 +318,17 @@ class _AddressTab extends StatelessWidget {
       children: [
         LabelValue(
           label: AppLocalizations.of(context)!.practicePlace,
-          value: doctor.doctor.clinicAddress ?? AppLocalizations.of(context)!.noAddressProvided,
+          value:
+              doctor.doctor.clinicAddress ??
+              AppLocalizations.of(context)!.noAddressProvided,
         ),
         if (doctor.doctor.clinicImagesUrls != null &&
             doctor.doctor.clinicImagesUrls!.isNotEmpty) ...[
           SizedBox(height: AppSpacing.xl),
-          Text(AppLocalizations.of(context)!.clinicImages, style: context.headingSmall),
+          Text(
+            AppLocalizations.of(context)!.clinicImages,
+            style: context.headingSmall,
+          ),
           SizedBox(height: AppSpacing.md),
           SizedBox(
             height: 100.h,
@@ -371,7 +387,10 @@ class _AddressTab extends StatelessWidget {
           ),
         ],
         SizedBox(height: AppSpacing.xl),
-        Text(AppLocalizations.of(context)!.locationMap, style: context.headingSmall),
+        Text(
+          AppLocalizations.of(context)!.locationMap,
+          style: context.headingSmall,
+        ),
         SizedBox(height: AppSpacing.md),
         GestureDetector(
           onTap: () async {
@@ -401,7 +420,9 @@ class _AddressTab extends StatelessWidget {
 
               await availableMaps.first.showMarker(
                 coords: Coords(lat, lng),
-                title: doctor.doctor.clinicAddress ?? AppLocalizations.of(context)!.clinicLocation,
+                title:
+                    doctor.doctor.clinicAddress ??
+                    AppLocalizations.of(context)!.clinicLocation,
               );
             }
           },
@@ -410,7 +431,9 @@ class _AddressTab extends StatelessWidget {
             child: Container(
               height: 220.h,
               color: colorScheme.primaryContainer.withValues(alpha: 0.3),
-              child: CustomPaint(painter: _MiniMapPainter(colorScheme: colorScheme)),
+              child: CustomPaint(
+                painter: _MiniMapPainter(colorScheme: colorScheme),
+              ),
             ),
           ),
         ),
@@ -425,7 +448,8 @@ class _MiniMapPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final blockPaint = Paint()..color = colorScheme.primaryContainer.withValues(alpha: 0.5);
+    final blockPaint = Paint()
+      ..color = colorScheme.primaryContainer.withValues(alpha: 0.5);
     final roadPaint = Paint()
       ..color = colorScheme.surface
       ..strokeWidth = 10.w;
@@ -487,8 +511,10 @@ class _ReviewsTab extends StatelessWidget {
             child: ListView.separated(
               padding: EdgeInsets.all(AppSpacing.lg),
               itemCount: 3,
-              separatorBuilder: (_, _) =>
-                  Divider(height: AppSpacing.xxl, color: colorScheme.outlineVariant),
+              separatorBuilder: (_, _) => Divider(
+                height: AppSpacing.xxl,
+                color: colorScheme.outlineVariant,
+              ),
               itemBuilder: (_, index) => _ReviewTile(
                 name: AppLocalizations.of(context)!.patientNameLoading,
                 text: AppLocalizations.of(context)!.reviewCommentPlaceholder,
@@ -508,14 +534,19 @@ class _ReviewsTab extends StatelessWidget {
           final reviews = state.reviews;
           if (reviews.isEmpty) {
             return Center(
-              child: Text(AppLocalizations.of(context)!.noReviewsYet, style: context.bodyMedium),
+              child: Text(
+                AppLocalizations.of(context)!.noReviewsYet,
+                style: context.bodyMedium,
+              ),
             );
           }
           return ListView.separated(
             padding: EdgeInsets.all(AppSpacing.lg),
             itemCount: reviews.length,
-            separatorBuilder: (_, _) =>
-                Divider(height: AppSpacing.xxl, color: colorScheme.outlineVariant),
+            separatorBuilder: (_, _) => Divider(
+              height: AppSpacing.xxl,
+              color: colorScheme.outlineVariant,
+            ),
             itemBuilder: (_, index) => _ReviewTile(
               name: reviews[index].patientName,
               text: reviews[index].comment,
@@ -627,8 +658,10 @@ class _AppointmentButton extends StatelessWidget {
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: () =>
-                    context.pushNamed(Routes.bookingDateView, extra: doctor.doctor),
+                onPressed: () => context.pushNamed(
+                  Routes.bookingDateView,
+                  extra: doctor.doctor,
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colorScheme.primary,
                   foregroundColor: colorScheme.onPrimary,

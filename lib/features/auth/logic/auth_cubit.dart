@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:doctor_appointment/core/errors/failures.dart';
 import 'package:doctor_appointment/core/utils/result.dart';
@@ -170,9 +171,15 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> _updateFcmToken() async {
-    final fcmToken = await NotificationService().getFcmToken();
-    if (fcmToken != null) {
-      await updateFcmTokenUseCase(fcmToken);
+    try {
+      final fcmToken = await NotificationService().getFcmToken();
+      if (fcmToken != null) {
+        await updateFcmTokenUseCase(fcmToken);
+      }
+    } catch (e) {
+      debugPrint(
+        'Failed to get FCM token (permission blocked or other error): $e',
+      );
     }
   }
 
