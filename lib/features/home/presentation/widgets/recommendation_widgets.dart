@@ -1,3 +1,4 @@
+import 'package:doctor_appointment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
@@ -16,7 +17,7 @@ class RecommendationSearchRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: Row(
@@ -37,8 +38,10 @@ class RecommendationSearchRow extends StatelessWidget {
               child: TextField(
                 onChanged: onChanged,
                 decoration: InputDecoration(
-                  hintText: 'Search...',
-                  hintStyle: context.bodyMedium.copyWith(color: colorScheme.onSurfaceVariant),
+                  hintText: l10n.search,
+                  hintStyle: context.bodyMedium.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                   prefixIcon: Icon(
                     Icons.search_rounded,
                     size: 18.sp,
@@ -92,13 +95,13 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
     'Cardiology',
     'Neurologic',
     'Pediatric',
-    'Dentistry'
+    'Dentistry',
   ];
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: EdgeInsets.fromLTRB(
         AppSpacing.xxl,
@@ -130,7 +133,12 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Sort & Filter', style: context.displayMedium.copyWith(color: colorScheme.onSurface)),
+              Text(
+                l10n.sortAndFilter,
+                style: context.displayMedium.copyWith(
+                  color: colorScheme.onSurface,
+                ),
+              ),
               GestureDetector(
                 onTap: () => setState(() {
                   _selectedSort = 'Rating';
@@ -138,7 +146,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
                   _selectedRating = 4;
                 }),
                 child: Text(
-                  'Reset',
+                  l10n.reset,
                   style: context.labelMedium.copyWith(
                     color: colorScheme.primary,
                     fontWeight: FontWeight.w700,
@@ -149,7 +157,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
           ),
           SizedBox(height: AppSpacing.xxl),
           _FilterSection(
-            title: 'Sort By',
+            title: l10n.sortBy,
             child: Wrap(
               spacing: AppSpacing.md,
               runSpacing: AppSpacing.md,
@@ -166,7 +174,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
           ),
           SizedBox(height: AppSpacing.xl),
           _FilterSection(
-            title: 'Speciality',
+            title: l10n.speciality,
             child: Wrap(
               spacing: AppSpacing.md,
               runSpacing: AppSpacing.md,
@@ -183,7 +191,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
           ),
           SizedBox(height: AppSpacing.xl),
           _FilterSection(
-            title: 'Minimum Rating',
+            title: l10n.minimumRating,
             child: Row(
               children: List.generate(
                 5,
@@ -217,7 +225,7 @@ class _SortBottomSheetState extends State<SortBottomSheet> {
                 elevation: 0,
               ),
               child: Text(
-                'Apply Filters',
+                l10n.applyFilters,
                 style: TextStyle(
                   color: colorScheme.onPrimary,
                   fontWeight: FontWeight.w700,
@@ -243,7 +251,10 @@ class _FilterSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: context.headingMedium.copyWith(color: colorScheme.onSurface)),
+        Text(
+          title,
+          style: context.headingMedium.copyWith(color: colorScheme.onSurface),
+        ),
         SizedBox(height: AppSpacing.md),
         child,
       ],
@@ -274,13 +285,17 @@ class ChipOption extends StatelessWidget {
           vertical: AppSpacing.sm,
         ),
         decoration: BoxDecoration(
-          color: selected ? colorScheme.primary : colorScheme.surfaceContainerHighest,
+          color: selected
+              ? colorScheme.primary
+              : colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(AppRadius.full),
         ),
         child: Text(
           label,
           style: context.bodySmall.copyWith(
-            color: selected ? colorScheme.onPrimary : colorScheme.onSurfaceVariant,
+            color: selected
+                ? colorScheme.onPrimary
+                : colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.w600,
             fontSize: 12.sp,
           ),
@@ -289,4 +304,3 @@ class ChipOption extends StatelessWidget {
     );
   }
 }
-

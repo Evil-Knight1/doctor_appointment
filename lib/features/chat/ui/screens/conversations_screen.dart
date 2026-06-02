@@ -1,3 +1,4 @@
+import 'package:doctor_appointment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -180,6 +181,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
   Widget _buildHeader(BuildContext context) {
     final customColors = context.customColors;
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -211,7 +213,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                     SizedBox(width: 40.w),
                   const Spacer(),
                   Text(
-                    'Messages',
+                    l10n.messages,
                     style: context.headingLarge.copyWith(
                       color: Colors.white,
                       fontSize: 20.sp,
@@ -238,7 +240,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
                   onChanged: (v) => setState(() => _query = v),
                   style: TextStyle(color: Colors.white, fontSize: 14.sp),
                   decoration: InputDecoration(
-                    hintText: 'Search conversations…',
+                    hintText: l10n.searchConversations,
                     hintStyle: TextStyle(
                       color: Colors.white.withValues(alpha: 0.6),
                       fontSize: 14.sp,
@@ -261,6 +263,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   }
 
   Widget _buildEmpty(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     return Center(
       child: Column(
@@ -273,7 +276,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
           ),
           SizedBox(height: 12.h),
           Text(
-            'No conversations found',
+            l10n.noConversationsFound,
             style: context.bodyMedium.copyWith(
               color: colorScheme.onSurfaceVariant,
             ),

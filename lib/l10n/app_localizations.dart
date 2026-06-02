@@ -2161,6 +2161,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cash at Clinic'**
   String get cashAtClinicDefault;
+
+  /// No description provided for @findYourBestDoctor.
+  ///
+  /// In en, this message translates to:
+  /// **'Find your best doctor'**
+  String get findYourBestDoctor;
+
+  /// No description provided for @speciality.
+  ///
+  /// In en, this message translates to:
+  /// **'speciality'**
+  String get speciality;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'search'**
+  String get search;
+
+  /// No description provided for @sortAndFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'sortAndFilter'**
+  String get sortAndFilter;
+
+  /// No description provided for @reset.
+  ///
+  /// In en, this message translates to:
+  /// **'reset'**
+  String get reset;
+
+  /// No description provided for @sortBy.
+  ///
+  /// In en, this message translates to:
+  /// **'sortBy'**
+  String get sortBy;
+
+  /// No description provided for @minimumRating.
+  ///
+  /// In en, this message translates to:
+  /// **'minimumRating'**
+  String get minimumRating;
+
+  /// No description provided for @applyFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'applyFilters'**
+  String get applyFilters;
+
+  /// No description provided for @reviews.
+  ///
+  /// In en, this message translates to:
+  /// **'reviews'**
+  String get reviews;
+
+  /// No description provided for @messages.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messages;
+
+  /// No description provided for @searchConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Search conversations…'**
+  String get searchConversations;
+
+  /// No description provided for @noConversationsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations found'**
+  String get noConversationsFound;
 }
 
 class _AppLocalizationsDelegate

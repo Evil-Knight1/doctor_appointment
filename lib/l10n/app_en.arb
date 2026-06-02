@@ -370,5 +370,17 @@
   "appointmentBooked": "Appointment Booked",
   "getLocation": "Get Location",
   "paymentLabel": "Payment",
-  "cashAtClinicDefault": "Cash at Clinic"
+  "cashAtClinicDefault": "Cash at Clinic",
+  "findYourBestDoctor": "Find your best doctor",
+  "speciality": "speciality",
+  "search": "search",
+  "sortAndFilter": "sortAndFilter",
+  "reset": "reset",
+  "sortBy": "sortBy",
+  "minimumRating": "minimumRating",
+  "applyFilters": "applyFilters",
+  "reviews":"reviews",
+  "messages":"Messages",
+  "searchConversations":"Search conversations…",
+  "noConversationsFound":"No conversations found"
 }

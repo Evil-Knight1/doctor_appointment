@@ -1083,4 +1083,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cashAtClinicDefault => 'Cash at Clinic';
+
+  @override
+  String get findYourBestDoctor => 'Find your best doctor';
+
+  @override
+  String get speciality => 'speciality';
+
+  @override
+  String get search => 'search';
+
+  @override
+  String get sortAndFilter => 'sortAndFilter';
+
+  @override
+  String get reset => 'reset';
+
+  @override
+  String get sortBy => 'sortBy';
+
+  @override
+  String get minimumRating => 'minimumRating';
+
+  @override
+  String get applyFilters => 'applyFilters';
+
+  @override
+  String get reviews => 'reviews';
+
+  @override
+  String get messages => 'Messages';
+
+  @override
+  String get searchConversations => 'Search conversations…';
+
+  @override
+  String get noConversationsFound => 'No conversations found';
 }

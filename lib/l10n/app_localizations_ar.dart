@@ -1070,4 +1070,40 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get cashAtClinicDefault => 'نقداً في العيادة';
+
+  @override
+  String get findYourBestDoctor => 'ابحث عن أفضل دكتور لك';
+
+  @override
+  String get speciality => 'تخصص';
+
+  @override
+  String get search => 'بحث';
+
+  @override
+  String get sortAndFilter => 'ترتيب وتصفية';
+
+  @override
+  String get reset => 'إعادة تعيين';
+
+  @override
+  String get sortBy => 'ترتيب حسب';
+
+  @override
+  String get minimumRating => 'الحد الأدنى للتقييم';
+
+  @override
+  String get applyFilters => 'تطبيق الفلاتر';
+
+  @override
+  String get reviews => 'تقييمات';
+
+  @override
+  String get messages => 'الرسائل';
+
+  @override
+  String get searchConversations => 'Search conversations…';
+
+  @override
+  String get noConversationsFound => 'لم يتم العثور على محادثات';
 }

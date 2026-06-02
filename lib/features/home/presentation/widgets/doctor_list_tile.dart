@@ -1,5 +1,6 @@
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/core/utils/image_url_helper.dart';
+import 'package:doctor_appointment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
@@ -60,10 +61,7 @@ class DoctorListTile extends StatelessWidget {
                         size: 34.sp,
                       ),
                     )
-                  : Image.asset(
-                      doctor.imageAsset,
-                      fit: BoxFit.cover,
-                    ),
+                  : Image.asset(doctor.imageAsset, fit: BoxFit.cover),
             ),
             SizedBox(width: AppSpacing.md),
             Expanded(
@@ -88,7 +86,7 @@ class DoctorListTile extends StatelessWidget {
                       ),
                       SizedBox(width: 3.w),
                       Text(
-                        '${doctor.rating} (${doctor.reviewCount} reviews)',
+                        '${doctor.rating} (${doctor.reviewCount} ${AppLocalizations.of(context)!.reviewsCount})',
                         style: context.bodySmall.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),

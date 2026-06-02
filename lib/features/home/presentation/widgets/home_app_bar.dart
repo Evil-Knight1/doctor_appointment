@@ -1,4 +1,5 @@
 import 'package:doctor_appointment/core/utils/go_router.dart';
+import 'package:doctor_appointment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -67,7 +68,10 @@ class _UserInfoRow extends StatelessWidget {
                 height: 45.r,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: colorScheme.primaryContainer, width: 2),
+                  border: Border.all(
+                    color: colorScheme.primaryContainer,
+                    width: 2,
+                  ),
                   boxShadow: [
                     BoxShadow(
                       color: colorScheme.shadow.withValues(alpha: 0.1),
@@ -112,7 +116,7 @@ class _UserInfoRow extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Find your best doctor',
+                  AppLocalizations.of(context)!.findYourBestDoctor,
                   style: context.styleRegular12.copyWith(
                     color: colorScheme.onSurfaceVariant,
                   ),
@@ -129,7 +133,11 @@ class _UserInfoRow extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       color: colorScheme.primaryContainer,
-      child: Icon(Icons.person_rounded, color: colorScheme.primary, size: 28.sp),
+      child: Icon(
+        Icons.person_rounded,
+        color: colorScheme.primary,
+        size: 28.sp,
+      ),
     );
   }
 }

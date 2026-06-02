@@ -356,5 +356,17 @@
   "appointmentBooked": "تم حجز الموعد",
   "getLocation": "الحصول على الموقع",
   "paymentLabel": "الدفع",
-  "cashAtClinicDefault": "نقداً في العيادة"
+  "cashAtClinicDefault": "نقداً في العيادة",
+  "findYourBestDoctor": "ابحث عن أفضل دكتور لك",
+  "speciality": "تخصص",
+  "search": "بحث",
+  "sortAndFilter": "ترتيب وتصفية",
+  "reset": "إعادة تعيين",
+  "sortBy": "ترتيب حسب",
+  "minimumRating": "الحد الأدنى للتقييم",
+  "applyFilters": "تطبيق الفلاتر",
+  "reviews": "تقييمات",
+  "messages": "الرسائل",
+  "searchConversation": "ابحث في المحادثات",
+  "noConversationsFound": "لم يتم العثور على محادثات"
 }
