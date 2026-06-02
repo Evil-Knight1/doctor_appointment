@@ -72,24 +72,24 @@ class _EditMedicalRecordViewState extends State<EditMedicalRecordView> {
     final updatedRecord = widget.record.copyWith(
       bloodType: _bloodTypeController.text.trim().isNotEmpty
           ? _bloodTypeController.text.trim()
-          : "",
-      height: double.tryParse(_heightController.text.trim()) ?? 60,
-      weight: double.tryParse(_weightController.text.trim()) ?? 160,
+          : null,
+      height: double.tryParse(_heightController.text.trim()),
+      weight: double.tryParse(_weightController.text.trim()),
       allergies: _allergiesController.text.trim().isNotEmpty
           ? _allergiesController.text.trim()
-          : "",
+          : null,
       chronicDiseases: _chronicController.text.trim().isNotEmpty
           ? _chronicController.text.trim()
-          : "",
+          : null,
       medications: _medicationsController.text.trim().isNotEmpty
           ? _medicationsController.text.trim()
-          : "",
+          : null,
       surgeries: _surgeriesController.text.trim().isNotEmpty
           ? _surgeriesController.text.trim()
-          : "",
+          : null,
       additionalNotes: _notesController.text.trim().isNotEmpty
           ? _notesController.text.trim()
-          : "",
+          : null,
     );
     context.read<MedicalRecordsCubit>().updateMedicalRecord(
       widget.patientId,
