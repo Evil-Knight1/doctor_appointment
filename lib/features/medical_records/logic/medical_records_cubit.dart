@@ -33,14 +33,18 @@ class MedicalRecordsCubit extends Cubit<MedicalRecordsState> {
       String errorMessage = 'Failed to load medical records.';
       if (profileResult is FailureResult<MedicalRecordModel>) {
         errorMessage = profileResult.failure.message;
-      } else if (documentsResult is FailureResult<List<MedicalRecordDocumentModel>>) {
+      } else if (documentsResult
+          is FailureResult<List<MedicalRecordDocumentModel>>) {
         errorMessage = documentsResult.failure.message;
       }
       emit(MedicalRecordsError(errorMessage));
     }
   }
 
-  Future<void> updateMedicalRecord(int patientId, MedicalRecordModel record) async {
+  Future<void> updateMedicalRecord(
+    int patientId,
+    MedicalRecordModel record,
+  ) async {
     if (isClosed) return;
     emit(const MedicalRecordUpdating());
 
