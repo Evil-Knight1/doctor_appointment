@@ -42,6 +42,9 @@ import 'package:doctor_appointment/features/auth/presentation/views/doctor_pendi
     as doctor_pending;
 import 'package:doctor_appointment/features/medical_records/presentation/views/medical_records_view.dart';
 import 'package:doctor_appointment/features/medical_records/presentation/views/create_record_view.dart';
+import 'package:doctor_appointment/features/medical_records/presentation/views/edit_medical_record_view.dart';
+import 'package:doctor_appointment/features/medical_records/logic/medical_records_cubit.dart';
+import 'package:doctor_appointment/features/medical_records/data/models/medical_record_model.dart';
 import 'package:doctor_appointment/features/doctor_flow/presentation/views/doctor_root.dart';
 import 'package:doctor_appointment/features/payments/presentation/views/payment_history_view.dart';
 import 'package:doctor_appointment/features/payments/presentation/views/transaction_details_view.dart';
@@ -90,6 +93,7 @@ abstract class AppRouter {
   static const kDoctorPendingApprovalView = '/doctorPendingApprovalView';
   static const kMedicalRecordsView = '/medicalRecordsView';
   static const kCreateRecordView = '/createRecordView';
+  static const kEditMedicalRecordView = '/editMedicalRecordView';
   static const kPaymentHistoryView = '/paymentHistoryView';
   static const kTransactionDetailsView = '/transactionDetailsView';
   static const kCheckoutView = '/checkoutView';
@@ -226,12 +230,37 @@ abstract class AppRouter {
       GoRoute(
         name: Routes.medicalRecordsView,
         path: kMedicalRecordsView,
-        builder: (context, state) => const MedicalRecordsView(),
+        builder: (context, state) {
+          final patientId = state.extra as int?;
+          return BlocProvider(
+            create: (_) => getIt<MedicalRecordsCubit>(),
+            child: MedicalRecordsView(patientId: patientId),
+          );
+        },
       ),
       GoRoute(
         name: Routes.createRecordView,
         path: kCreateRecordView,
-        builder: (context, state) => const CreateRecordView(),
+        builder: (context, state) {
+          final patientId = state.extra as int;
+          return BlocProvider(
+            create: (_) => getIt<MedicalRecordsCubit>(),
+            child: CreateRecordView(patientId: patientId),
+          );
+        },
+      ),
+      GoRoute(
+        name: Routes.editMedicalRecordView,
+        path: kEditMedicalRecordView,
+        builder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+          final patientId = args['patientId'] as int;
+          final record = args['record'] as MedicalRecordModel;
+          return BlocProvider(
+            create: (_) => getIt<MedicalRecordsCubit>(),
+            child: EditMedicalRecordView(patientId: patientId, record: record),
+          );
+        },
       ),
       GoRoute(
         name: Routes.paymentHistoryView,

@@ -109,6 +109,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:doctor_appointment/core/logic/locale_cubit.dart';
 
+// Medical Records
+import 'package:doctor_appointment/features/medical_records/data/repositories/medical_records_repository.dart';
+import 'package:doctor_appointment/features/medical_records/logic/medical_records_cubit.dart';
+
 final getIt = GetIt.instance;
 
 void setupServiceLocator() {
@@ -472,5 +476,13 @@ void setupServiceLocator() {
   );
   getIt.registerFactory(
     () => NotificationCubit(getIt<NotificationRepository>()),
+  );
+
+  // Medical Records
+  getIt.registerLazySingleton<MedicalRecordsRepository>(
+    () => MedicalRecordsRepositoryImpl(getIt<ApiService>()),
+  );
+  getIt.registerFactory(
+    () => MedicalRecordsCubit(getIt<MedicalRecordsRepository>()),
   );
 }

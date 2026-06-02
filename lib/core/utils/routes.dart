@@ -31,6 +31,7 @@ abstract class Routes {
   static const chatHistoryView = 'chatHistoryView';
   static const medicalRecordsView = 'medicalRecordsView';
   static const createRecordView = 'createRecordView';
+  static const editMedicalRecordView = 'editMedicalRecordView';
   static const paymentHistoryView = 'paymentHistoryView';
   static const transactionDetailsView = 'transactionDetailsView';
   static const checkoutView = 'checkoutView';
