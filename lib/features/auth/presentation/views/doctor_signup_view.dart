@@ -29,7 +29,6 @@ class DoctorSignUpView extends StatefulWidget {
 
 class _DoctorSignUpViewState extends State<DoctorSignUpView> {
   final _formKey = GlobalKey<FormState>();
-  final _pageController = PageController();
   int _currentStep = 0;
   bool _isSubmitting = false;
 
@@ -63,7 +62,6 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
 
   @override
   void dispose() {
-    _pageController.dispose();
     _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
@@ -100,11 +98,6 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
       setState(() {
         _currentStep++;
       });
-      _pageController.animateToPage(
-        _currentStep,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
     } else {
       _submitForm();
     }
@@ -115,11 +108,6 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
       setState(() {
         _currentStep--;
       });
-      _pageController.animateToPage(
-        _currentStep,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
     } else {
       context.pop();
     }
@@ -155,12 +143,12 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
     final useCase = getIt<CheckAvailabilityUseCase>();
     final result = await useCase(email: email, phone: phone);
     if (!mounted) return;
-    
+
     if (result is Success<AvailabilityCheckModel>) {
       final errors = Map<String, String>.from(_fieldErrors);
       final l10n = AppLocalizations.of(context)!;
       bool changed = false;
-      
+
       if (email != null) {
         if (!result.data.isEmailAvailable) {
           errors['email'] = l10n.authErrorsEmailInUse;
@@ -170,7 +158,7 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
           changed = true;
         }
       }
-      
+
       if (phone != null) {
         if (!result.data.isPhoneAvailable) {
           errors['phone'] = l10n.authErrorsPhoneInUse;
@@ -180,7 +168,7 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
           changed = true;
         }
       }
-      
+
       if (changed) {
         setState(() {
           _fieldErrors = errors;
@@ -222,8 +210,8 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
       clinicImagesPaths: _clinicImagesPaths,
       gender: _selectedGender,
       dateOfBirth: _dateOfBirth,
-      latitude: _clinicLat,
-      longitude: _clinicLng,
+      latitude: _clinicLat ?? _hospitalLat,
+      longitude: _clinicLng ?? _hospitalLng,
     );
   }
 
@@ -369,11 +357,6 @@ class _DoctorSignUpViewState extends State<DoctorSignUpView> {
               _isSubmitting = false;
               _currentStep++;
             });
-            _pageController.animateToPage(
-              _currentStep,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
           }
         } else if (state is AvailabilityCheckFailed) {
           setState(() => _isSubmitting = false);

@@ -85,10 +85,14 @@ class DoctorListTile extends StatelessWidget {
                         color: context.customColors.rating,
                       ),
                       SizedBox(width: 3.w),
-                      Text(
-                        '${doctor.rating} (${doctor.reviewCount} ${AppLocalizations.of(context)!.reviewsCount})',
-                        style: context.bodySmall.copyWith(
-                          color: colorScheme.onSurfaceVariant,
+                      Expanded(
+                        child: Text(
+                          '${doctor.rating} (${doctor.reviewCount} ${AppLocalizations.of(context)!.reviewsCount})',
+                          style: context.bodySmall.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],

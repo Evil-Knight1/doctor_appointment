@@ -121,6 +121,8 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<AppConfig>(() {
     final config = AppConfig(
       apiUrl: Env.apiUrl,
+      paymobMobileWalletId: Env.paymobMobileWalletId,
+      paymobWalletNumber: Env.paymobWalletNumber,
       googleMapsApiKey: Env.googleMapsApiKey,
       paymobApiKey: Env.paymobApiKey,
       paymobIntegrationId: Env.paymobIntegrationId,

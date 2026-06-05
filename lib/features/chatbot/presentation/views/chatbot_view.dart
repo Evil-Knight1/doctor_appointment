@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'package:doctor_appointment/features/chatbot/domain/entities/ai_chat_entity.dart';
 import 'package:doctor_appointment/features/chatbot/logic/chat_cubit.dart';
@@ -411,7 +412,24 @@ class _ChatbotViewState extends State<ChatbotView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(text, style: context.styleRegular14.copyWith(height: 1.5)),
+            MarkdownBody(
+              data: text,
+              styleSheet: MarkdownStyleSheet(
+                p: context.styleRegular14.copyWith(height: 1.5),
+
+                blockquote: context.styleRegular14.copyWith(height: 1.5),
+
+                blockquotePadding: EdgeInsets.all(12.r),
+
+                blockquoteDecoration: BoxDecoration(
+                  color: Colors.amber.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(8.r),
+                  border: Border.all(
+                    color: theme.colorScheme.primary.withValues(alpha: 0.5),
+                  ),
+                ),
+              ),
+            ),
             if (showMapLink) ...[
               SizedBox(height: 12.h),
               GestureDetector(
@@ -473,11 +491,17 @@ class _ChatbotViewState extends State<ChatbotView> {
           ),
         ),
 
-        child: Text(
-          text,
-          style: context.styleRegular14.copyWith(
-            color: theme.colorScheme.onPrimary,
-            height: 1.5,
+        child: MarkdownBody(
+          data: text,
+          styleSheet: MarkdownStyleSheet(
+            p: context.styleRegular14.copyWith(
+              color: theme.colorScheme.onPrimary,
+              height: 1.5,
+            ),
+            listBullet: context.styleRegular14.copyWith(
+              color: theme.colorScheme.onPrimary,
+              height: 1.5,
+            ),
           ),
         ),
       ),

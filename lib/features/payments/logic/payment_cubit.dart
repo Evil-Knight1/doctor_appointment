@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:doctor_appointment/core/config/app_config.dart';
+import 'package:doctor_appointment/core/services/service_locator.dart';
 import 'package:doctor_appointment/core/utils/result.dart';
 import 'package:doctor_appointment/features/appointment/domain/usecases/create_appointment_usecase.dart';
 import 'package:doctor_appointment/features/payments/domain/entities/payment_status.dart';
@@ -131,7 +133,7 @@ class PaymentCubit extends Cubit<PaymentState> {
             context: context,
             currency: "EGP",
             amount: amount,
-            number: "01025170803",
+            number: getIt<AppConfig>().paymobWalletNumber,
             onPayment: (response) {
               onWebViewResult(
                 success: response.success,

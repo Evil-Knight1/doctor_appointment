@@ -12,6 +12,7 @@ class DoctorsCubit extends Cubit<DoctorsState> {
 
   DoctorsPage? _currentPage;
   bool _isFetching = false;
+  int _fetchId = 0;
   int? _currentSpecializationId;
   double? _currentMinRating;
   String? _currentSearchTerm;
@@ -30,7 +31,9 @@ class DoctorsCubit extends Cubit<DoctorsState> {
     int pageSize = 10,
     bool isPagination = false,
   }) async {
-    if (_isFetching) return;
+    if (isPagination && _isFetching) return;
+    
+    final currentFetchId = ++_fetchId;
     _isFetching = true;
 
     if (!isPagination) {
@@ -62,6 +65,8 @@ class DoctorsCubit extends Cubit<DoctorsState> {
         pageSize: pageSize,
       ),
     );
+
+    if (currentFetchId != _fetchId) return;
 
     _isFetching = false;
 

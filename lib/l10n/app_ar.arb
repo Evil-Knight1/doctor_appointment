@@ -367,6 +367,6 @@
   "applyFilters": "تطبيق الفلاتر",
   "reviews": "تقييمات",
   "messages": "الرسائل",
-  "searchConversation": "ابحث في المحادثات",
+  "searchConversations": "ابحث في المحادثات",
   "noConversationsFound": "لم يتم العثور على محادثات"
 }

@@ -1,4 +1,5 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:doctor_appointment/core/config/app_config.dart';
 import 'package:doctor_appointment/core/config/env.dart';
 import 'package:doctor_appointment/core/logging/log_service.dart';
 import 'package:doctor_appointment/core/services/notification_service.dart';
@@ -59,15 +60,16 @@ void main() async {
       await Hive.initFlutter();
       await ChatCacheService.openBoxes();
       await AppCacheService.openBoxes();
-
+      setupServiceLocator();
       await FlutterPaymob.instance.initialize(
         apiKey: Env.paymobApiKey,
-        integrationID: int.tryParse(Env.paymobIntegrationId) ?? 0,
-        walletIntegrationId: int.tryParse(Env.paymobIntegrationId) ?? 0,
-        iFrameID: int.tryParse(Env.paymobIframeId) ?? 0,
+        integrationID:
+            int.tryParse(getIt<AppConfig>().paymobIntegrationId) ?? 0,
+        walletIntegrationId:
+            int.tryParse(getIt<AppConfig>().paymobMobileWalletId) ?? 0,
+        iFrameID: int.tryParse(getIt<AppConfig>().paymobIframeId) ?? 0,
       );
 
-      setupServiceLocator();
       await getIt<NotificationService>().init();
       await getIt<LogService>().init();
       runApp(const DoctorAppointment());

@@ -11,6 +11,8 @@ import '../widgets/recommendation_widgets.dart';
 import '../widgets/shared_app_bar.dart';
 import 'package:doctor_appointment/l10n/app_localizations.dart';
 
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:doctor_appointment/features/doctors/logic/doctors_cubit.dart';
 import 'package:doctor_appointment/features/doctors/logic/doctors_state.dart';
@@ -26,6 +28,8 @@ class RecommendationView extends StatefulWidget {
 }
 
 class _RecommendationViewState extends State<RecommendationView> {
+  Timer? _debounce;
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +40,20 @@ class _RecommendationViewState extends State<RecommendationView> {
   }
 
   void _onSearchChanged(String query) {
-    context.read<DoctorsCubit>().fetchDoctors(searchTerm: query);
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      if (!mounted) return;
+      context.read<DoctorsCubit>().fetchDoctors(
+        searchTerm: query,
+        specializationId: widget.filterSpecializationId,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
   }
 
   void _showSortSheet() => showModalBottomSheet(

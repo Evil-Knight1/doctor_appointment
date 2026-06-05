@@ -1102,7 +1102,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get messages => 'الرسائل';
 
   @override
-  String get searchConversations => 'Search conversations…';
+  String get searchConversations => 'ابحث في المحادثات';
 
   @override
   String get noConversationsFound => 'لم يتم العثور على محادثات';

@@ -77,8 +77,6 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (result) {
       case Success():
-        // await _saveUserData(result.data); token, refresh token => ''
-        await _updateFcmToken();
         emit(AuthSuccess(result.data, role: _normalizeRole(result.data.role)));
       case FailureResult():
         emit(
@@ -136,8 +134,6 @@ class AuthCubit extends Cubit<AuthState> {
 
     switch (result) {
       case Success():
-        await _saveUserData(result.data);
-        await _updateFcmToken();
         emit(AuthSuccess(result.data, role: _normalizeRole(result.data.role)));
       case FailureResult():
         emit(

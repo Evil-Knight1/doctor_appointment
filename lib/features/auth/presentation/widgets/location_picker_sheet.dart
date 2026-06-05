@@ -186,9 +186,10 @@ class _LocationPickerSheetState extends State<LocationPickerSheet> {
                   ),
                   onGeoPointClicked: (geoPoint) async {
                     try {
-                      await _controller.removeMarkers(
-                        [geoPoint],
-                      ); // Avoid duplicates if needed, though addMarker usually handles it
+                      // We can use changeLocationMarker or just addMarker.
+                      // Remove all markers before adding a new one is safer:
+                      // But since we might not know the exact old point, we could just clear all markers.
+                      // For now, let's just add the marker directly.
                       await _controller.addMarker(
                         geoPoint,
                         markerIcon: MarkerIcon(

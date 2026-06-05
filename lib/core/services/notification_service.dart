@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:doctor_appointment/core/config/app_config.dart';
 import 'package:doctor_appointment/core/config/env.dart';

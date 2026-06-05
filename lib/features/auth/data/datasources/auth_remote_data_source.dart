@@ -156,14 +156,23 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       'specializationId': specializationId,
       'yearsOfExperience': experienceYears,
       'licenseNumber': licenseId,
-      'clinicAddress': clinicAddress.isEmpty ? null : clinicAddress,
-      'hospital': hospitalName.isEmpty ? null : hospitalName,
-      'dateOfBirth': dateOfBirth?.toUtc().toIso8601String(),
-      'gender': gender,
-      'bio': bio?.isEmpty == true ? null : bio,
-      'latitude': latitude,
-      'longitude': longitude,
     };
+
+    if (clinicAddress.isNotEmpty) data['clinicAddress'] = clinicAddress;
+    if (hospitalName.isNotEmpty) data['hospital'] = hospitalName;
+    if (dateOfBirth != null) {
+      data['dateOfBirth'] = dateOfBirth.toUtc().toIso8601String();
+    }
+    if (gender != null) data['gender'] = gender;
+    if (bio?.isNotEmpty == true) data['bio'] = bio;
+    if (latitude != null) {
+      print("latitude: $latitude");
+      data['latitude'] = latitude;
+    }
+    if (longitude != null) {
+      print("longitude: $longitude");
+      data['longitude'] = longitude;
+    }
 
     if (profilePicturePath != null) {
       data['profilePicture'] = await MultipartFile.fromFile(
@@ -181,7 +190,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
     }
 
-    data['consultationFee'] = consultationFee;
+    data['consultationFee'] = consultationFee.toString();
 
     final response = await apiService.post(
       '/api/Auth/register/doctor',
