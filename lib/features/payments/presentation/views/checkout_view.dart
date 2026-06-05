@@ -30,8 +30,8 @@ class CheckoutView extends StatefulWidget {
 }
 
 class _CheckoutViewState extends State<CheckoutView> {
-  /// 1 = Credit/Debit Card, 2 = Mobile Wallet, 3 = Cash at Clinic
-  int _selectedMethod = 1;
+  /// 4 = OnlineCard, 5 = Mobile Wallet, 3 = Cash at Clinic
+  int _selectedMethod = 4;
   late final PaymentCubit _cubit;
 
   @override
@@ -89,14 +89,14 @@ class _CheckoutViewState extends State<CheckoutView> {
                   ),
                   SizedBox(height: 16.h),
                   _buildMethodTile(
-                    value: 1,
+                    value: 4,
                     label: AppLocalizations.of(context)!.onlineCard,
                     icon: Icons.credit_card_rounded,
                     subtitle: AppLocalizations.of(context)!.onlineCardSubtitle,
                   ),
                   SizedBox(height: 12.h),
                   _buildMethodTile(
-                    value: 2,
+                    value: 5,
                     label: AppLocalizations.of(context)!.mobileWallet,
                     icon: Icons.account_balance_wallet_rounded,
                     subtitle: AppLocalizations.of(context)!.mobileWalletSubtitle,
@@ -155,6 +155,7 @@ class _CheckoutViewState extends State<CheckoutView> {
           builder: (_) => PaymentWebViewScreen(
             paymentUrl: state.session.paymentUrl,
             cubit: _cubit,
+            isWalletPayment: _selectedMethod == 5,
           ),
         ),
       );

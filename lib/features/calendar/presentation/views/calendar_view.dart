@@ -4,6 +4,7 @@ import 'package:doctor_appointment/features/appointment/logic/appointments_cubit
 import 'package:doctor_appointment/features/appointment/logic/appointments_state.dart';
 import 'package:doctor_appointment/features/calendar/presentation/widgets/appointment_card.dart';
 import 'package:doctor_appointment/core/widgets/bottom_navigation_bar.dart';
+import 'package:doctor_appointment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,12 +37,13 @@ class _CalendarViewState extends State<CalendarView>
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
-          'Appointments',
+          l10n.appointments,
           style: context.styleSemiBold22.copyWith(fontSize: 18.sp),
         ),
         bottom: PreferredSize(
@@ -53,10 +55,10 @@ class _CalendarViewState extends State<CalendarView>
             indicatorColor: colorScheme.primary,
             indicatorSize: TabBarIndicatorSize.label,
             labelStyle: context.styleMedium14.copyWith(fontSize: 13.sp),
-            tabs: const [
-              Tab(text: 'Upcoming'),
-              Tab(text: 'Completed'),
-              Tab(text: 'Cancelled'),
+            tabs: [
+              Tab(text: l10n.upcoming),
+              Tab(text: l10n.completed),
+              Tab(text: l10n.cancelled),
             ],
           ),
         ),
@@ -70,7 +72,8 @@ class _CalendarViewState extends State<CalendarView>
               if (notification.overscroll < 0 && _tabController.index == 0) {
                 // Dragged to the right at the leftmost tab -> go to Search (Index 2)
                 rootState.changePage(2);
-              } else if (notification.overscroll > 0 && _tabController.index == 2) {
+              } else if (notification.overscroll > 0 &&
+                  _tabController.index == 2) {
                 // Dragged to the left at the rightmost tab -> go to Profile (Index 4)
                 rootState.changePage(4);
               }
@@ -86,9 +89,9 @@ class _CalendarViewState extends State<CalendarView>
           child: TabBarView(
             controller: _tabController,
             children: [
-              _buildList(AppointmentTab.upcoming),
-              _buildList(AppointmentTab.completed),
-              _buildList(AppointmentTab.cancelled),
+              _buildList(AppointmentTab.upcoming, l10n),
+              _buildList(AppointmentTab.completed, l10n),
+              _buildList(AppointmentTab.cancelled, l10n),
             ],
           ),
         ),
@@ -96,7 +99,7 @@ class _CalendarViewState extends State<CalendarView>
     );
   }
 
-  Widget _buildList(AppointmentTab tab) {
+  Widget _buildList(AppointmentTab tab, AppLocalizations l10n) {
     final colorScheme = Theme.of(context).colorScheme;
     return BlocBuilder<AppointmentsCubit, AppointmentsState>(
       builder: (context, state) {
@@ -161,11 +164,13 @@ class _CalendarViewState extends State<CalendarView>
                     Icon(
                       Icons.calendar_today_outlined,
                       size: 64.sp,
-                      color: colorScheme.onSurfaceVariant.withValues(alpha: 0.2),
+                      color: colorScheme.onSurfaceVariant.withValues(
+                        alpha: 0.2,
+                      ),
                     ),
                     SizedBox(height: 16.h),
                     Text(
-                      'No appointments found.',
+                      l10n.noAppointmentsFound,
                       style: context.styleRegular14.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),

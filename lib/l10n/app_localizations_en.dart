@@ -1122,4 +1122,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get consulationEmptyPrice => 'No price set';
+
+  @override
+  String get cancelPending => 'Cancel Pending';
+
+  @override
+  String get reschedulePending => 'Reschedule Pending';
+
+  @override
+  String get slotSelect => 'Slot Select';
+
+  @override
+  String get appointments => 'Appointments';
+
+  @override
+  String get noAppointmentsFound => 'No appointments found.';
 }

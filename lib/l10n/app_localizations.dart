@@ -2239,6 +2239,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No price set'**
   String get consulationEmptyPrice;
+
+  /// No description provided for @cancelPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Pending'**
+  String get cancelPending;
+
+  /// No description provided for @reschedulePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Reschedule Pending'**
+  String get reschedulePending;
+
+  /// No description provided for @slotSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Slot Select'**
+  String get slotSelect;
+
+  /// No description provided for @appointments.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointments'**
+  String get appointments;
+
+  /// No description provided for @noAppointmentsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No appointments found.'**
+  String get noAppointmentsFound;
 }
 
 class _AppLocalizationsDelegate

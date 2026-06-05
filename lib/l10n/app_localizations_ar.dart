@@ -1109,4 +1109,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get consulationEmptyPrice => 'لا يوجد';
+
+  @override
+  String get cancelPending => 'إلغاء معلق';
+
+  @override
+  String get reschedulePending => 'إعادة جدولة معلقة';
+
+  @override
+  String get slotSelect => 'اختر الفترة';
+
+  @override
+  String get appointments => 'المواعيد';
+
+  @override
+  String get noAppointmentsFound => 'لم يتم العثور على مواعيد';
 }

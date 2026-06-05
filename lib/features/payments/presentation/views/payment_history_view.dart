@@ -69,7 +69,6 @@ class PaymentHistoryView extends StatelessWidget {
                 },
               ),
             ),
-            _ => const SizedBox.shrink(),
           };
         },
       ),

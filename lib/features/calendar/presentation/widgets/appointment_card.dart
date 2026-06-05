@@ -3,6 +3,7 @@ import 'package:doctor_appointment/core/utils/result.dart';
 import 'package:doctor_appointment/features/appointment/domain/entities/appointment.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/features/appointment/logic/appointments_cubit.dart';
+import 'package:doctor_appointment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,6 +27,7 @@ class AppointmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         context.push(AppRouter.kAppointmentDetailsView, extra: appointment);
@@ -50,7 +52,10 @@ class AppointmentCard extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [_buildDoctorInfo(context), _buildStatusBadge(context)],
+              children: [
+                _buildDoctorInfo(context),
+                _buildStatusBadge(context, l10n),
+              ],
             ),
             SizedBox(height: 16.h),
             _buildDateTimeRow(context),
@@ -150,7 +155,7 @@ class AppointmentCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusBadge(BuildContext context) {
+  Widget _buildStatusBadge(BuildContext context, AppLocalizations l10n) {
     final colorScheme = Theme.of(context).colorScheme;
     final successColor = context.customColors.success ?? Colors.green;
     final errorColor = context.customColors.error ?? Colors.red;
@@ -162,25 +167,25 @@ class AppointmentCard extends StatelessWidget {
     if (isCancelled) {
       bgColor = errorColor.withValues(alpha: 0.1);
       textColor = errorColor;
-      label = 'Cancelled';
+      label = l10n.cancelled;
     } else if (isCompleted) {
       bgColor = successColor.withValues(alpha: 0.1);
       textColor = successColor;
-      label = 'Completed';
+      label = l10n.completed;
     } else if (appointment.isCancellationRequested) {
       bgColor = errorColor.withValues(alpha: 0.1);
       textColor = errorColor;
-      label = 'Cancel Pending';
+      label = l10n.cancelPending;
     } else if (appointment.isRescheduleRequested) {
       bgColor = Colors.orange.withValues(alpha: 0.1);
       textColor = Colors.orange;
       label = appointment.rescheduleApprovedAt != null
-          ? 'Slot Select'
-          : 'Reschedule Pending';
+          ? l10n.slotSelect
+          : l10n.reschedulePending;
     } else {
       bgColor = colorScheme.primary.withValues(alpha: 0.1);
       textColor = colorScheme.primary;
-      label = 'Upcoming';
+      label = l10n.upcoming;
     }
 
     return Container(

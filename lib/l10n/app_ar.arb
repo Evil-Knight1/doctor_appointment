@@ -369,5 +369,10 @@
   "messages": "الرسائل",
   "searchConversations": "ابحث في المحادثات",
   "noConversationsFound": "لم يتم العثور على محادثات",
-  "consulationEmptyPrice": "لا يوجد"
+  "consulationEmptyPrice": "لا يوجد",
+  "cancelPending": "إلغاء معلق",
+  "reschedulePending": "إعادة جدولة معلقة",
+  "slotSelect": "اختر الفترة",
+  "appointments": "المواعيد",
+  "noAppointmentsFound": "لم يتم العثور على مواعيد"
 }

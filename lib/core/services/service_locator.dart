@@ -316,7 +316,7 @@ void setupServiceLocator() {
   // ── Payments ────────────────────────────────────────────────────────────
   // Backend drives all Paymob interactions; Flutter never touches secrets.
   getIt.registerLazySingleton<PaymentRemoteDataSource>(
-    () => PaymentRemoteDataSourceImpl(getIt<ApiService>()),
+    () => PaymentRemoteDataSourceImpl(getIt<ApiService>(), getIt<AppConfig>()),
   );
   getIt.registerLazySingleton<PaymentRepository>(
     () => PaymentRepositoryImpl(getIt<PaymentRemoteDataSource>()),

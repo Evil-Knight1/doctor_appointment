@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:doctor_appointment/core/config/app_config.dart';
-import 'package:doctor_appointment/core/services/service_locator.dart';
 import 'package:doctor_appointment/core/utils/result.dart';
 import 'package:doctor_appointment/features/appointment/domain/usecases/create_appointment_usecase.dart';
 import 'package:doctor_appointment/features/payments/domain/entities/payment_status.dart';
@@ -9,10 +7,8 @@ import 'package:doctor_appointment/features/payments/domain/usecases/create_paym
 import 'package:doctor_appointment/features/payments/domain/usecases/get_payment_status_usecase.dart';
 import 'package:doctor_appointment/features/payments/domain/repositories/payment_repository.dart';
 import 'package:doctor_appointment/features/payments/logic/payment_state.dart';
-import 'package:doctor_appointment/features/payments/data/services/paymob_sdk_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_paymob/flutter_paymob.dart';
 
 /// Orchestrates the entire backend-driven payment flow.
 ///
@@ -34,7 +30,6 @@ class PaymentCubit extends Cubit<PaymentState> {
   final CreatePaymentSessionUseCase _createPaymentSessionUseCase;
   final GetPaymentStatusUseCase _getPaymentStatusUseCase;
   final PaymentRepository _paymentRepository;
-  final PaymobSdkService _paymobSdkService = PaymobSdkService();
 
   /// How many times to poll before giving up.
   static const int _maxPollAttempts = 12;
@@ -115,33 +110,25 @@ class PaymentCubit extends Cubit<PaymentState> {
           ),
         );
 
-        if (paymentMethod == 4) {
-          await FlutterPaymob.instance.payWithCard(
-            context: context,
-            currency: "EGP",
+        final sessionResult = await _createPaymentSessionUseCase(
+          CreatePaymentSessionParams(
+            appointmentId: appointment.id,
             amount: amount,
-            onPayment: (response) {
-              onWebViewResult(
-                success: response.success,
-                providerTransactionId: response.transactionID,
-                failureReason: response.message,
-              );
-            },
-          );
-        } else if (paymentMethod == 5) {
-          await FlutterPaymob.instance.payWithWallet(
-            context: context,
-            currency: "EGP",
-            amount: amount,
-            number: getIt<AppConfig>().paymobWalletNumber,
-            onPayment: (response) {
-              onWebViewResult(
-                success: response.success,
-                providerTransactionId: response.transactionID,
-                failureReason: response.message,
-              );
-            },
-          );
+            paymentMethodType: paymentMethod,
+          ),
+        );
+
+        switch (sessionResult) {
+          case FailureResult():
+            emit(
+              PaymentFailure(
+                message: sessionResult.failure.message,
+                appointmentId: appointment.id,
+                amount: amount,
+              ),
+            );
+          case Success():
+            emit(PaymentSessionCreated(session: sessionResult.data));
         }
     }
   }

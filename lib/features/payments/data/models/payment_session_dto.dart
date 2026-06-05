@@ -40,16 +40,14 @@ class PaymentSessionDto {
 
   factory PaymentSessionDto.fromJson(Map<String, dynamic> json) {
     return PaymentSessionDto(
-      sessionId: json['sessionId'] as String,
+      sessionId: json['id'].toString(),
       appointmentId: json['appointmentId'] as int,
       paymentUrl: json['paymentUrl'] as String,
       clientSecret: json['clientSecret'] as String?,
-      providerOrderId: json['providerOrderId'] as String?,
+      providerOrderId: json['transactionId'] as String?,
       amount: (json['amount'] as num).toDouble(),
-      currency: json['currency'] as String? ?? 'EGP',
-      expiresAt: json['expiresAt'] != null
-          ? DateTime.tryParse(json['expiresAt'] as String)
-          : null,
+      currency: 'EGP',
+      expiresAt: null,
     );
   }
 

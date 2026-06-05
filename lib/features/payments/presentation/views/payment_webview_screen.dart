@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/features/payments/logic/payment_cubit.dart';
 import 'package:flutter/material.dart';
@@ -7,20 +8,25 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 /// Renders the Paymob payment iframe inside an in-app WebView.
 ///
-/// Paymob sends the user to either:
-///   - Success callback: URL contains `success=true`
-///   - Pending/failure callback: URL contains `success=false` or `pending=true`
+/// For card payments (Unified Checkout):
+///   Paymob redirects to a callback URL with `success=true` or `success=false`,
+///   which we intercept via [NavigationDelegate.onNavigationRequest].
 ///
-/// We intercept those redirects here and call [PaymentCubit.onWebViewResult].
-/// The WebView callback is NOT the source of truth — it triggers backend polling.
+/// For wallet payments (legacy Accept API):
+///   Paymob shows an OTP page. After OTP + MPIN, Paymob redirects to its own
+///   result page (no `success=true` in URL). We detect this by watching for any
+///   page navigation AWAY from the original OTP URL, then start polling.
+///   The webhook is the authoritative source of truth.
 class PaymentWebViewScreen extends StatefulWidget {
   final String paymentUrl;
   final PaymentCubit cubit;
+  final bool isWalletPayment;
 
   const PaymentWebViewScreen({
     super.key,
     required this.paymentUrl,
     required this.cubit,
+    this.isWalletPayment = false,
   });
 
   @override
@@ -31,6 +37,14 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
   late final WebViewController _controller;
   bool _isLoading = true;
   bool _resultReported = false;
+
+  /// For wallet: track whether the initial OTP page has finished loading.
+  /// Once it has, any subsequent page load = user completed OTP → start polling.
+  bool _otpPageLoaded = false;
+
+  /// Fallback timer: if wallet OTP page loaded but Paymob uses AJAX (no navigation),
+  /// we start polling after 30 s regardless.
+  Timer? _walletFallbackTimer;
 
   // Paymob's callback URL patterns to intercept.
   static const _successPattern = 'success=true';
@@ -43,15 +57,38 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
     _initWebView();
   }
 
+  @override
+  void dispose() {
+    _walletFallbackTimer?.cancel();
+    super.dispose();
+  }
+
   void _initWebView() {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
-          onPageStarted: (_) => setState(() => _isLoading = true),
-          onPageFinished: (_) => setState(() => _isLoading = false),
+          onPageStarted: (url) {
+            setState(() => _isLoading = true);
+            // Wallet: once the OTP page is loaded, any new page = OTP submitted.
+            if (widget.isWalletPayment && _otpPageLoaded && !_resultReported) {
+              // Navigating to a new page after OTP → assume payment was attempted.
+              _reportResult(success: true);
+            }
+          },
+          onPageFinished: (url) {
+            setState(() => _isLoading = false);
+            if (widget.isWalletPayment && !_otpPageLoaded) {
+              _otpPageLoaded = true; // OTP page has fully loaded
+              // Start fallback timer: if no navigation detected in 90 s, start polling.
+              _walletFallbackTimer = Timer(const Duration(seconds: 90), () {
+                if (!_resultReported) {
+                  _reportResult(success: true);
+                }
+              });
+            }
+          },
           onWebResourceError: (error) {
-            // Only report if we haven't already captured a result.
             if (!_resultReported) {
               _reportResult(success: false, failureReason: error.description);
             }
@@ -95,6 +132,7 @@ class _PaymentWebViewScreenState extends State<PaymentWebViewScreen> {
   }) {
     if (_resultReported) return;
     _resultReported = true;
+    _walletFallbackTimer?.cancel();
 
     widget.cubit.onWebViewResult(
       success: success,

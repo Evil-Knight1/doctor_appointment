@@ -383,5 +383,10 @@
   "messages": "Messages",
   "searchConversations": "Search conversations…",
   "noConversationsFound": "No conversations found",
-  "consulationEmptyPrice": "No price set"
+  "consulationEmptyPrice": "No price set",
+  "cancelPending": "Cancel Pending",
+  "reschedulePending": "Reschedule Pending",
+  "slotSelect": "Slot Select",
+  "appointments": "Appointments",
+  "noAppointmentsFound": "No appointments found."
 }

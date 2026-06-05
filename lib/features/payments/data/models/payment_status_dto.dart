@@ -44,10 +44,23 @@ class PaymentStatusDto {
   });
 
   factory PaymentStatusDto.fromJson(Map<String, dynamic> json) {
+    final statusVal = json['status'];
+    String statusStr = 'unknown';
+    if (statusVal is int) {
+      switch (statusVal) {
+        case 0: statusStr = 'pending'; break;
+        case 1: statusStr = 'paid'; break;
+        case 2: statusStr = 'failed'; break;
+        case 3: statusStr = 'refunded'; break;
+      }
+    } else if (statusVal is String) {
+      statusStr = statusVal;
+    }
+
     return PaymentStatusDto(
-      paymentId: json['paymentId'] as int,
+      paymentId: json['id'] as int,
       appointmentId: json['appointmentId'] as int,
-      statusRaw: json['status'] as String? ?? 'unknown',
+      statusRaw: statusStr,
       transactionId: json['transactionId'] as String?,
       orderId: json['orderId'] as String?,
       failureReason: json['failureReason'] as String?,
@@ -55,7 +68,7 @@ class PaymentStatusDto {
           ? DateTime.tryParse(json['paidAt'] as String)
           : null,
       amount: (json['amount'] as num).toDouble(),
-      currency: json['currency'] as String? ?? 'EGP',
+      currency: 'EGP',
     );
   }
 

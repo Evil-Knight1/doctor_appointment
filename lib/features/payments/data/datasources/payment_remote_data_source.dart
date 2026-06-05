@@ -1,12 +1,13 @@
 import 'package:doctor_appointment/core/errors/exceptions.dart';
 import 'package:doctor_appointment/features/payments/data/models/payment_history_item_dto.dart';
 import 'package:doctor_appointment/core/services/api_service.dart';
+import 'package:doctor_appointment/core/config/app_config.dart';
 import 'package:doctor_appointment/features/payments/data/models/payment_session_dto.dart';
 import 'package:doctor_appointment/features/payments/data/models/payment_status_dto.dart';
 
 /// Contract for the network-level payment operations.
 abstract class PaymentRemoteDataSource {
-  /// POST /api/Payment/create-session
+  /// POST /api/Payment/process
   Future<PaymentSessionDto> createPaymentSession({
     required int appointmentId,
     required double amount,
@@ -34,8 +35,9 @@ abstract class PaymentRemoteDataSource {
 /// All requests carry the JWT auth token automatically (via [AuthTokenInterceptor]).
 class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
   final ApiService _apiService;
+  final AppConfig _appConfig;
 
-  const PaymentRemoteDataSourceImpl(this._apiService);
+  const PaymentRemoteDataSourceImpl(this._apiService, this._appConfig);
 
   // ─── Create Session ────────────────────────────────────────────────────────
 
@@ -47,12 +49,13 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
     required int paymentMethodType,
   }) async {
     final response = await _apiService.post(
-      '/api/Payment/create-session',
+      '/api/Payment/process',
       data: {
         'appointmentId': appointmentId,
         'amount': amount,
-        'currency': currency,
-        'paymentMethodType': paymentMethodType,
+        'paymentMethod': paymentMethodType,
+        'transactionId': null,
+        'paymentDetails': paymentMethodType == 5 ? _appConfig.paymobWalletNumber : null,
       },
     );
 
@@ -73,7 +76,7 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
     required int appointmentId,
   }) async {
     final response = await _apiService.get(
-      '/api/Payment/status/$appointmentId',
+      '/api/Payment/appointment/$appointmentId',
     );
 
     _assertSuccess(response, fallback: 'Failed to retrieve payment status');
