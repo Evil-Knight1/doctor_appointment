@@ -379,8 +379,9 @@
   "sortBy": "sortBy",
   "minimumRating": "minimumRating",
   "applyFilters": "applyFilters",
-  "reviews":"reviews",
-  "messages":"Messages",
-  "searchConversations":"Search conversations…",
-  "noConversationsFound":"No conversations found"
+  "reviews": "reviews",
+  "messages": "Messages",
+  "searchConversations": "Search conversations…",
+  "noConversationsFound": "No conversations found",
+  "consulationEmptyPrice": "No price set"
 }

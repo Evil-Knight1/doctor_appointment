@@ -368,5 +368,6 @@
   "reviews": "تقييمات",
   "messages": "الرسائل",
   "searchConversations": "ابحث في المحادثات",
-  "noConversationsFound": "لم يتم العثور على محادثات"
+  "noConversationsFound": "لم يتم العثور على محادثات",
+  "consulationEmptyPrice": "لا يوجد"
 }

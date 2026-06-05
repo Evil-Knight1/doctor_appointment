@@ -1119,4 +1119,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noConversationsFound => 'No conversations found';
+
+  @override
+  String get consulationEmptyPrice => 'No price set';
 }

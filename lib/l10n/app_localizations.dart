@@ -2233,6 +2233,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No conversations found'**
   String get noConversationsFound;
+
+  /// No description provided for @consulationEmptyPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'No price set'**
+  String get consulationEmptyPrice;
 }
 
 class _AppLocalizationsDelegate

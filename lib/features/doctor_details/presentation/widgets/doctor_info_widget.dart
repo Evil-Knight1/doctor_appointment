@@ -1,5 +1,5 @@
-
 import 'package:doctor_appointment/features/home/data/models/home_doctor_model.dart';
+import 'package:doctor_appointment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
@@ -10,6 +10,7 @@ class DoctorInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.all(20.w),
       child: Row(
@@ -39,7 +40,7 @@ class DoctorInfoWidget extends StatelessWidget {
             ],
           ),
           Text(
-            doctor.fee,
+            doctor.price ?? l10n.consulationEmptyPrice,
             style: context.styleSemiBold22.copyWith(
               color: Theme.of(context).colorScheme.primary,
               fontSize: 18.sp,

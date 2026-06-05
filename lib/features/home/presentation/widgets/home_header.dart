@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:doctor_appointment/core/utils/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:doctor_appointment/core/utils/app_dimensions.dart';
@@ -46,10 +48,7 @@ class _GreetingText extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '${l10n.hi}, $userName! 👋',
-              style: context.displayMedium,
-            ),
+            Text('${l10n.hi}, $userName! 👋', style: context.displayMedium),
             SizedBox(height: 2.h),
             Text(l10n.howAreYou, style: context.bodyMedium),
           ],
@@ -101,7 +100,8 @@ class _AvatarButton extends StatelessWidget {
                     ),
                   ),
                 ),
-                errorWidget: (context, url, error) => _buildPlaceholder(context),
+                errorWidget: (context, url, error) =>
+                    _buildPlaceholder(context),
               )
             : _buildPlaceholder(context),
       ),
@@ -144,7 +144,9 @@ class _HeroBanner extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.35),
+            color: Theme.of(
+              context,
+            ).colorScheme.primary.withValues(alpha: 0.35),
             blurRadius: 20.r,
             offset: Offset(0, 8.h),
           ),
@@ -171,7 +173,9 @@ class _BannerDecoration extends StatelessWidget {
                 height: 130.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.07),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onPrimary.withValues(alpha: 0.07),
                 ),
               ),
             ),
@@ -183,7 +187,9 @@ class _BannerDecoration extends StatelessWidget {
                 height: 90.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.05),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onPrimary.withValues(alpha: 0.05),
                 ),
               ),
             ),
@@ -241,28 +247,34 @@ class _FindNearbyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.sm,
-      ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(AppRadius.full),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).shadowColor,
-            blurRadius: 8.r,
-            offset: Offset(0, 2.h),
+    return InkWell(
+      borderRadius: BorderRadius.circular(AppRadius.full),
+      onTap: () {
+        context.push(Routes.findNearbyView);
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.sm,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(AppRadius.full),
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).shadowColor,
+              blurRadius: 8.r,
+              offset: Offset(0, 2.h),
+            ),
+          ],
+        ),
+        child: Text(
+          l10n.findNearby,
+          style: TextStyle(
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).colorScheme.primary,
           ),
-        ],
-      ),
-      child: Text(
-        l10n.findNearby,
-        style: TextStyle(
-          fontSize: 12.sp,
-          fontWeight: FontWeight.w600,
-          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );

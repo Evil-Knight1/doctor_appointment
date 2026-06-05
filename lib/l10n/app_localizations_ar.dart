@@ -1106,4 +1106,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noConversationsFound => 'لم يتم العثور على محادثات';
+
+  @override
+  String get consulationEmptyPrice => 'لا يوجد';
 }

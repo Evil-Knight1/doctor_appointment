@@ -7,6 +7,7 @@ import 'package:doctor_appointment/features/doctor_details/presentation/widgets/
 import 'package:doctor_appointment/core/services/shared_preferences_helper.dart';
 import 'package:doctor_appointment/features/doctors/logic/doctor_details_cubit.dart';
 import 'package:doctor_appointment/features/doctors/logic/doctor_details_state.dart';
+import 'package:doctor_appointment/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -45,6 +46,7 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Stack(
@@ -77,7 +79,7 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView>
               ),
             ],
           ),
-          _buildBottomButton(context),
+          _buildBottomButton(context, l10n),
         ],
       ),
     );
@@ -269,7 +271,7 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView>
     );
   }
 
-  Widget _buildBottomButton(BuildContext context) {
+  Widget _buildBottomButton(BuildContext context, AppLocalizations l10n) {
     return Positioned(
       bottom: 0,
       left: 0,
@@ -311,24 +313,37 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView>
             SizedBox(width: 12.w),
             Expanded(
               flex: 2,
-              child: ElevatedButton(
-                onPressed: () => context.pushNamed(
-                  Routes.bookingDateView,
-                  extra: widget.doctor.doctor, // Passing the entity
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14.r),
+              child: AbsorbPointer(
+                absorbing: widget.doctor.doctor.consultationPrice == null
+                    ? true
+                    : false,
+                child: ElevatedButton(
+                  onPressed: () => context.pushNamed(
+                    Routes.bookingDateView,
+                    extra: widget.doctor.doctor, // Passing the entity
                   ),
-                  minimumSize: Size(double.infinity, 52.h),
-                  elevation: 0,
-                ),
-                child: Text(
-                  'Book Appointment',
-                  style: context.styleSemiBold16.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        widget.doctor.doctor.consultationPrice == null
+                        ? Theme.of(context)
+                              .colorScheme
+                              .onSurfaceVariant // gray out
+                        : Theme.of(context).colorScheme.primary,
+                    foregroundColor:
+                        widget.doctor.doctor.consultationPrice == null
+                        ? Theme.of(context).colorScheme.onPrimaryContainer
+                        : Theme.of(context).colorScheme.onPrimary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14.r),
+                    ),
+                    minimumSize: Size(double.infinity, 52.h),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    l10n.bookAppointment,
+                    style: context.styleSemiBold16.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
                   ),
                 ),
               ),
