@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TransactionDetailsView extends StatelessWidget {
   const TransactionDetailsView({
@@ -111,19 +112,22 @@ class TransactionDetailsView extends StatelessWidget {
               _buildDetailRow(context, 'Failure Reason', payment.failureReason!),
             const Spacer(),
             CustomButton(
-              text: payment.paymentUrl?.isNotEmpty == true
-                  ? 'Payment Link Available'
+              text: payment.status == PaymentStatus.pending && payment.paymentUrl?.isNotEmpty == true
+                  ? 'Pay Now'
                   : 'Receipt Unavailable',
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      payment.paymentUrl?.isNotEmpty == true
-                          ? 'This payment includes a backend payment URL.'
-                          : 'No downloadable receipt is available yet.',
+              onPressed: () async {
+                if (payment.status == PaymentStatus.pending && payment.paymentUrl?.isNotEmpty == true) {
+                  final url = Uri.parse(payment.paymentUrl!);
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('No downloadable receipt is available yet.'),
                     ),
-                  ),
-                );
+                  );
+                }
               },
               width: double.infinity,
               height: 50.h,

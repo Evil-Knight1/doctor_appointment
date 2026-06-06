@@ -174,7 +174,7 @@ class _ChatbotViewState extends State<ChatbotView> {
             );
           }
           if (state.status == ChatStatus.limitReached) {
-            GlassAlert.show(
+            GlassAlert.showError(
               context,
               title: appLocalizations.limitReached,
               message: appLocalizations.limitReachedMessage,
@@ -253,25 +253,28 @@ class _ChatbotViewState extends State<ChatbotView> {
                                 _buildUserMessage(
                                   context,
                                   state.pendingUserMessage!,
+                                  isError: state.isPendingMessageError,
+                                  onResend: () => _sendMessage(state.pendingUserMessage!),
                                 ),
                                 SizedBox(height: 16.h),
                               ],
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                  padding: EdgeInsets.all(12.w),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.surface,
-                                    borderRadius: BorderRadius.circular(16.r),
-                                  ),
-                                  child: Text(
-                                    "...",
-                                    style: context.styleRegular14,
+                              if (isSending)
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    padding: EdgeInsets.all(12.w),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.surface,
+                                      borderRadius: BorderRadius.circular(16.r),
+                                    ),
+                                    child: Text(
+                                      "...",
+                                      style: context.styleRegular14,
+                                    ),
                                   ),
                                 ),
-                              ),
                             ],
                           );
                         },
@@ -470,41 +473,67 @@ class _ChatbotViewState extends State<ChatbotView> {
     );
   }
 
-  Widget _buildUserMessage(BuildContext context, String text) {
+  Widget _buildUserMessage(
+    BuildContext context, 
+    String text, {
+    bool isError = false,
+    VoidCallback? onResend,
+  }) {
     final theme = Theme.of(context);
 
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        margin: EdgeInsets.only(left: 50.w),
+    Widget messageBubble = Container(
+      margin: EdgeInsets.only(left: isError ? 0 : 50.w),
 
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
 
-        decoration: BoxDecoration(
-          color:
-              context.customColors.chatBubbleMine ?? theme.colorScheme.primary,
+      decoration: BoxDecoration(
+        color:
+            context.customColors.chatBubbleMine ?? theme.colorScheme.primary,
 
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16.r),
-            topRight: Radius.circular(16.r),
-            bottomLeft: Radius.circular(16.r),
-          ),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16.r),
+          topRight: Radius.circular(16.r),
+          bottomLeft: Radius.circular(16.r),
         ),
+      ),
 
-        child: MarkdownBody(
-          data: text,
-          styleSheet: MarkdownStyleSheet(
-            p: context.styleRegular14.copyWith(
-              color: theme.colorScheme.onPrimary,
-              height: 1.5,
-            ),
-            listBullet: context.styleRegular14.copyWith(
-              color: theme.colorScheme.onPrimary,
-              height: 1.5,
-            ),
+      child: MarkdownBody(
+        data: text,
+        styleSheet: MarkdownStyleSheet(
+          p: context.styleRegular14.copyWith(
+            color: theme.colorScheme.onPrimary,
+            height: 1.5,
+          ),
+          listBullet: context.styleRegular14.copyWith(
+            color: theme.colorScheme.onPrimary,
+            height: 1.5,
           ),
         ),
       ),
+    );
+
+    if (isError) {
+      return Align(
+        alignment: Alignment.centerRight,
+        child: Opacity(
+          opacity: 0.5,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.refresh_rounded, color: Colors.red),
+                onPressed: onResend,
+              ),
+              Flexible(child: messageBubble),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Align(
+      alignment: Alignment.centerRight,
+      child: messageBubble,
     );
   }
 

@@ -15,8 +15,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeBack => 'Welcome Back';
 
   @override
-  String get welcomeBackSubtitle =>
-      'We\'re excited to have you back, can\'t wait to see what you\'ve been up to since you last logged in.';
+  String get welcomeBackSubtitle => 'We\'re excited to have you back, can\'t wait to see what you\'ve been up to since you last logged in.';
 
   @override
   String get email => 'Email';
@@ -52,8 +51,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get accountInfo => 'Account Info';
 
   @override
-  String get accountInfoSubtitle =>
-      'Set up your login credentials to get started.';
+  String get accountInfoSubtitle => 'Set up your login credentials to get started.';
 
   @override
   String get emailRequired => 'Email is required';
@@ -80,8 +78,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get personalDetails => 'Personal Details';
 
   @override
-  String get personalDetailsSubtitle =>
-      'Complete your profile for a better experience.';
+  String get personalDetailsSubtitle => 'Complete your profile for a better experience.';
 
   @override
   String get fullName => 'Full Name';
@@ -309,19 +306,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rescheduleWindowExpired => 'Reschedule window expired.';
 
   @override
-  String get reschedulePendingApproval =>
-      'Your reschedule request is pending doctor approval.';
+  String get reschedulePendingApproval => 'Your reschedule request is pending doctor approval.';
 
   @override
-  String get cancellationPendingReview =>
-      'Your cancellation request is pending review.';
+  String get cancellationPendingReview => 'Your cancellation request is pending review.';
 
   @override
   String get requestReschedule => 'Request Reschedule';
 
   @override
-  String get rescheduleAllowedUpTo24Hours =>
-      'Rescheduling is only allowed up to 24 hours before the appointment.';
+  String get rescheduleAllowedUpTo24Hours => 'Rescheduling is only allowed up to 24 hours before the appointment.';
 
   @override
   String get requestCancel => 'Request Cancel';
@@ -350,8 +344,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pleaseEnterReason => 'Please enter a reason';
 
   @override
-  String get cancellationSubmittedSuccessfully =>
-      'Cancellation request submitted successfully';
+  String get cancellationSubmittedSuccessfully => 'Cancellation request submitted successfully';
 
   @override
   String get submit => 'Submit';
@@ -365,15 +358,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rescheduleReasonHint => 'Reschedule reason...';
 
   @override
-  String get rescheduleSubmittedSuccessfully =>
-      'Reschedule request submitted successfully';
+  String get rescheduleSubmittedSuccessfully => 'Reschedule request submitted successfully';
 
   @override
   String get limitReached => 'Limit Reached';
 
   @override
-  String get limitReachedMessage =>
-      'You have reached the daily limit of messages';
+  String get limitReachedMessage => 'You have reached the daily limit of messages';
 
   @override
   String rateYourDoctor(Object doctorName) {
@@ -417,8 +408,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get weValueYourFeedback => 'We value your feedback';
 
   @override
-  String get feedbackHelpsUsImprove =>
-      'Your feedback helps us improve our service.';
+  String get feedbackHelpsUsImprove => 'Your feedback helps us improve our service.';
 
   @override
   String get aiAssistant => 'AI Assistant';
@@ -445,15 +435,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authStepsCredentialsTitle => 'Step 1: Credentials';
 
   @override
-  String get authStepsCredentialsSubtitle =>
-      'Provide your professional email and a secure password. You\'ll also need a valid phone number for verification.';
+  String get authStepsCredentialsSubtitle => 'Provide your professional email and a secure password. You\'ll also need a valid phone number for verification.';
 
   @override
   String get authStepsCredentialsHeader => 'Account Credentails';
 
   @override
-  String get authStepsCredentialsEmail =>
-      'Enter your email, password and phone to get started.';
+  String get authStepsCredentialsEmail => 'Enter your email, password and phone to get started.';
 
   @override
   String get authStepsCredentialsPhone => 'Phone';
@@ -468,19 +456,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authStepsPersonalInfoTitle => 'Step 2: Personal Information';
 
   @override
-  String get authStepsPersonalInfoSubtitle =>
-      'Share some basic details about yourself for your profile.';
+  String get authStepsPersonalInfoSubtitle => 'Share some basic details about yourself for your profile.';
 
   @override
   String get authStepsClinicDetailsTitle => 'Step 3: Clinic Details';
 
   @override
-  String get authStepsClinicDetailsSubtitle =>
-      'Tell us about your clinic and where you practice.';
+  String get authStepsClinicDetailsSubtitle => 'Tell us about your clinic and where you practice.';
 
   @override
-  String get authStepsNote =>
-      'Note: All registrations are reviewed by our administration team before approval.';
+  String get authStepsNote => 'Note: All registrations are reviewed by our administration team before approval.';
 
   @override
   String get authStepsGotIt => 'Got it';
@@ -510,15 +495,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authDoctorAuthDoctorRegistration => 'Doctor Registration';
 
   @override
-  String get authDoctorAuthRegisterPending =>
-      'Your registration as a Doctor has been successfully submitted. Our administration team is reviewing your details to verify your medical credentials. You will receive an email once approved.';
+  String get authDoctorAuthRegisterPending => 'Your registration as a Doctor has been successfully submitted. Our administration team is reviewing your details to verify your medical credentials. You will receive an email once approved.';
 
   @override
   String get authDoctorAuthApplicationRecieved => 'Application Recieved';
 
   @override
-  String get authDoctorAuthSelectSpecialization =>
-      'Please select a specialization';
+  String get authDoctorAuthSelectSpecialization => 'Please select a specialization';
 
   @override
   String get authDoctorAuthSelectClinicLocation => 'Select Clinic Location';
@@ -571,8 +554,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgotPasswordTitle => 'Forgot Password';
 
   @override
-  String get forgotPasswordSubtitle =>
-      'Enter your email address to receive a verification code.';
+  String get forgotPasswordSubtitle => 'Enter your email address to receive a verification code.';
 
   @override
   String get sending => 'Sending...';
@@ -590,8 +572,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordMinChars => 'Min. 8 characters';
 
   @override
-  String get meetPasswordRequirements =>
-      'Please meet all password requirements';
+  String get meetPasswordRequirements => 'Please meet all password requirements';
 
   @override
   String get birthDate => 'Birth Date';
@@ -675,8 +656,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noAvailability => 'Doctor has no availability';
 
   @override
-  String get noAvailabilityMessage =>
-      'This doctor hasn\'t set any slots yet.\nPlease check back later or choose another doctor.';
+  String get noAvailabilityMessage => 'This doctor hasn\'t set any slots yet.\nPlease check back later or choose another doctor.';
 
   @override
   String get noSlotsForDate => 'No slots for this date';
@@ -703,8 +683,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentOption => 'Payment Option';
 
   @override
-  String get paymentOptionSubtitle =>
-      'Select how you\'d like to pay for your appointment';
+  String get paymentOptionSubtitle => 'Select how you\'d like to pay for your appointment';
 
   @override
   String get paymobSecured => 'Payments secured by Paymob';
@@ -713,22 +692,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onlineCard => 'Online Card';
 
   @override
-  String get onlineCardSubtitle =>
-      'Pay securely with Visa or MasterCard via Paymob';
+  String get onlineCardSubtitle => 'Pay securely with Visa or MasterCard via Paymob';
 
   @override
   String get mobileWallet => 'Mobile Wallet';
 
   @override
-  String get mobileWalletSubtitle =>
-      'Pay with Vodafone Cash, Orange Money or Etisalat Cash';
+  String get mobileWalletSubtitle => 'Pay with Vodafone Cash, Orange Money or Etisalat Cash';
 
   @override
   String get cashAtClinic => 'Cash at Clinic';
 
   @override
-  String get cashAtClinicSubtitle =>
-      'Pay in person when you arrive at the clinic';
+  String get cashAtClinicSubtitle => 'Pay in person when you arrive at the clinic';
 
   @override
   String get paymentCancelled => 'Payment cancelled. You can try again.';
@@ -763,8 +739,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get couldNotAccessLocation =>
-      'Could not access your current location.';
+  String get couldNotAccessLocation => 'Could not access your current location.';
 
   @override
   String get continueToPayment => 'Continue to Payment';
@@ -785,15 +760,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentCancelledShort => 'Payment cancelled.';
 
   @override
-  String get availabilityGeneratedSuccessfully =>
-      'Availability generated successfully!';
+  String get availabilityGeneratedSuccessfully => 'Availability generated successfully!';
 
   @override
   String get pleaseFillAllFields => 'Please fill all fields';
 
   @override
-  String get rescheduleApprovedSuccessfully =>
-      'Reschedule approved successfully';
+  String get rescheduleApprovedSuccessfully => 'Reschedule approved successfully';
 
   @override
   String get recordSimulatedSuccessfully => 'Record simulated successfully!';
@@ -841,16 +814,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get total => 'Total';
 
   @override
-  String get cashAtClinicInfo =>
-      'You selected Cash at Clinic. Your appointment will be booked and payment confirmed by the doctor when you arrive.';
+  String get cashAtClinicInfo => 'You selected Cash at Clinic. Your appointment will be booked and payment confirmed by the doctor when you arrive.';
 
   @override
-  String get paymobPaymentInfo =>
-      'You will complete payment securely inside the app via Paymob. No browser redirect.';
+  String get paymobPaymentInfo => 'You will complete payment securely inside the app via Paymob. No browser redirect.';
 
   @override
-  String get rescheduleNoPayment =>
-      'You are rescheduling your appointment. No additional payment is required.';
+  String get rescheduleNoPayment => 'You are rescheduling your appointment. No additional payment is required.';
 
   @override
   String get confirmAndPay => 'Confirm & Pay';
@@ -925,12 +895,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get processing => 'Processing…';
 
   @override
-  String get waitingForPaymentConfirmation =>
-      'Waiting for payment confirmation from the gateway. This usually takes a few seconds.';
+  String get waitingForPaymentConfirmation => 'Waiting for payment confirmation from the gateway. This usually takes a few seconds.';
 
   @override
-  String get appointmentConfirmedInfo =>
-      'Your appointment has been confirmed. You will receive a confirmation shortly.';
+  String get appointmentConfirmedInfo => 'Your appointment has been confirmed. You will receive a confirmation shortly.';
 
   @override
   String get aboutMe => 'About me';
@@ -957,8 +925,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get patientNameLoading => 'Patient Name Loading';
 
   @override
-  String get reviewCommentPlaceholder =>
-      'Review comment content loading placeholder text.';
+  String get reviewCommentPlaceholder => 'Review comment content loading placeholder text.';
 
   @override
   String get bookNow => 'Book Now';
@@ -1054,8 +1021,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noNotificationsYet => 'No notifications yet';
 
   @override
-  String get noNotificationsSubtitle =>
-      'We\'ll notify you when something important happens';
+  String get noNotificationsSubtitle => 'We\'ll notify you when something important happens';
 
   @override
   String get allNotifications => 'All Notifications';
@@ -1137,4 +1103,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noAppointmentsFound => 'No appointments found.';
+
+  @override
+  String get actionPending => 'Action pending. Tap for details.';
+
+  @override
+  String get reqReschedule => 'Request Reschedule';
+
+  @override
+  String get rebook => 'Re-book';
+
+  @override
+  String get reqCancel => 'Request Cancel';
+
+  @override
+  String cancelAppointmentReason(Object doctorName) {
+    return 'Please provide a reason for cancelling your appointment with $doctorName.';
+  }
+
+  @override
+  String get cancelReasonPlaceholder => 'Cancellation reason...';
+
+  @override
+  String get cancelReasonTitle => 'Request Cancellation';
+
+  @override
+  String get cancelRequestSuccess => 'Cancellation request submitted successfully';
+
+  @override
+  String get success => 'Success';
+
+  @override
+  String get error => 'Error';
 }

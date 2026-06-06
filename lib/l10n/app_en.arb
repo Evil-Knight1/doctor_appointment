@@ -388,5 +388,21 @@
   "reschedulePending": "Reschedule Pending",
   "slotSelect": "Slot Select",
   "appointments": "Appointments",
-  "noAppointmentsFound": "No appointments found."
+  "noAppointmentsFound": "No appointments found.",
+  "actionPending": "Action pending. Tap for details.",
+  "reqReschedule": "Request Reschedule",
+  "rebook": "Re-book",
+  "reqCancel": "Request Cancel",
+  "cancelAppointmentReason": "Please provide a reason for cancelling your appointment with {doctorName}.",
+  "@cancelAppointmentReason": {
+    "placeholders": {
+      "doctorName": {}
+  }
+},
+  "cancelReasonPlaceholder": "Cancellation reason...",
+  "cancelReasonTitle": "Request Cancellation",
+  "cancelRequestSuccess":"Cancellation request submitted successfully",
+  "success":"Success",
+  "error":"Error"
+
 }

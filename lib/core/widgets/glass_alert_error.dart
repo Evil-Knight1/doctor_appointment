@@ -4,12 +4,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class GlassAlert {
-  static void show(
+  static void showError(
     BuildContext context, {
     required String title,
     required String message,
     IconData icon = Icons.info_outline_rounded,
     Color iconColor = Colors.orange,
+    Duration duration = const Duration(seconds: 4),
+  }) {
+    final overlay = Overlay.of(context);
+
+    late OverlayEntry entry;
+
+    entry = OverlayEntry(
+      builder: (_) {
+        return _GlassAlertWidget(
+          title: title,
+          message: message,
+          icon: icon,
+          iconColor: iconColor,
+        );
+      },
+    );
+
+    overlay.insert(entry);
+
+    Future.delayed(duration, () {
+      entry.remove();
+    });
+  }
+
+  static void showSuccess(
+    BuildContext context, {
+    required String title,
+    required String message,
+    IconData icon = Icons.check_circle_outline_rounded,
+    Color iconColor = Colors.green,
     Duration duration = const Duration(seconds: 4),
   }) {
     final overlay = Overlay.of(context);

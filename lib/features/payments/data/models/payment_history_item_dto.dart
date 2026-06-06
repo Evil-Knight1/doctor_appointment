@@ -90,17 +90,11 @@ class PaymentHistoryItemDto {
         case 0:
           return PaymentStatus.pending;
         case 1:
-          return PaymentStatus.processing;
-        case 2:
           return PaymentStatus.paid;
-        case 3:
+        case 2:
           return PaymentStatus.failed;
-        case 4:
-          return PaymentStatus.cancelled;
-        case 5:
+        case 3:
           return PaymentStatus.refunded;
-        case 6:
-          return PaymentStatus.expired;
         default:
           return PaymentStatus.unknown;
       }

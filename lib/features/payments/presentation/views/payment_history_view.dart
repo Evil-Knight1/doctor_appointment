@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PaymentHistoryView extends StatelessWidget {
   const PaymentHistoryView({super.key});
@@ -180,12 +181,32 @@ class _PaymentHistoryCard extends StatelessWidget {
                   color: colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: 6.h),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 14.sp,
-                color: colorScheme.onSurfaceVariant,
-              ),
+              if (payment.status == PaymentStatus.pending &&
+                  payment.paymentUrl != null &&
+                  payment.paymentUrl!.isNotEmpty) ...[
+                SizedBox(height: 8.h),
+                OutlinedButton(
+                  onPressed: () async {
+                    final url = Uri.parse(payment.paymentUrl!);
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url, mode: LaunchMode.externalApplication);
+                    }
+                  },
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 0),
+                    minimumSize: Size(0, 32.h),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text('Pay Now', style: TextStyle(fontSize: 12.sp)),
+                ),
+              ] else ...[
+                SizedBox(height: 6.h),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 14.sp,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ],
             ],
           ),
         ],

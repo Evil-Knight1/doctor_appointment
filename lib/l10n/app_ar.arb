@@ -374,5 +374,20 @@
   "reschedulePending": "إعادة جدولة معلقة",
   "slotSelect": "اختر الفترة",
   "appointments": "المواعيد",
-  "noAppointmentsFound": "لم يتم العثور على مواعيد"
+  "noAppointmentsFound": "لم يتم العثور على مواعيد",
+  "actionPending": "إجراء قيد الانتظار. اضغط لعرض التفاصيل.",
+  "reqReschedule": "طلب إعادة جدولة",
+  "rebook": "إعادة حجز",
+  "reqCancel": "طلب إلغاء",
+  "cancelAppointmentReason": "يرجى توضيح سبب إلغاء موعدك مع {doctorName}.",
+  "@cancelAppointmentReason": {
+    "placeholders": {
+      "doctorName": {}
+    }
+  },
+  "cancelReasonPlaceholder": "سبب الإلغاء...",
+  "cancelReasonTitle": "طلب إلغاء",
+  "cancelRequestSuccess": "تم إرسال طلب الإلغاء بنجاح",
+  "success": "تم بنجاح",
+  "error": "خطأ"
 }

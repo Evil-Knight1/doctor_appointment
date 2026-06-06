@@ -89,7 +89,13 @@ class ChatCubit extends Cubit<ChatState> {
     if (message.trim().isEmpty) return;
 
     emit(
-      state.copyWith(status: ChatStatus.sending, pendingUserMessage: message),
+      state.copyWith(
+        status: ChatStatus.sending,
+        pendingUserMessage: message,
+        isPendingMessageError: false,
+        previousUi: state.currentUi,
+        clearCurrentUi: true,
+      ),
     );
 
     final result = await _sendAIChatMessageUseCase(
@@ -185,6 +191,8 @@ class ChatCubit extends Cubit<ChatState> {
             status: ChatStatus.ready,
             messages: updatedMessages,
             clearPendingUserMessage: true,
+            isPendingMessageError: false,
+            clearPreviousUi: true,
             currentUi: response.ui,
             currentStructuredReport: response.structured,
             currentRiskLevel: response.riskLevel,
@@ -197,7 +205,10 @@ class ChatCubit extends Cubit<ChatState> {
           state.copyWith(
             status: ChatStatus.limitReached,
             errorMessage: result.failure.message,
-            clearPendingUserMessage: true,
+            clearPendingUserMessage: false,
+            isPendingMessageError: true,
+            currentUi: state.previousUi,
+            clearPreviousUi: true,
           ),
         );
       } else {
@@ -205,7 +216,10 @@ class ChatCubit extends Cubit<ChatState> {
           state.copyWith(
             status: ChatStatus.error,
             errorMessage: result.failure.message,
-            clearPendingUserMessage: true,
+            clearPendingUserMessage: false,
+            isPendingMessageError: true,
+            currentUi: state.previousUi,
+            clearPreviousUi: true,
           ),
         );
       }

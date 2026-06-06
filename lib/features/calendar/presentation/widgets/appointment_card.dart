@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:doctor_appointment/core/utils/result.dart';
+import 'package:doctor_appointment/core/widgets/glass_alert_error.dart';
 import 'package:doctor_appointment/features/appointment/domain/entities/appointment.dart';
 import 'package:doctor_appointment/core/theme/app_theme_extension.dart';
 import 'package:doctor_appointment/features/appointment/logic/appointments_cubit.dart';
@@ -65,7 +66,7 @@ class AppointmentCard extends StatelessWidget {
               height: 1,
             ),
             SizedBox(height: 16.h),
-            _buildActions(context),
+            _buildActions(context, l10n),
           ],
         ),
       ),
@@ -260,7 +261,7 @@ class AppointmentCard extends StatelessWidget {
     );
   }
 
-  Widget _buildActions(BuildContext context) {
+  Widget _buildActions(BuildContext context, AppLocalizations l10n) {
     final colorScheme = Theme.of(context).colorScheme;
     final isUpcoming =
         !isCompleted &&
@@ -271,7 +272,7 @@ class AppointmentCard extends StatelessWidget {
     if (!isUpcoming && !isCompleted && !isCancelled) {
       return Center(
         child: Text(
-          'Action pending. Tap for details.',
+          l10n.actionPending,
           style: context.styleMedium12.copyWith(color: Colors.orange),
         ),
       );
@@ -301,7 +302,7 @@ class AppointmentCard extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 12.h),
             ),
             child: Text(
-              isUpcoming ? 'Req. Reschedule' : 'Re-book',
+              isUpcoming ? l10n.reqReschedule : l10n.rebook,
               style: context.styleSemiBold14.copyWith(
                 color: colorScheme.primary,
                 fontSize: 13.sp,
@@ -314,7 +315,7 @@ class AppointmentCard extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {
               if (isUpcoming) {
-                _showRequestCancelDialog(context);
+                _showRequestCancelDialog(context, l10n);
               } else {
                 context.pushNamed(
                   Routes.bookingReviewView,
@@ -334,7 +335,7 @@ class AppointmentCard extends StatelessWidget {
               elevation: 0,
             ),
             child: Text(
-              isUpcoming ? 'Req. Cancel' : 'Leave Review',
+              isUpcoming ? l10n.reqCancel : l10n.leaveReview,
               style: context.styleSemiBold14.copyWith(
                 color: colorScheme.onPrimary,
                 fontSize: 13.sp,
@@ -346,7 +347,7 @@ class AppointmentCard extends StatelessWidget {
     );
   }
 
-  void _showRequestCancelDialog(BuildContext context) {
+  void _showRequestCancelDialog(BuildContext context, AppLocalizations l10n) {
     final reasonController = TextEditingController();
     showDialog(
       context: context,
@@ -354,13 +355,13 @@ class AppointmentCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.r),
         ),
-        title: Text('Request Cancellation', style: context.styleSemiBold18),
+        title: Text(l10n.requestCancellation, style: context.styleSemiBold18),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Please provide a reason for cancelling your appointment with ${appointment.doctorName}.',
+              l10n.cancelAppointmentReason(appointment.doctorName),
               style: context.styleRegular14.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
@@ -369,7 +370,7 @@ class AppointmentCard extends StatelessWidget {
             TextField(
               controller: reasonController,
               decoration: InputDecoration(
-                hintText: 'Cancellation reason...',
+                hintText: l10n.cancelReasonPlaceholder,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
                 ),
@@ -382,7 +383,7 @@ class AppointmentCard extends StatelessWidget {
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
             child: Text(
-              'Back',
+              l10n.back,
               style: context.styleMedium14.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
@@ -403,25 +404,23 @@ class AppointmentCard extends StatelessWidget {
                   .read<AppointmentsCubit>()
                   .requestCancel(appointment.id, reason);
               if (result is Success<void>) {
-                messenger.showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Cancellation request submitted successfully',
-                    ),
-                    backgroundColor: Colors.green,
-                  ),
+                GlassAlert.showSuccess(
+                  context,
+                  title: l10n.success,
+                  message: l10n.cancelRequestSuccess,
+                  iconColor: Colors.green,
                 );
               } else if (result is FailureResult<void>) {
-                messenger.showSnackBar(
-                  SnackBar(
-                    content: Text(result.failure.message),
-                    backgroundColor: Colors.red,
-                  ),
+                GlassAlert.showError(
+                  context,
+                  title: l10n.error,
+                  message: result.failure.message,
+                  iconColor: Colors.red,
                 );
               }
             },
             child: Text(
-              'Submit',
+              l10n.submit,
               style: context.styleSemiBold14.copyWith(
                 color: context.customColors.error,
               ),
