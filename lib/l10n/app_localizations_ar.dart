@@ -15,7 +15,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get welcomeBack => 'مرحباً بعودتك';
 
   @override
-  String get welcomeBackSubtitle => 'نحن متحمسون لرؤيتك مرة أخرى، لا يمكننا الانتظار لرؤية ما كنت تفعله منذ آخر تسجيل دخول لك.';
+  String get welcomeBackSubtitle =>
+      'نحن متحمسون لرؤيتك مرة أخرى، لا يمكننا الانتظار لرؤية ما كنت تفعله منذ آخر تسجيل دخول لك.';
 
   @override
   String get email => 'البريد الإلكتروني';
@@ -51,7 +52,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get accountInfo => 'معلومات الحساب';
 
   @override
-  String get accountInfoSubtitle => 'قم بإعداد بيانات اعتماد تسجيل الدخول الخاصة بك للبدء.';
+  String get accountInfoSubtitle =>
+      'قم بإعداد بيانات اعتماد تسجيل الدخول الخاصة بك للبدء.';
 
   @override
   String get emailRequired => 'البريد الإلكتروني مطلوب';
@@ -78,7 +80,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get personalDetails => 'التفاصيل الشخصية';
 
   @override
-  String get personalDetailsSubtitle => 'أكمل ملفك الشخصي للحصول على تجربة أفضل.';
+  String get personalDetailsSubtitle =>
+      'أكمل ملفك الشخصي للحصول على تجربة أفضل.';
 
   @override
   String get fullName => 'الاسم الكامل';
@@ -306,16 +309,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rescheduleWindowExpired => 'انتهت فترة إعادة الجدولة.';
 
   @override
-  String get reschedulePendingApproval => 'طلب إعادة الجدولة الخاص بك في انتظار موافقة الطبيب.';
+  String get reschedulePendingApproval =>
+      'طلب إعادة الجدولة الخاص بك في انتظار موافقة الطبيب.';
 
   @override
-  String get cancellationPendingReview => 'طلب الإلغاء الخاص بك في انتظار المراجعة.';
+  String get cancellationPendingReview =>
+      'طلب الإلغاء الخاص بك في انتظار المراجعة.';
 
   @override
   String get requestReschedule => 'طلب إعادة جدولة';
 
   @override
-  String get rescheduleAllowedUpTo24Hours => 'يُسمح بإعادة الجدولة فقط حتى 24 ساعة قبل الموعد.';
+  String get rescheduleAllowedUpTo24Hours =>
+      'يُسمح بإعادة الجدولة فقط حتى 24 ساعة قبل الموعد.';
 
   @override
   String get requestCancel => 'طلب إلغاء';
@@ -358,7 +364,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rescheduleReasonHint => 'سبب إعادة الجدولة...';
 
   @override
-  String get rescheduleSubmittedSuccessfully => 'تم تقديم طلب إعادة الجدولة بنجاح';
+  String get rescheduleSubmittedSuccessfully =>
+      'تم تقديم طلب إعادة الجدولة بنجاح';
 
   @override
   String get limitReached => 'تم الوصول إلى الحد الأقصى';
@@ -435,13 +442,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authStepsCredentialsTitle => 'الخطوة 1: بيانات الاعتماد';
 
   @override
-  String get authStepsCredentialsSubtitle => 'قم بتقديم بريدك الإلكتروني المهني وكلمة مرور آمنة. ستحتاج أيضًا إلى رقم هاتف صالح للتحقق.';
+  String get authStepsCredentialsSubtitle =>
+      'قم بتقديم بريدك الإلكتروني المهني وكلمة مرور آمنة. ستحتاج أيضًا إلى رقم هاتف صالح للتحقق.';
 
   @override
   String get authStepsCredentialsHeader => 'بيانات الحساب';
 
   @override
-  String get authStepsCredentialsEmail => 'أدخل بريدك الإلكتروني، كلمة المرور والهاتف للبدء.';
+  String get authStepsCredentialsEmail =>
+      'أدخل بريدك الإلكتروني، كلمة المرور والهاتف للبدء.';
 
   @override
   String get authStepsCredentialsPhone => 'رقم الهاتف';
@@ -456,7 +465,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authStepsPersonalInfoTitle => 'الخطوة 2: المعلومات الشخصية';
 
   @override
-  String get authStepsPersonalInfoSubtitle => 'شارك بعض التفاصيل الأساسية عن نفسك لملفك الشخصي.';
+  String get authStepsPersonalInfoSubtitle =>
+      'شارك بعض التفاصيل الأساسية عن نفسك لملفك الشخصي.';
 
   @override
   String get authStepsClinicDetailsTitle => 'الخطوة 3: تفاصيل العيادة';
@@ -465,7 +475,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authStepsClinicDetailsSubtitle => 'أخبرنا عن عيادتك ومكان عملك.';
 
   @override
-  String get authStepsNote => 'ملاحظة: تتم مراجعة جميع التسجيلات من قبل فريق الإدارة لدينا قبل الموافقة.';
+  String get authStepsNote =>
+      'ملاحظة: تتم مراجعة جميع التسجيلات من قبل فريق الإدارة لدينا قبل الموافقة.';
 
   @override
   String get authStepsGotIt => 'حسناً';
@@ -495,7 +506,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authDoctorAuthDoctorRegistration => 'تسجيل طبيب';
 
   @override
-  String get authDoctorAuthRegisterPending => 'تم إرسال تسجيلك كطبيب بنجاح. يقوم فريق الإدارة لدينا بمراجعة تفاصيلك للتحقق من أوراق اعتمادك الطبية. ستتلقى بريدًا إلكترونيًا بمجرد الموافقة.';
+  String get authDoctorAuthRegisterPending =>
+      'تم إرسال تسجيلك كطبيب بنجاح. يقوم فريق الإدارة لدينا بمراجعة تفاصيلك للتحقق من أوراق اعتمادك الطبية. ستتلقى بريدًا إلكترونيًا بمجرد الموافقة.';
 
   @override
   String get authDoctorAuthApplicationRecieved => 'تم استلام الطلب';
@@ -554,7 +566,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get forgotPasswordTitle => 'نسيت كلمة المرور';
 
   @override
-  String get forgotPasswordSubtitle => 'أدخل عنوان بريدك الإلكتروني لتلقي رمز التحقق.';
+  String get forgotPasswordSubtitle =>
+      'أدخل عنوان بريدك الإلكتروني لتلقي رمز التحقق.';
 
   @override
   String get sending => 'جاري الإرسال...';
@@ -656,7 +669,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noAvailability => 'الطبيب ليس لديه توافر';
 
   @override
-  String get noAvailabilityMessage => 'لم يضبط هذا الطبيب أي مواعيد بعد.\nيرجى المتابعة لاحقاً أو اختيار طبيب آخر.';
+  String get noAvailabilityMessage =>
+      'لم يضبط هذا الطبيب أي مواعيد بعد.\nيرجى المتابعة لاحقاً أو اختيار طبيب آخر.';
 
   @override
   String get noSlotsForDate => 'لا توجد مواعيد لهذا التاريخ';
@@ -692,13 +706,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get onlineCard => 'بطاقة إلكترونية';
 
   @override
-  String get onlineCardSubtitle => 'ادفع بأمان ببطاقة Visa أو MasterCard عبر Paymob';
+  String get onlineCardSubtitle =>
+      'ادفع بأمان ببطاقة Visa أو MasterCard عبر Paymob';
 
   @override
   String get mobileWallet => 'محفظة المحمول';
 
   @override
-  String get mobileWalletSubtitle => 'ادفع باستخدام فودافون كاش أو أورنج موني أو اتصالات كاش';
+  String get mobileWalletSubtitle =>
+      'ادفع باستخدام فودافون كاش أو أورنج موني أو اتصالات كاش';
 
   @override
   String get cashAtClinic => 'نقداً في العيادة';
@@ -766,7 +782,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get pleaseFillAllFields => 'يرجى ملء جميع الحقول';
 
   @override
-  String get rescheduleApprovedSuccessfully => 'تمت الموافقة على إعادة الجدولة بنجاح';
+  String get rescheduleApprovedSuccessfully =>
+      'تمت الموافقة على إعادة الجدولة بنجاح';
 
   @override
   String get recordSimulatedSuccessfully => 'تم محاكاة السجل بنجاح!';
@@ -814,13 +831,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get total => 'الإجمالي';
 
   @override
-  String get cashAtClinicInfo => 'لقد اخترت الدفع نقداً في العيادة. سيتم حجز موعدك وتأكيد الدفع من قبل الطبيب عند وصولك.';
+  String get cashAtClinicInfo =>
+      'لقد اخترت الدفع نقداً في العيادة. سيتم حجز موعدك وتأكيد الدفع من قبل الطبيب عند وصولك.';
 
   @override
   String get paymobPaymentInfo => 'ستكمل الدفع بأمان داخل التطبيق عبر Paymob.';
 
   @override
-  String get rescheduleNoPayment => 'أنت تعيد جدولة موعدك. لا توجد مدفوعات إضافية مطلوبة.';
+  String get rescheduleNoPayment =>
+      'أنت تعيد جدولة موعدك. لا توجد مدفوعات إضافية مطلوبة.';
 
   @override
   String get confirmAndPay => 'تأكيد ودفع';
@@ -895,10 +914,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get processing => 'جاري المعالجة…';
 
   @override
-  String get waitingForPaymentConfirmation => 'في انتظار تأكيد الدفع من البوابة. يستغرق هذا عادة بضع ثوانٍ.';
+  String get waitingForPaymentConfirmation =>
+      'في انتظار تأكيد الدفع من البوابة. يستغرق هذا عادة بضع ثوانٍ.';
 
   @override
-  String get appointmentConfirmedInfo => 'تم تأكيد موعدك. ستتلقى تأكيداً قريباً.';
+  String get appointmentConfirmedInfo =>
+      'تم تأكيد موعدك. ستتلقى تأكيداً قريباً.';
 
   @override
   String get aboutMe => 'من أنا';
