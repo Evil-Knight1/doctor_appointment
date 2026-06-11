@@ -401,8 +401,18 @@
 },
   "cancelReasonPlaceholder": "Cancellation reason...",
   "cancelReasonTitle": "Request Cancellation",
-  "cancelRequestSuccess":"Cancellation request submitted successfully",
-  "success":"Success",
-  "error":"Error"
-
+  "cancelRequestSuccess": "Cancellation request submitted successfully",
+  "success": "Success",
+  "error": "Error",
+  "requestRescheduleTitle": "Request Reschedule",
+  "requestRescheduleReason": "Please provide a reason for rescheduling your appointment with {doctorName}.",
+  "@requestRescheduleReason": {
+    "placeholders": {
+      "doctorName": {
+        "type": "String"
+      }
+    }
+  },
+  "rescheduleReason": "Reschedule reason...",
+  "rescheduleSuccess":"Reschedule request submitted successfully"
 }

@@ -1170,4 +1170,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error => 'Error';
+
+  @override
+  String get requestRescheduleTitle => 'Request Reschedule';
+
+  @override
+  String requestRescheduleReason(String doctorName) {
+    return 'Please provide a reason for rescheduling your appointment with $doctorName.';
+  }
+
+  @override
+  String get rescheduleReason => 'Reschedule reason...';
+
+  @override
+  String get rescheduleSuccess => 'Reschedule request submitted successfully';
 }

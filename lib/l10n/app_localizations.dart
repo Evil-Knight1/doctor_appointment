@@ -2329,6 +2329,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error'**
   String get error;
+
+  /// No description provided for @requestRescheduleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Reschedule'**
+  String get requestRescheduleTitle;
+
+  /// No description provided for @requestRescheduleReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide a reason for rescheduling your appointment with {doctorName}.'**
+  String requestRescheduleReason(String doctorName);
+
+  /// No description provided for @rescheduleReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reschedule reason...'**
+  String get rescheduleReason;
+
+  /// No description provided for @rescheduleSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Reschedule request submitted successfully'**
+  String get rescheduleSuccess;
 }
 
 class _AppLocalizationsDelegate

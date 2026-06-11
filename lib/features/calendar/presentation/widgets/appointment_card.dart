@@ -284,7 +284,7 @@ class AppointmentCard extends StatelessWidget {
           child: OutlinedButton(
             onPressed: () {
               if (isUpcoming) {
-                _showRequestRescheduleDialog(context);
+                _showRequestRescheduleDialog(context, l10n);
               } else {
                 context.pushNamed(
                   Routes.bookingDateView,
@@ -431,7 +431,10 @@ class AppointmentCard extends StatelessWidget {
     );
   }
 
-  void _showRequestRescheduleDialog(BuildContext context) {
+  void _showRequestRescheduleDialog(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
     final reasonController = TextEditingController();
     showDialog(
       context: context,
@@ -439,13 +442,13 @@ class AppointmentCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.r),
         ),
-        title: Text('Request Reschedule', style: context.styleSemiBold18),
+        title: Text(l10n.reqReschedule, style: context.styleSemiBold18),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Please provide a reason for rescheduling your appointment with ${appointment.doctorName}.',
+              l10n.requestRescheduleReason(appointment.doctorName),
               style: context.styleRegular14.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
@@ -454,7 +457,7 @@ class AppointmentCard extends StatelessWidget {
             TextField(
               controller: reasonController,
               decoration: InputDecoration(
-                hintText: 'Reschedule reason...',
+                hintText: l10n.rescheduleReason,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.r),
                 ),
@@ -488,23 +491,22 @@ class AppointmentCard extends StatelessWidget {
                   .read<AppointmentsCubit>()
                   .requestReschedule(appointment.id, reason);
               if (result is Success<void>) {
-                messenger.showSnackBar(
-                  const SnackBar(
-                    content: Text('Reschedule request submitted successfully'),
-                    backgroundColor: Colors.green,
-                  ),
+                GlassAlert.showSuccess(
+                  context,
+                  title: l10n.success,
+                  message: l10n.rescheduleSuccess,
+                  iconColor: Colors.green,
                 );
               } else if (result is FailureResult<void>) {
-                messenger.showSnackBar(
-                  SnackBar(
-                    content: Text(result.failure.message),
-                    backgroundColor: Colors.red,
-                  ),
+                GlassAlert.showError(
+                  context,
+                  title: l10n.error,
+                  message: result.failure.message,
                 );
               }
             },
             child: Text(
-              'Submit',
+              l10n.submit,
               style: context.styleSemiBold14.copyWith(
                 color: Theme.of(context).colorScheme.primary,
               ),

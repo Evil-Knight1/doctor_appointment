@@ -166,11 +166,12 @@ class _ChatbotViewState extends State<ChatbotView> {
       body: BlocConsumer<ChatCubit, ChatState>(
         listener: (context, state) {
           if (state.status == ChatStatus.error && state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage!),
-                backgroundColor: Theme.of(context).colorScheme.error,
-              ),
+            GlassAlert.showError(
+              context,
+              title: appLocalizations.error,
+              message: state.errorMessage!,
+              icon: Icons.error_outline_rounded,
+              iconColor: Colors.redAccent,
             );
           }
           if (state.status == ChatStatus.limitReached) {

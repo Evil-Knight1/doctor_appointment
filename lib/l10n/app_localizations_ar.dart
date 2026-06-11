@@ -1156,4 +1156,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get error => 'خطأ';
+
+  @override
+  String get requestRescheduleTitle => 'طلب إعادة جدولة';
+
+  @override
+  String requestRescheduleReason(String doctorName) {
+    return 'يرجى توضيح سبب إعادة جدولة موعدك مع $doctorName.';
+  }
+
+  @override
+  String get rescheduleReason => 'سبب اعادة الجدولة';
+
+  @override
+  String get rescheduleSuccess => 'تم إرسال طلب إعادة الجدولة بنجاح';
 }

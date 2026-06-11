@@ -23,7 +23,9 @@ class AIChatRemoteDataSourceImpl implements AIChatRemoteDataSource {
   @override
   Future<List<String>> getUserChats() async {
     final response = await _apiService.get('/api/AIChat/user-chats');
-    return (response['data'] as List<dynamic>).map((e) => e.toString()).toList();
+    return (response['data'] as List<dynamic>)
+        .map((e) => e.toString())
+        .toList();
   }
 
   @override
@@ -35,11 +37,13 @@ class AIChatRemoteDataSourceImpl implements AIChatRemoteDataSource {
       );
       return AIChatResponseModel.fromJson(response['data']);
     } on DioException catch (e) {
+      final serverMessage = e.response?.data is Map
+          ? (e.response?.data['message'] as String?)
+          : null;
       if (e.response?.statusCode == 429) {
-        final errorMessage = e.response?.data['message'] ?? 'Rate limit exceeded';
-        throw Exception(errorMessage);
+        throw Exception(serverMessage ?? 'Rate limit exceeded');
       }
-      throw Exception('Failed to send message: ${e.message}');
+      throw Exception(serverMessage ?? 'Failed to send message');
     }
   }
 

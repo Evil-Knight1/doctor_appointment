@@ -128,92 +128,99 @@ class _GlassAlertWidgetState extends State<_GlassAlertWidget>
       child: Material(
         color: Colors.transparent,
 
-        child: FadeTransition(
-          opacity: _fadeAnimation,
+        child: Dismissible(
+          key: const ValueKey('glass_alert'),
+          direction: DismissDirection.horizontal,
+          onDismissed: (_) => _controller.reverse(),
+          child: FadeTransition(
+            opacity: _fadeAnimation,
 
-          child: SlideTransition(
-            position: _slideAnimation,
+            child: SlideTransition(
+              position: _slideAnimation,
 
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(24.r),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24.r),
 
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
 
-                child: Container(
-                  padding: EdgeInsets.all(18.w),
+                  child: Container(
+                    padding: EdgeInsets.all(18.w),
 
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24.r),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24.r),
 
-                    color: Colors.white.withValues(alpha: 0.08),
+                      color: Colors.white.withValues(alpha: 0.08),
 
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.12),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.12),
+                      ),
+
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.12),
+                          blurRadius: 30,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
                     ),
 
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.12),
-                        blurRadius: 30,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
 
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 46.w,
+                          height: 46.w,
 
-                    children: [
-                      Container(
-                        width: 46.w,
-                        height: 46.w,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
 
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
+                            color: widget.iconColor.withValues(alpha: .15),
+                          ),
 
-                          color: widget.iconColor.withValues(alpha: .15),
+                          child: Icon(
+                            widget.icon,
+                            color: widget.iconColor,
+                            size: 24.sp,
+                          ),
                         ),
 
-                        child: Icon(
-                          widget.icon,
-                          color: widget.iconColor,
-                          size: 24.sp,
-                        ),
-                      ),
+                        SizedBox(width: 14.w),
 
-                      SizedBox(width: 14.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
 
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-
-                          children: [
-                            Text(
-                              widget.title,
-
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 15.sp,
+                            children: [
+                              Text(
+                                widget.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15.sp,
+                                ),
                               ),
-                            ),
 
-                            SizedBox(height: 4.h),
+                              SizedBox(height: 4.h),
 
-                            Text(
-                              widget.message,
-
-                              style: TextStyle(
-                                color: Colors.white.withValues(alpha: .75),
-                                fontSize: 13.sp,
-                                height: 1.4,
+                              Text(
+                                widget.message,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 14.sp,
+                                  height: 1.4,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

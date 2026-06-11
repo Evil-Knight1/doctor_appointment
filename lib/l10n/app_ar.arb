@@ -389,5 +389,23 @@
   "cancelReasonTitle": "طلب إلغاء",
   "cancelRequestSuccess": "تم إرسال طلب الإلغاء بنجاح",
   "success": "تم بنجاح",
-  "error": "خطأ"
+  "error": "خطأ",
+  "requestRescheduleReason": "يرجى توضيح سبب إعادة جدولة موعدك مع {doctorName}.",
+  "@requestRescheduleReason": {
+    "placeholders": {
+      "doctorName": {
+        "type":"String"
+      }
+    }
+  },
+  "requestRescheduleTitle": "طلب إعادة جدولة",
+  "requestRescheduleReasonPlaceholder": "سبب إعادة الجدولة...",
+  "@requestRescheduleReasonPlaceholder": {
+    "placeholders": {
+      "doctorName": {}
+    }
+  },
+  "rescheduleSuccess": "تم إرسال طلب إعادة الجدولة بنجاح",
+  "rescheduleReason":"سبب اعادة الجدولة"
+
 }
