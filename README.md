@@ -1,89 +1,309 @@
-# Doctor Appointment App 🩺
+# 🩺 MedLink+
 
-![Flutter](https://img.shields.io/badge/Flutter-3.10.7-blue?logo=flutter)
-![Dart](https://img.shields.io/badge/Dart-3.1-blue?logo=dart)
-![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android-lightgrey)
+![Flutter](https://img.shields.io/badge/Flutter-3.x-blue?logo=flutter)
+![Dart](https://img.shields.io/badge/Dart-3.x-blue?logo=dart)
+![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-lightgrey)
+![Architecture](https://img.shields.io/badge/Architecture-Clean%20Architecture-green)
 
-A comprehensive cross-platform mobile application that connects patients with doctors. The app provides a seamless experience for searching for medical professionals, booking appointments, managing medical records, processing payments, and real-time chatting with both doctors and an AI chatbot.
+MedLink+ is an AI-powered healthcare platform that connects patients with doctors through a seamless and intelligent experience. The application enables appointment booking, real-time communication, secure payments, location-based doctor discovery, and AI-assisted healthcare support.
 
-## 🌟 Key Features
-
-### For Patients:
-- **Smart Search & Filters:** Find nearby doctors using an interactive map, and filter by specialization, rating, or recommendations.
-- **Appointment Booking:** View available doctor slots and book appointments easily.
-- **Secure Payments:** Integrated with Paymob to support cash at clinic, online cards, and mobile wallets.
-- **Real-Time Chat:** 1-on-1 messaging with doctors over SignalR.
-- **AI Chatbot:** Built-in AI assistant to help patients with basic medical inquiries.
-- **Medical Records:** Upload and manage personal medical files and history.
-
-### For Doctors:
-- **Doctor Dashboard:** Dedicated dashboard to view daily statistics and appointments.
-- **Schedule Management:** Handle upcoming, pending, and completed appointments.
-- **Profile Management:** Control visibility, working hours, and specializations.
-
-## 🏗️ Architecture
-
-The project strictly follows **Clean Architecture** combined with a **Feature-First** structure.
-
-- **`core/`**: Shared infrastructure (DI, networking, themes, routing, logging, errors).
-- **`features/`**: 16 self-contained modules (e.g., `auth`, `appointment`, `chat`, `payments`).
-
-Each feature is divided into 4 layers:
-1. `data/` (Datasources, Repositories, Models)
-2. `domain/` (Entities, UseCases, Repository Contracts)
-3. `logic/` (Cubit state management)
-4. `presentation/` (Views and Widgets)
-
-## 🛠️ Technology Stack
-
-**Frontend Framework & State:**
-- [Flutter](https://flutter.dev/) & [Dart](https://dart.dev/)
-- `flutter_bloc` / Cubit for state management
-- `go_router` for declarative routing and deep linking
-- `get_it` for Dependency Injection (Service Locator)
-
-**Networking, Real-Time & Offline:**
-- `dio` for REST API HTTP requests
-- `signalr_core` for real-time WebSockets messaging
-- `api_cache_manager` for persistent API response caching
-- `flutter_offline` for handling global and local offline states
-- `liquid_pull_to_refresh` for smooth data refreshing UX
-
-**Storage & Security:**
-- `flutter_secure_storage` for encrypted JWT storage
-- `shared_preferences` for light key-value persistence
-- `jwt_decoder` for proactive token validation
-
-**Device Features:**
-- `firebase_messaging` & `flutter_local_notifications` for push notifications
-- `geolocator` & `flutter_osm_plugin` for location mapping
-- `image_picker` & `file_picker` for media uploads
-
-**Localization:**
-- Multi-language support (English & Arabic) using `flutter_localizations` and `intl`.
-- Persistence of language preference via `LocaleCubit`.
-
-**Observability:**
-- `sentry_flutter` & `sentry_dio` for crash and performance monitoring
-- `logger` for structured application logging and file-based log persistence
-
-## 🔐 Authentication & Token Refresh
-
-The application utilizes a secure JWT-based authentication system with a **hybrid proactive/reactive refresh mechanism**:
-1. **Proactive Check:** On launch (`SplashView`), the app uses `jwt_decoder` to locally inspect token expiration. If expired, it seamlessly requests a new token before entering the app.
-2. **Reactive Intercepting:** During active use, a custom Dio `AuthTokenInterceptor` catches `401 Unauthorized` errors, pauses incoming requests using a `Completer`, refreshes the token, and replays the failed request completely invisibly to the user.
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Flutter SDK `^3.10.7`
-- Android Studio / Xcode
-
-### Setup
-1. Clone the repository.
-2. Ensure you have an `assets/envs/.env` file with your API keys (Paymob, API URL).
-3. Run `flutter pub get` to fetch dependencies.
-4. Run `flutter run` to launch the app on your connected device or emulator.
+Built as a **Graduation Project**, MedLink+ aims to provide a scalable and modern healthcare solution suitable for clinics and medical centers.
 
 ---
-*Built as a Graduation Project.*
+
+# ✨ Features
+
+## 👨‍⚕️ For Patients
+
+### 🔍 Smart Doctor Search
+
+* Search doctors by specialization.
+* View doctor ratings and recommendations.
+* Find nearby doctors using OpenStreetMap (OSM).
+* Interactive map experience powered by OSM.
+
+### 📅 Appointment Booking
+
+* View available schedules.
+* Book appointments instantly.
+* Manage upcoming and previous appointments.
+
+### 💳 Secure Payments
+
+Integrated with **Paymob** supporting:
+
+* Online card payments.
+* Mobile wallets.
+* Cash payments at the clinic.
+
+### 💬 Real-Time Chat
+
+* One-to-one messaging with doctors.
+* Real-time communication using SignalR.
+
+### 🤖 AI Assistant
+
+* AI-powered chatbot.
+* Answers basic medical questions.
+* Provides healthcare guidance and recommendations.
+
+### 📂 Medical Records
+
+* Upload medical files and reports.
+* Manage medical history.
+* Access patient records securely.
+
+### 🔔 Notifications
+
+* Push notifications with Firebase Cloud Messaging.
+* Local notifications support.
+* Appointment reminders.
+
+---
+
+## 👨‍⚕️ For Doctors
+
+### 📊 Doctor Dashboard
+
+* View statistics and appointments.
+* Monitor daily activities.
+
+### 📅 Schedule Management
+
+* Manage pending appointments.
+* View completed appointments.
+* Organize availability and working hours.
+
+### 👤 Profile Management
+
+* Update profile information.
+* Manage specializations.
+* Control visibility settings.
+
+---
+
+# 📍 Location Services
+
+MedLink+ utilizes **OpenStreetMap (OSM)** with `flutter_osm_plugin` to:
+
+* Display interactive maps.
+* Detect user location.
+* Find nearby doctors.
+* Enhance accessibility for patients.
+
+---
+
+# 🏗 Architecture
+
+The project follows **Clean Architecture** with a **Feature-First Structure**.
+
+## Core Layer
+
+Shared infrastructure:
+
+* Dependency Injection
+* Routing
+* Themes
+* Networking
+* Error Handling
+* Logging
+
+## Feature Modules
+
+The application consists of multiple independent features such as:
+
+* Authentication
+* Home
+* Doctors
+* Appointments
+* Chat
+* Payments
+* Notifications
+* AI Assistant
+* Medical Records
+* Profile
+
+Each feature contains:
+
+1. **Data Layer**
+
+   * Models
+   * Datasources
+   * Repository Implementations
+
+2. **Domain Layer**
+
+   * Entities
+   * Use Cases
+   * Repository Contracts
+
+3. **Logic Layer**
+
+   * Cubit / Bloc State Management
+
+4. **Presentation Layer**
+
+   * Views
+   * Widgets
+
+---
+
+# 🛠 Tech Stack
+
+## Frontend
+
+* Flutter
+* Dart
+
+## State Management
+
+* Bloc / Cubit
+
+## Routing
+
+* go_router
+
+## Dependency Injection
+
+* GetIt
+  
+## Networking
+
+* Dio
+
+## Real-Time Communication
+
+* SignalR for mobile
+* WebSocker for web
+
+## Payment Gateway
+
+* Paymob
+
+## Maps & Location
+
+* OpenStreetMap (OSM)
+* flutter_osm_plugin
+* geolocator
+
+## Notifications
+
+* Firebase Messaging
+* flutter_local_notifications
+
+## Storage
+*hive
+* flutter_secure_storage
+* shared_preferences
+
+## Monitoring
+
+* Sentry
+* Logger
+
+## Localization
+
+* English 🇺🇸
+* Arabic 🇪🇬
+
+---
+
+# 🔐 Authentication
+
+MedLink+ uses a secure JWT-based authentication system with hybrid refresh:
+
+### Proactive Refresh
+
+The token expiration is checked locally during app launch and refreshed automatically if needed.
+
+### Reactive Refresh
+
+A custom Dio interceptor handles `401 Unauthorized` responses, refreshes the token, and retries requests transparently.
+
+---
+
+# 📸 Screenshots
+
+<p align="center">
+  <img src="assets/screenshots/login.png" width="230"/>
+  <img src="assets/screenshots/home.png" width="230"/>
+  <img src="assets/screenshots/doctors.png" width="230"/>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/map.png" width="230"/>
+  <img src="assets/screenshots/chat.png" width="230"/>
+  <img src="assets/screenshots/appointments.png" width="230"/>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/profile.png" width="230"/>
+  <img src="assets/screenshots/payment.png" width="230"/>
+  <img src="assets/screenshots/medical_records.png" width="230"/>
+</p>
+
+---
+
+# 🚀 Getting Started
+
+## Prerequisites
+
+* Flutter SDK
+* Android Studio / VS Code
+* Android Emulator or Physical Device
+
+## Setup
+
+### Clone the repository
+
+```bash
+git clone https://github.com/your_username/medlink.git
+```
+
+### Install dependencies
+
+```bash
+flutter pub get
+```
+
+### Configure environment variables
+
+Create:
+
+```text
+assets/envs/.env
+```
+
+Example:
+
+```env
+API_BASE_URL=
+PAYMOB_API_KEY=
+PAYMOB_INTEGRATION_ID=
+```
+
+### Run the application
+
+```bash
+flutter run
+```
+
+---
+
+# 🔮 Future Enhancements
+
+* Video consultations.
+* Voice calls.
+* AI symptom checker.
+* E-prescriptions.
+* Electronic Health Records (EHR).
+* Medical reports and analytics.
+* Wearable device integration.
+* AI-powered doctor recommendations.
+
+
+---
+
+# 📄 License
+
+This project is developed for educational and research purposes.
