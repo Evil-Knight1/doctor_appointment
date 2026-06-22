@@ -225,21 +225,21 @@ A custom Dio interceptor handles `401 Unauthorized` responses, refreshes the tok
 # 📸 Screenshots
 
 <p align="center">
-  <img src="assets/screenshots/login.png" width="230"/>
-  <img src="assets/screenshots/home.png" width="230"/>
-  <img src="assets/screenshots/doctors.png" width="230"/>
+  <img src="assets/screenshots/splash.jpeg" width="230"/>
+  <img src="assets/screenshots/choose_login.jpeg" width="230"/>
+  <img src="assets/screenshots/register.jpeg" width="230"/>
 </p>
 
 <p align="center">
-  <img src="assets/screenshots/map.png" width="230"/>
-  <img src="assets/screenshots/chat.png" width="230"/>
-  <img src="assets/screenshots/appointments.png" width="230"/>
+  <img src="assets/screenshots/home.jpeg" width="230"/>
+  <img src="assets/screenshots/doctor_profile.jpeg" width="230"/>
+  <img src="assets/screenshots/map.jpeg" width="230"/>
 </p>
 
 <p align="center">
-  <img src="assets/screenshots/profile.png" width="230"/>
-  <img src="assets/screenshots/payment.png" width="230"/>
-  <img src="assets/screenshots/medical_records.png" width="230"/>
+  <img src="assets/screenshots/profile.jpeg" width="230"/>
+  <img src="assets/screenshots/choose_appointment_slot.jpeg" width="230"/>
+  <img src="assets/screenshots/profile.jpeg" width="230"/>
 </p>
 
 ---
